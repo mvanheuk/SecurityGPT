@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<!--
+Navigation website to easily access all perrigo work sites.
+Designer: Marc VanHeukelum
+Company: Perrigo
+Current Version: v3.0
+Date: 12/17/2019
+-->
+
+<html lang="en">
+
+  <head>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="This is the navigation page for Perrigo Work Sites">
+    <title>Perrigo IT Security Site: SecurityGPT</title>
+  </head>
+
+  <body>
+
+      <header>
+        <img class="perrigoLogo" src="images/perrigo-logo.png" alt="perrigo logo">
+        <p id="headerText">SecurityGPT</p>
+      </header>
+
+      <main>
+
+        <nav>
+          <ul id="menuClosed">
+            <li><a class="menuIcon" onClick="openMenu()" alt="Open Menu Button"><img id="openImg" src="images/open.png"></a></li>
+          </ul>
+
+          <ul id="menuOpen">
+            <li><a class="menuIcon" onClick="openMenu()" alt="Open Menu Button"><img id="closeImg" src="images/close.png"></a></li>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="securityGPT.html">SecurityGPT</a></li>
+          </ul>
+        </nav>
+     </main>
+
+     <div id="app">
+      <div id="chat_container"></div>
+      
+      <form>
+        <textarea name="prompt" rows="1" cols="1" placeholder="Ask SecurityGPT..."></textarea>
+        <button type="submit"><img src="assets/send.svg" /></button>
+      </form>
+      
+      <script type="module" src="scripts4.js"></script>
+    </div>
+
+      <footer>
+        <p>For issues with the site, or change recommendations, contact Marc VanHeukelum.<br>
+          Email: marc.vanheukelumII@perrigo.com</p>
+      </footer>
+  </body>
+</html>
