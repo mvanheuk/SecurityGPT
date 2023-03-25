@@ -93,8 +93,8 @@ const handleSubmit = async (e) => {
         })
     })
 
-    // to focus scroll to the bottom 
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+    // to focus scroll to the bottom here
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight; 
 
     clearInterval(loadInterval)
     messageDiv.innerHTML = ""
