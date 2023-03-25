@@ -15,7 +15,7 @@
 }
 
 #chat_container {
-  flex: 1;
+  flex: 9;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
@@ -37,7 +37,6 @@
 }
 
 .wrapper {
-  width: 100%;
   padding: 15px;
 }
 
@@ -48,7 +47,7 @@
 .chat {
   width: 100%;
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 1 auto;
 
   display: flex;
   flex-direction: row;
@@ -87,12 +86,6 @@
   max-width: 100%;
   overflow-x: scroll;
 
-  /*
-   * white space refers to any spaces, tabs, or newline characters that are used to format the CSS code
-   * specifies how white space within an element should be handled. It is similar to the "pre" value, which tells the browser to treat all white space as significant and to preserve it exactly as it appears in the source code.
-   * The pre-wrap value allows the browser to wrap long lines of text onto multiple lines if necessary.
-   * The default value for the white-space property in CSS is "normal". This tells the browser to collapse multiple white space characters into a single space, and to wrap text onto multiple lines as needed to fit within its container.
-  */
   white-space: pre-wrap; 
 
   -ms-overflow-style: none;
@@ -164,20 +157,6 @@ body {
   border-top-style: none;
   border-bottom-style: none;
   border-width: 8px;
-}
-
-.worksiteNavImages {
-  display: inline-block;
-  float: left;
-  margin-right: auto;
-  margin-left: auto;
-  padding: 2%;
-  width: 20%;
-}
-
-.worksiteNavImages:hover {
-  transform: scale(1.1);
-  opacity: 0.5;
 }
 
 .perrigoLogo {
@@ -266,51 +245,6 @@ li a {
   width: 40%;
 }
 
-.buttons {
-  display: inline;
-  text-align: center;
-  font-family: arial, courier, helvetica;
-  font-size: 95%;
-  padding-bottom: 5%;
-  margin-bottom: 2%;
-}
-
-#b1 {
-  padding: .2%;
-  color: white;
-  float: left;
-  margin-left: 35%;
-  border-style: solid;
-  border-radius: 10%;
-  border-width: 1.5px;
-  background-color: #282828;
-  box-shadow: 5px 5px 2.5px black;
-}
-
-#b1:hover {
-  cursor: pointer;
-  transform: scale(1.05);
-  opacity: 0.5;
-}
-
-#b2 {
-  padding: .2%;
-  color: white;
-  float: right;
-  margin-right: 35%;
-  border-style: solid;
-  border-radius: 10%;
-  border-width: 1.5px;
-  background-color: #282828;
-  box-shadow: 5px 5px 2.5px black;
-}
-
-#b2:hover {
-  cursor: pointer;
-  transform: scale(1.05);
-  opacity: 0.5;
-}
-
 
 h2 {
   text-align: center;
@@ -332,109 +266,10 @@ h2 {
   border-top-right-radius: 50%;
 }
 
-#favBarHeading {
-  padding-left: 10%;
-}
-
-#unlockImage {
-  display: inline;
-  float: right;
-  height: 3.5%;
-  width: 3.5%;
-  padding-top: 2%;
-  padding-right: 8%;
-}
-
-#lockImage {
-  display: none;
-  float: right;
-  height: 3.5%;
-  width: 3.5%;
-  padding-top: 2%;
-  padding-right: 8%;
-}
-
-.group1, .group2, .group3, .group4 {
-  float: left;
-  width: 35%;
-  height: 35%;
-  margin-bottom: .5%;
-  margin-top: .5%;
-  padding-left: 2%;
-  padding-right: 2%;
-  border-style: solid;
-  border-radius: 10%;
-  background-color: #7D7D7D;
-  box-shadow: 10px 10px 5px black;
-}
-
-.favBar {
-  float: right;
-  width: 35%;
-  height: 35%;
-  margin-bottom: .5%;
-  margin-top: .5%;
-  margin-right: 32.5%;
-  border-style: solid;
-  border-radius: 10%;
-  background-color: #7D7D7D;
-  box-shadow: 10px 10px 5px black;
-}
-
-.favBar h2 {
-  font-size: 100%;
-}
-
-.favBar .worksiteNavImages {
-  width: 15%;
-  padding-left: 2%;
-  padding-right: 2%;
-  padding-bottom: 2%;
-  padding-top: 0;
-}
-
-.group1, .group3 {
-  margin-left: 9%;
-  margin-right: 1%;
-}
-
-.group2, .group4 {
-  margin-right: 9%;
-  margin-left: 1%;
-}
-
-.group1Images  {
-  display: inline;
-}
-
 footer {
   padding-top: 5%;
   text-align: center;
   clear: both;
   color: white;
   font-family: arial, courier, helvetica;
-}
-
-.cal {
-  margin-left: 2%;
-  margin-right: 2%;
-  padding: 2%;
-  padding-top: 0;
-  height: 700px;
-  margin-top: 1%;
-  position: relative;
-  overflow: hidden;
-}
-
-iframe {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  left: 0px;
-  top: 0px;
-  border-style: solid;
-  border-color: black;
-  border-width: 3px;
-  border-radius: 1%;
-  box-shadow: 15px 15px 8px black;
 }
