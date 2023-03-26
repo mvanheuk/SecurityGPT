@@ -8,6 +8,8 @@ let loadInterval
 
 function loader(element) {
     element.textContent = ''
+    // to focus scroll to the bottom here
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
 
     loadInterval = setInterval(() => {
         // Update the text content of the loading indicator
@@ -22,10 +24,13 @@ function loader(element) {
 
 function typeText(element, text) {
     let index = 0
+    // to focus scroll to the bottom here
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
 
     let interval = setInterval(() => {
         if (index < text.length) {
             element.innerHTML += text.charAt(index)
+            chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
             index++
         } else {
             clearInterval(interval)
@@ -45,6 +50,8 @@ function generateUniqueId() {
 }
 
 function chatStripe(isAi, value, uniqueId) {
+    // to focus scroll to the bottom here
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
     return (
         `
         <div class="wrapper ${isAi && 'ai'}">
