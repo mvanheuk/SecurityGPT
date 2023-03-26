@@ -38,7 +38,7 @@
   
   /* Chatbot container styles */
   #app {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -72,9 +72,8 @@
     height: 100px;
     width: 70%;
     border: none;
-    border-radius: 80px;
+    border-radius: 25px;
     padding: 30px;
-    padding-top: 15px;
     resize: none;
     font-size: 16px;
     box-shadow: 0px 0px 20px rgba(46, 46, 46, 0.1);
@@ -85,7 +84,7 @@
     background-color: #1d3c5c;
     border: none;
     border-radius: 25px;
-    padding: 15px 30px;
+    padding: 15px 50px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -97,8 +96,8 @@
   }
   
   button[type="submit"] img {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     fill: #fff;
   }
 
@@ -141,6 +140,7 @@
   .message {
     color: #333333;
   }
+
   
   /* Responsive styles */
   @media (max-width: 768px) {
