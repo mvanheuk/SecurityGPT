@@ -22,31 +22,6 @@ function loader(element) {
     }, 300);
 }
 
-function typeText(element, text) {
-    let currentCharacter = 0;
-    let currentParagraph = 0;
-    const paragraphs = text.split('\n'); // split text into paragraphs based on new line characters
-  
-    const typeInterval = setInterval(() => {
-      if (currentParagraph >= paragraphs.length) {
-        clearInterval(typeInterval);
-        return;
-      }
-  
-      const currentParagraphText = paragraphs[currentParagraph];
-      if (currentCharacter >= currentParagraphText.length) {
-        currentCharacter = 0;
-        currentParagraph++;
-        element.appendChild(document.createElement('br')); // insert line break element for new paragraph
-        return;
-      }
-  
-      const currentText = currentParagraphText.slice(0, ++currentCharacter);
-      element.innerHTML = currentText;
-    }, 20);
-  }
-  
-
 // generate unique ID for each message div of bot
 // necessary for typing text effect for that specific reply
 // without unique ID, typing text will work on every element
@@ -58,6 +33,71 @@ function generateUniqueId() {
     return `id-${timestamp}-${hexadecimalString}`;
 }
 
+
+function typeText(element, text) {
+    let currentCharacter = 0; // initialize to 0 for list items
+    let currentParagraph = 0;
+    const paragraphs = text.split('\n'); // split text into paragraphs based on new line characters
+  
+    const typeInterval = setInterval(() => {
+      if (currentParagraph >= paragraphs.length) {
+        clearInterval(typeInterval);
+        chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+        return;
+      }
+  
+      const currentParagraphText = paragraphs[currentParagraph];
+      if (currentParagraphText.startsWith('- ')) {
+        // Handle list items
+        const currentText = currentParagraphText.slice(currentCharacter);
+        const listItem = document.createElement('li');
+        listItem.innerHTML = currentText;
+        if (!element.lastElementChild || element.lastElementChild.tagName !== 'UL') {
+          const newList = document.createElement('ul'); // create new ul element if there is none
+          element.appendChild(newList);
+        }
+        element.lastElementChild.appendChild(listItem);
+        chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+        currentCharacter += currentText.length + 2; // add the length of the list item and the dash to currentCharacter
+      } else if (currentParagraphText.startsWith('`')) {
+        // Handle code paragraphs
+        if (currentCharacter >= currentParagraphText.length) {
+          currentCharacter = 0;
+          currentParagraph++;
+          const newCodeBlock = document.createElement('code');
+          element.appendChild(newCodeBlock);
+          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+        } else {
+          const currentText = currentParagraphText.slice(0, ++currentCharacter);
+          if (!element.lastElementChild || element.lastElementChild.tagName !== 'CODE') {
+            const newCodeBlock = document.createElement('code');
+            element.appendChild(newCodeBlock);
+          }
+          element.lastElementChild.innerHTML = currentText;
+          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+        }
+      } else {
+        // Handle regular paragraphs
+        if (currentCharacter >= currentParagraphText.length) {
+          currentCharacter = 0;
+          currentParagraph++;
+          const newParagraph = document.createElement('p');
+          element.appendChild(newParagraph);
+          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+        } else {
+          const currentText = currentParagraphText.slice(0, ++currentCharacter);
+          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+            const newParagraph = document.createElement('p');
+            element.appendChild(newParagraph);
+          }
+          element.lastElementChild.innerHTML = currentText;
+          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+        }
+      }
+    }, 20);
+  }
+  
+  
 function chatStripe(isAi, value, uniqueId) {
     // to focus scroll to the bottom here
     chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
@@ -77,7 +117,7 @@ function chatStripe(isAi, value, uniqueId) {
     `
     )
 }
-  
+
 
 const handleSubmit = async (e) => {
     e.preventDefault()
