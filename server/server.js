@@ -9,9 +9,7 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-let prompt = '';
 const openai = new OpenAIApi(configuration);
-let responseText = '';
 const app = express();
 
 app.use(cors());
@@ -39,7 +37,7 @@ app.post('/', async (req, res) => {
     const botResponse = response.data.choices[0].text;
 
     if (botResponse.toLowerCase() === 'yes') {
-      prompt = req.body.prompt;
+      let prompt = req.body.prompt;
       try {
         response = await openai.createCompletion({
           model: 'text-davinci-003',
@@ -59,15 +57,14 @@ app.post('/', async (req, res) => {
         res.status(500).send(error || 'Something went wrong');
       }
     } else if (botResponse.toLowerCase() === 'no') {
-      responseText =
-        'This question cannot be answered by SecurityGPT due to the limitation in the subjects it can speak on.';
+      let responseText = 'This question cannot be answered by SecurityGPT due to the limitation in the subjects it can speak on.';
       res.status(200).send({
         bot: responseText,
       });
     } else {
-      responseText = 'I am sorry, I did not understand your response.';
+      let responseText2 = 'I am sorry, I did not understand your response.';
       res.status(200).send({
-        bot: responseText,
+        bot: responseText2,
       });
     }
   } catch (error) {
