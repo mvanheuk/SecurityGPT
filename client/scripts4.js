@@ -23,20 +23,29 @@ function loader(element) {
 }
 
 function typeText(element, text) {
-    let index = 0
-    // to focus scroll to the bottom here
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-
-    let interval = setInterval(() => {
-        if (index < text.length) {
-            element.innerHTML += text.charAt(index)
-            chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-            index++
-        } else {
-            clearInterval(interval)
-        }
-    }, 20)
-}
+    let currentCharacter = 0;
+    let currentParagraph = 0;
+    const paragraphs = text.split('\n'); // split text into paragraphs based on new line characters
+  
+    const typeInterval = setInterval(() => {
+      if (currentParagraph >= paragraphs.length) {
+        clearInterval(typeInterval);
+        return;
+      }
+  
+      const currentParagraphText = paragraphs[currentParagraph];
+      if (currentCharacter >= currentParagraphText.length) {
+        currentCharacter = 0;
+        currentParagraph++;
+        element.appendChild(document.createElement('br')); // insert line break element for new paragraph
+        return;
+      }
+  
+      const currentText = currentParagraphText.slice(0, ++currentCharacter);
+      element.innerHTML = currentText;
+    }, 20);
+  }
+  
 
 // generate unique ID for each message div of bot
 // necessary for typing text effect for that specific reply
@@ -68,6 +77,7 @@ function chatStripe(isAi, value, uniqueId) {
     `
     )
 }
+  
 
 const handleSubmit = async (e) => {
     e.preventDefault()
@@ -108,9 +118,10 @@ const handleSubmit = async (e) => {
 
     if (response.ok) {
         const data = await response.json();
-        const parsedData = data.bot.trim() // trims any trailing spaces/'\n' 
+        const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
+        const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
 
-        typeText(messageDiv, parsedData)
+        typeText(messageDiv, paragraphs);
     } else {
         const err = await response.text()
 
