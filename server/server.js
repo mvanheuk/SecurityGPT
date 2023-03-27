@@ -24,7 +24,7 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const prompt = req.body.prompt;
-    let prePrompt = `Does the question in quotes following this sentence pertain to any of the following subjects (Computers, Technology, Data, Cyber Security, Information Security, Programming, Business)? "${prompt}"? Please only respond explicitly with either Yes or No.`;
+    let prePrompt = `Does the question in quotes following this sentence pertain to any of the following subjects (Computers, Technology, Data, Cyber Security, Information Security, Programming, Business)? "${prompt}"? Please only respond to this prompt with yes or no.`;
 
     const responsePrePrompt = await openai.createCompletion({
       model: "text-davinci-003",
