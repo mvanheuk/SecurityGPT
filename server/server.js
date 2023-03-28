@@ -24,49 +24,26 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const prompt = req.body.prompt;
-    let prePrompt = `Does the prompt in quotes following this sentence pertain to any of the following subjects (Computers, Technology, Data, Cyber Security, Information, Programming, Business)? "${prompt}"? Please only respond to this prompt with yes or no.`;
 
-    const responsePrePrompt = await openai.createCompletion({
+    const responseTest = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `${prePrompt}`,
-      temperature: 0,
-      max_tokens: 60,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
+      prompt: `${prompt}`,
+      temperature: 0, // Higher values means the model will take more risks.
+      max_tokens: 3000, // The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 4096).
+      top_p: 1, // alternative to sampling with temperature, called nucleus sampling
+      frequency_penalty: 0.5, // Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
+      presence_penalty: 0, // Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
     });
 
-    const prePromptAnswer = responsePrePrompt.data.choices[0].text.trim().toLowerCase();
+    res.status(200).send({
+      bot: response.data.choices[0].text
+    });
 
-    if (prePromptAnswer === "yes") {
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: `${prompt}`,
-        temperature: 0,
-        max_tokens: 3000,
-        top_p: 1,
-        frequency_penalty: 0.5,
-        presence_penalty: 0,
-      });
-
-      res.status(200).send({
-        bot: response.data.choices[0].text
-      });
-    } else if (prePromptAnswer === "no") {
-      res.status(200).send({
-        bot: "This question can not be answered by SecurityGPT due to Prompt Policy settings."
-      });
-    } else {
-      res.status(200).send({
-        bot: "I'm sorry, I didn't understand your question."
-      });
-    }
   } catch (error) {
-    console.error(error);
+    console.error(error)
     res.status(500).send(error || 'Something went wrong');
   }
-});
-
+})
 
 app.listen(5000, () => console.log('AI server started on http://localhost:5000'))
 
