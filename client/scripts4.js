@@ -3,6 +3,18 @@ import user from './assets/user.svg'
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
+const modelButtons = document.querySelectorAll('.model-btn')
+
+let currentModel = 'text-davinci-003'; // Default model
+
+// Add click event listeners for the model buttons
+modelButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    currentModel = button.dataset.model;
+    modelButtons.forEach((btn) => btn.classList.remove('active'));
+    button.classList.add('active');
+  });
+});
 
 let loadInterval
 

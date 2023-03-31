@@ -18,14 +18,36 @@
     </header>
 
     <div id="app">
+      <div id="model_selector">
+        <button class="model_button" data-model="model_name_1">Model 1</button>
+        <button class="model_button" data-model="model_name_2">Model 2</button>
+        <!-- Add more buttons as needed -->
+      </div>
+
       <div id="chat_container"></div>
 
-      <form>
+      <form id="chat_form">
         <textarea name="prompt" rows="1" cols="1" placeholder="Ask SecurityGPT..."></textarea>
         <button type="submit"><img src="assets/send.svg" /></button>
       </form>
 
       <script type="module" src="scripts4.js"></script>
+      <script>
+        let currentModel = 'model_name_1'; // Set the default model
+
+        document.querySelectorAll('.model_button').forEach((button) => {
+          button.addEventListener('click', (event) => {
+            currentModel = event.target.dataset.model;
+            console.log('Model changed to:', currentModel);
+            // Send an AJAX request to the server to change the model (implementation depends on your server-side code)
+          });
+        });
+
+        document.getElementById('chat_form').addEventListener('submit', (event) => {
+          event.preventDefault();
+          // Include the currentModel in your API call (implementation depends on your existing code)
+        });
+      </script>
     </div>
 
     <footer></footer>

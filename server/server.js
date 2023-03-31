@@ -24,9 +24,10 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const prompt = req.body.prompt;
+    const model = req.body.model || "text-davinci-003"; // Extract the model from the request body or use the default model
 
     const response = await openai.createCompletion({
-      model: "text-davinci-003",
+      model: model,
       prompt: `${prompt}`,
       temperature: 0, // Higher values means the model will take more risks.
       max_tokens: 3000, // The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 4096).
