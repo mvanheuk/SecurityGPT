@@ -167,15 +167,6 @@
   text-decoration: none;
   display: inline-block;
 }
-
-.model-selection button:hover {
-  background-color: #0052a3;
-}
-
-.model-selection button:focus {
-  outline: none;
-}
-
   
   /* Responsive styles */
   @media (max-width: 768px) {
