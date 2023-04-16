@@ -81,16 +81,18 @@ function chatStripe(isAi, value, uniqueId) {
 
 function updateChatHistoryDisplay() {
     chatHistoryContainer.innerHTML = '';
-    chatHistory.forEach((history, index) => {
-        const chatHistoryRow = document.createElement('div');
-        chatHistoryRow.classList.add('chat-history-row');
-        chatHistoryRow.textContent = history.prompts[0].substring(0, 50) + (history.prompts[0].length > 50 ? '...' : '');
-        chatHistoryContainer.appendChild(chatHistoryRow);
+    if (chatHistory.length > 0) {
+        chatHistory.forEach((history, index) => {
+            const chatHistoryRow = document.createElement('div');
+            chatHistoryRow.classList.add('chat-history-row');
+            chatHistoryRow.textContent = history.prompts[0].substring(0, 50) + (history.prompts[0].length > 50 ? '...' : '');
+            chatHistoryContainer.appendChild(chatHistoryRow);
 
-        chatHistoryRow.addEventListener('click', () => {
-            showChatHistoryPopup(history);
+            chatHistoryRow.addEventListener('click', () => {
+                showChatHistoryPopup(history);
+            });
         });
-    });
+    }
 }
 
 function addChatHistory(prompt, response) {
