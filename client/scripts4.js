@@ -84,17 +84,17 @@ const chatHistoryContainer = document.querySelector('#chat_history_container');
 const chatHistory = [];
 
 function addChatHistory(prompt, response) {
-  chatHistory.push({ prompt, response });
-
-  const chatHistoryRow = document.createElement('div');
-  chatHistoryRow.classList.add('chat-history-row');
-  chatHistoryRow.textContent = prompt.substring(0, 50) + (prompt.length > 50 ? '...' : '');
-  chatHistoryContainer.appendChild(chatHistoryRow);
-
-  chatHistoryRow.addEventListener('click', () => {
-    showChatHistoryPopup(prompt, response);
-  });
-}
+    chatHistory.push({ prompt, response });
+  
+    const chatHistoryRow = document.createElement('div');
+    chatHistoryRow.classList.add('chat-history-row');
+    chatHistoryRow.textContent = prompt.substring(0, 50) + (prompt.length > 50 ? '...' : '');
+    chatHistoryContainer.appendChild(chatHistoryRow);
+  
+    chatHistoryRow.addEventListener('click', () => {
+      showChatHistoryPopup(prompt, response);
+    });
+  }
 
 function showChatHistoryPopup(prompt, response) {
   const overlay = document.createElement('div');
@@ -187,17 +187,17 @@ const handleSubmit = async (e) => {
         const data = await response.json();
         const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
         const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
-
+    
         typeText(messageDiv, parsedData);
-
+    
         addChatHistory(data.get('prompt'), parsedData);
         saveChatHistory(); // Save the updated chat history to localStorage
-    } else {
+      } else {
         const err = await response.text()
-
+    
         messageDiv.innerHTML = "Something went wrong"
         alert(err)
-    }
+      }
 
 
     // Save the chat history
@@ -208,6 +208,12 @@ const handleSubmit = async (e) => {
     chatHistory.push(chat)
     updateChatHistoryDisplay()
 }
+
+// Clear chat button functionality
+const clearChatButton = document.getElementById('clear_chat_button');
+clearChatButton.addEventListener('click', () => {
+  chatContainer.innerHTML = '';
+});
 
 loadChatHistory();
 

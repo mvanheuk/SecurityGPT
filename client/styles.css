@@ -107,6 +107,22 @@
     fill: #fff;
   }
 
+  button#clear_chat_button {
+    background-color: #1d3c5c;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 30px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    margin-left: 20px;
+  }
+  
+  button#clear_chat_button:focus,
+  button#clear_chat_button:hover {
+    background-color: #0052a3;
+  }
+
   .wrapper {
     padding: 15px;
   }
