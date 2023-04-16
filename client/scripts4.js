@@ -79,6 +79,56 @@ function chatStripe(isAi, value, uniqueId) {
     )
 }
 
+// Chat history handling
+const chatHistoryContainer = document.querySelector('#chat_history_container');
+const chatHistory = [];
+
+function addChatHistory(prompt, response) {
+  chatHistory.push({ prompt, response });
+
+  const chatHistoryRow = document.createElement('div');
+  chatHistoryRow.classList.add('chat-history-row');
+  chatHistoryRow.textContent = prompt.substring(0, 50) + (prompt.length > 50 ? '...' : '');
+  chatHistoryContainer.appendChild(chatHistoryRow);
+
+  chatHistoryRow.addEventListener('click', () => {
+    showChatHistoryPopup(prompt, response);
+  });
+}
+
+function showChatHistoryPopup(prompt, response) {
+  const overlay = document.createElement('div');
+  overlay.classList.add('overlay');
+
+  const popup = document.createElement('div');
+  popup.classList.add('popup');
+
+  const closeButton = document.createElement('button');
+  closeButton.textContent = 'X';
+  closeButton.style.float = 'right';
+  closeButton.style.border = 'none';
+  closeButton.style.background = 'none';
+  closeButton.style.cursor = 'pointer';
+  closeButton.style.fontSize = '20px';
+  closeButton.style.fontWeight = 'bold';
+
+  const promptElement = document.createElement('div');
+  promptElement.innerHTML = '<strong>User:</strong><br>' + prompt.replace(/\n/g, '<br>');
+
+  const responseElement = document.createElement('div');
+  responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + response.replace(/\n/g, '<br>');
+
+  popup.appendChild(closeButton);
+  popup.appendChild(promptElement);
+  popup.appendChild(responseElement);
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+
+  closeButton.addEventListener('click', () => {
+    document.body.removeChild(overlay);
+  });
+}
+
 
 const handleSubmit = async (e) => {
     e.preventDefault()
@@ -120,6 +170,10 @@ const handleSubmit = async (e) => {
     if (response.ok) {
         const data = await response.json();
         const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
+
+        // Save the chat history
+        addChatHistory(data.get('prompt'), parsedData);
+        
         const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
 
         typeText(messageDiv, parsedData);
