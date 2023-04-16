@@ -122,7 +122,7 @@ const handleSubmit = async (e) => {
         const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
         const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
 
-        typeText(messageDiv, paragraphs);
+        typeText(messageDiv, parsedData);
     } else {
         const err = await response.text()
 
