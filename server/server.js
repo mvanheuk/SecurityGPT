@@ -24,7 +24,7 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const prompt = req.body.prompt;
-    const model = "GPT-4";
+    const model = "gpt-4";
 
     const response = await openai.createCompletion({
       model: model,
