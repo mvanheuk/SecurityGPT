@@ -5,6 +5,7 @@ const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
 
 let loadInterval
+let isNewConversation = true;
 
 function loader(element) {
     element.textContent = ''
@@ -190,29 +191,24 @@ function loadChatHistory() {
   
       typeText(messageDiv, parsedData);
   
-      // Fix: pass the user's input and the bot's response to the addChatHistory function
-      addChatHistory(data.get('prompt'), parsedData);
-      saveChatHistory(); // Save the updated chat history to localStorage
+      if (isNewConversation) {
+        addChatHistory(data.get('prompt'), parsedData);
+        saveChatHistory(); // Save the updated chat history to localStorage
+        isNewConversation = false;
+      }
     } else {
       const err = await response.text();
   
       messageDiv.innerHTML = "Something went wrong";
       alert(err);
     }
-  
-    // Save the chat history
-    const chat = {
-      promptSnippet: data.get('prompt').substring(0, 30) + '...',
-      fullChat: data.get('prompt'),
-    };
-    chatHistory.push(chat);
-    updateChatHistoryDisplay();
   };
 
 // Clear chat button functionality
 const clearButton = document.getElementById('clear_chat_button');
 clearButton.addEventListener('click', () => {
   chatContainer.innerHTML = '';
+  isNewConversation = true;
 });
 
 form.addEventListener('submit', handleSubmit)
