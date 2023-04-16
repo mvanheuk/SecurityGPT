@@ -170,13 +170,11 @@ const handleSubmit = async (e) => {
     if (response.ok) {
         const data = await response.json();
         const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
-
-        // Save the chat history
-        addChatHistory(data.get('prompt'), parsedData);
-        
         const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
 
         typeText(messageDiv, parsedData);
+
+        addChatHistory(data.get('prompt'), parsedData);
     } else {
         const err = await response.text()
 

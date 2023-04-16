@@ -41,15 +41,21 @@
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     background-color: #fff;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
     margin-top: 50px;
     margin-bottom: 50px;
+  }
+
+  #chat_wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
   }
   
   #chat_container {
@@ -143,10 +149,9 @@
 
   #chat_history_container {
     height: calc(50vh - 150px);
-    width: calc(100% / 3);
+    width: calc(33.33% - 20px);
     overflow-y: auto;
     padding: 20px;
-    background-color: #fff;
     border-right: 1px solid #eee;
   }
   
