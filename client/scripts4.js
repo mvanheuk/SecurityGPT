@@ -95,21 +95,15 @@ function updateChatHistoryDisplay() {
 
 function addChatHistory(prompt, response) {
     const conversationId = generateUniqueId();
-    const conversationMarkup = `
-        <div class="chat-history-row" data-conversation-id="${conversationId}">
-            <div class="chat-history-prompt">${prompt}</div>
-            <div class="chat-history-response">${response}</div>
-        </div>
-    `;
-    chatHistoryContainer.insertAdjacentHTML('afterbegin', conversationMarkup);
 
-    chatHistory.push({
+    chatHistory.unshift({
         conversationId,
         prompts: [prompt],
         responses: [response],
     });
 
     saveChatHistory();
+    updateChatHistoryDisplay();
 }
 
 function showChatHistoryPopup(history) {
