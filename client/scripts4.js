@@ -80,21 +80,38 @@ function chatStripe(isAi, value, uniqueId) {
     )
 }
 
+function updateChatHistoryDisplay() {
+    chatHistoryContainer.innerHTML = '';
+    chatHistory.forEach((history, index) => {
+      const chatHistoryRow = document.createElement('div');
+      chatHistoryRow.classList.add('chat-history-row');
+      chatHistoryRow.textContent = history.prompts[0].substring(0, 50) + (history.prompts[0].length > 50 ? '...' : '');
+      chatHistoryContainer.appendChild(chatHistoryRow);
+  
+      chatHistoryRow.addEventListener('click', () => {
+        showChatHistoryPopup(history);
+      });
+    });
+  }
+
 // Chat history handling
 const chatHistoryContainer = document.querySelector('#chat_history_container');
 const chatHistory = [];
 
 function addChatHistory(prompt, response) {
-    chatHistory.push({ prompt, response });
+    const existingChat = chatHistory.find((chat) => chat.conversationId === conversationId);
+    if (existingChat) {
+      existingChat.prompts.push(prompt);
+      existingChat.responses.push(response);
+    } else {
+      chatHistory.push({
+        conversationId,
+        prompts: [prompt],
+        responses: [response],
+      });
+    }
   
-    const chatHistoryRow = document.createElement('div');
-    chatHistoryRow.classList.add('chat-history-row');
-    chatHistoryRow.textContent = prompt.substring(0, 50) + (prompt.length > 50 ? '...' : '');
-    chatHistoryContainer.appendChild(chatHistoryRow);
-  
-    chatHistoryRow.addEventListener('click', () => {
-      showChatHistoryPopup(prompt, response);
-    });
+    updateChatHistoryDisplay();
   }
 
 function showChatHistoryPopup(prompt, response) {
@@ -113,11 +130,15 @@ function showChatHistoryPopup(prompt, response) {
   closeButton.style.fontSize = '20px';
   closeButton.style.fontWeight = 'bold';
 
-  const promptElement = document.createElement('div');
-  promptElement.innerHTML = '<strong>User:</strong><br>' + prompt.replace(/\n/g, '<br>');
+  history.prompts.forEach((prompt, index) => {
+    const promptElement = document.createElement('div');
+    promptElement.innerHTML = '<strong>User:</strong><br>' + prompt.replace(/\n/g, '<br>');
+    const responseElement = document.createElement('div');
+    responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + history.responses[index].replace(/\n/g, '<br>');
 
-  const responseElement = document.createElement('div');
-  responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + response.replace(/\n/g, '<br>');
+    popup.appendChild(promptElement);
+    popup.appendChild(responseElement);
+  });
 
   popup.appendChild(closeButton);
   popup.appendChild(promptElement);
@@ -185,24 +206,20 @@ function loadChatHistory() {
     messageDiv.innerHTML = "";
   
     if (response.ok) {
-      const responseData = await response.json();
-      const parsedData = responseData.bot.trim(); // trims any trailing spaces/'\n'
-      const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
-  
-      typeText(messageDiv, parsedData);
-  
-      if (isNewConversation) {
+        const data = await response.json();
+        const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
+    
+        typeText(messageDiv, parsedData);
+    
         addChatHistory(data.get('prompt'), parsedData);
         saveChatHistory(); // Save the updated chat history to localStorage
-        isNewConversation = false;
+      } else {
+        const err = await response.text();
+    
+        messageDiv.innerHTML = "Something went wrong";
+        alert(err);
       }
-    } else {
-      const err = await response.text();
-  
-      messageDiv.innerHTML = "Something went wrong";
-      alert(err);
-    }
-  };
+    };
 
 // Clear chat button functionality
 const clearButton = document.getElementById('clear_chat_button');
