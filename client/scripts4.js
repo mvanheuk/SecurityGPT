@@ -3,18 +3,6 @@ import user from './assets/user.svg'
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
-const modelButtons = document.querySelectorAll('.model-btn')
-
-let currentModel = 'text-davinci-003'; // Default model
-
-// Add click event listeners for the model buttons
-modelButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    currentModel = button.dataset.model;
-    modelButtons.forEach((btn) => btn.classList.remove('active'));
-    button.classList.add('active');
-  });
-});
 
 let loadInterval
 
@@ -47,67 +35,28 @@ function generateUniqueId() {
 
 
 function typeText(element, text) {
-    let currentCharacter = 0; // initialize to 0 for list items
-    let currentParagraph = 0;
-    const paragraphs = text.split('\n'); // split text into paragraphs based on new line characters
-  
-    const typeInterval = setInterval(() => {
-      if (currentParagraph >= paragraphs.length) {
-        clearInterval(typeInterval);
-        chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-        return;
-      }
-  
-      const currentParagraphText = paragraphs[currentParagraph];
-      if (currentParagraphText.startsWith('- ')) {
-        // Handle list items
-        const currentText = currentParagraphText.slice(currentCharacter);
-        const listItem = document.createElement('li');
-        listItem.innerHTML = currentText;
-        if (!element.lastElementChild || element.lastElementChild.tagName !== 'UL') {
-          const newList = document.createElement('ul'); // create new ul element if there is none
-          element.appendChild(newList);
-        }
-        element.lastElementChild.appendChild(listItem);
-        chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-        currentCharacter += currentText.length + 2; // add the length of the list item and the dash to currentCharacter
-      } else if (currentParagraphText.startsWith('`')) {
-        // Handle code paragraphs
-        if (currentCharacter >= currentParagraphText.length) {
-          currentCharacter = 0;
-          currentParagraph++;
-          const newCodeBlock = document.createElement('code');
-          element.appendChild(newCodeBlock);
-          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-        } else {
-          const currentText = currentParagraphText.slice(0, ++currentCharacter);
-          if (!element.lastElementChild || element.lastElementChild.tagName !== 'CODE') {
-            const newCodeBlock = document.createElement('code');
-            element.appendChild(newCodeBlock);
+  let index = 0;
+
+  const typeCharacter = () => {
+      if (index < text.length) {
+          const currentChar = text[index++];
+          if (currentChar === '\n') {
+              const newParagraph = document.createElement('p');
+              element.appendChild(newParagraph);
+          } else {
+              if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+                  const newParagraph = document.createElement('p');
+                  element.appendChild(newParagraph);
+              }
+              element.lastElementChild.innerHTML += currentChar;
           }
-          element.lastElementChild.innerHTML = currentText;
           chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-        }
-      } else {
-        // Handle regular paragraphs
-        if (currentCharacter >= currentParagraphText.length) {
-          currentCharacter = 0;
-          currentParagraph++;
-          const newParagraph = document.createElement('p');
-          element.appendChild(newParagraph);
-          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-        } else {
-          const currentText = currentParagraphText.slice(0, ++currentCharacter);
-          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-            const newParagraph = document.createElement('p');
-            element.appendChild(newParagraph);
-          }
-          element.lastElementChild.innerHTML = currentText;
-          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-        }
+          setTimeout(typeCharacter, 20);
       }
-    }, 20);
-  }
+  };
+
+  typeCharacter();
+}
   
   
 function chatStripe(isAi, value, uniqueId) {
