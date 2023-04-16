@@ -161,6 +161,31 @@ function showChatHistoryPopup(history) {
     popup.appendChild(closeButton);
     popup.appendChild(chatContent);
     overlay.appendChild(popup);
+
+    const closePopup = () => {
+        document.body.removeChild(overlay);
+    };
+
+    const handleOverlayClick = (event) => {
+        if (event.target === overlay) {
+            closePopup();
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Escape') {
+            closePopup();
+        }
+    };
+
+    overlay.addEventListener('click', handleOverlayClick);
+    closeButton.addEventListener('click', closePopup);
+    document.addEventListener('keydown', handleKeyDown);
+
+    overlay.addEventListener('remove', () => {
+        document.removeEventListener('keydown', handleKeyDown);
+    });
+    
     document.body.appendChild(overlay);
 
     closeButton.addEventListener('click', () => {
