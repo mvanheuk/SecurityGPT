@@ -210,12 +210,10 @@ const handleSubmit = async (e) => {
 }
 
 // Clear chat button functionality
-const clearChatButton = document.getElementById('clear_chat_button');
-clearChatButton.addEventListener('click', () => {
+const clearButton = document.getElementById('clear_chat_button');
+clearButton.addEventListener('click', () => {
   chatContainer.innerHTML = '';
 });
-
-loadChatHistory();
 
 form.addEventListener('submit', handleSubmit)
 form.addEventListener('keyup', (e) => {
