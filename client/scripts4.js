@@ -94,19 +94,21 @@ function updateChatHistoryDisplay() {
 }
 
 function addChatHistory(prompt, response) {
-    const existingChat = chatHistory.find((chat) => chat.conversationId === conversationId);
-    if (existingChat) {
-        existingChat.prompts.push(prompt);
-        existingChat.responses.push(response);
-    } else {
-        chatHistory.push({
-            conversationId,
-            prompts: [prompt],
-            responses: [response],
-        });
-    }
+    const conversationId = generateUniqueId();
+    const conversationMarkup = `
+        <div class="chat-history-row" data-conversation-id="${conversationId}">
+            <div class="chat-history-prompt">${prompt}</div>
+            <div class="chat-history-response">${response}</div>
+        </div>
+    `;
+    chatHistoryContainer.insertAdjacentHTML('afterbegin', conversationMarkup);
 
-    updateChatHistoryDisplay();
+    chatHistory.push({
+        conversationId,
+        prompts: [prompt],
+        responses: [response],
+    });
+
     saveChatHistory();
 }
 
