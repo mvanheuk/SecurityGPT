@@ -146,68 +146,68 @@ function loadChatHistory() {
   }
 
 
-const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    const data = new FormData(form)
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const data = new FormData(form);
+  
     // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
-
-    // to clear the textarea input 
-    form.reset()
-
+    chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
+  
+    // to clear the textarea input
+    form.reset();
+  
     // bot's chatstripe
-    const uniqueId = generateUniqueId()
-    chatContainer.innerHTML += chatStripe(true, " ", uniqueId)
-
-    // specific message div 
-    const messageDiv = document.getElementById(uniqueId)
-
+    const uniqueId = generateUniqueId();
+    chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
+  
+    // specific message div
+    const messageDiv = document.getElementById(uniqueId);
+  
     // messageDiv.innerHTML = "..."
-    loader(messageDiv)
-
+    loader(messageDiv);
+  
     const response = await fetch('https://securitygpt.onrender.com', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            prompt: data.get('prompt')
-        })
-    })
-
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: data.get('prompt')
+      })
+    });
+  
     // to focus scroll to the bottom here
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight; 
-
-    clearInterval(loadInterval)
-    messageDiv.innerHTML = ""
-
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+  
+    clearInterval(loadInterval);
+    messageDiv.innerHTML = "";
+  
     if (response.ok) {
-        const data = await response.json();
-        const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
-        const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
-    
-        typeText(messageDiv, parsedData);
-    
-        addChatHistory(data.get('prompt'), parsedData);
-        saveChatHistory(); // Save the updated chat history to localStorage
-      } else {
-        const err = await response.text()
-    
-        messageDiv.innerHTML = "Something went wrong"
-        alert(err)
-      }
-
-
+      const responseData = await response.json();
+      const parsedData = responseData.bot.trim(); // trims any trailing spaces/'\n'
+      const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
+  
+      typeText(messageDiv, parsedData);
+  
+      // Fix: pass the user's input and the bot's response to the addChatHistory function
+      addChatHistory(data.get('prompt'), parsedData);
+      saveChatHistory(); // Save the updated chat history to localStorage
+    } else {
+      const err = await response.text();
+  
+      messageDiv.innerHTML = "Something went wrong";
+      alert(err);
+    }
+  
     // Save the chat history
     const chat = {
-        promptSnippet: data.get('prompt').substring(0, 30) + '...',
-        fullChat: data.get('prompt'),
-    }
-    chatHistory.push(chat)
-    updateChatHistoryDisplay()
-}
+      promptSnippet: data.get('prompt').substring(0, 30) + '...',
+      fullChat: data.get('prompt'),
+    };
+    chatHistory.push(chat);
+    updateChatHistoryDisplay();
+  };
 
 // Clear chat button functionality
 const clearButton = document.getElementById('clear_chat_button');
