@@ -1,31 +1,29 @@
-import bot from './assets/bot.svg'
-import user from './assets/user.svg'
+import bot from './assets/bot.svg';
+import user from './assets/user.svg';
 
-const form = document.querySelector('form')
-const chatContainer = document.querySelector('#chat_container')
+const form = document.querySelector('form');
+const chatContainer = document.querySelector('#chat_container');
+const chatHistoryContainer = document.querySelector('#chat_history_container');
+const clearButton = document.getElementById('clear_chat_button');
 
-let loadInterval
+let loadInterval;
 let isNewConversation = true;
 
+let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+
 function loader(element) {
-    element.textContent = ''
-    // to focus scroll to the bottom here
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+    element.textContent = '';
+    scrollToBottom();
 
     loadInterval = setInterval(() => {
-        // Update the text content of the loading indicator
         element.textContent += '.';
 
-        // If the loading indicator has reached three dots, reset it
         if (element.textContent === '....') {
             element.textContent = '';
         }
     }, 300);
 }
 
-// generate unique ID for each message div of bot
-// necessary for typing text effect for that specific reply
-// without unique ID, typing text will work on every element
 function generateUniqueId() {
     const timestamp = Date.now();
     const randomNumber = Math.random();
@@ -34,35 +32,36 @@ function generateUniqueId() {
     return `id-${timestamp}-${hexadecimalString}`;
 }
 
-
 function typeText(element, text) {
-  let index = 0;
+    let index = 0;
 
-  const typeCharacter = () => {
-      if (index < text.length) {
-          const currentChar = text[index++];
-          if (currentChar === '\n') {
-              const newParagraph = document.createElement('p');
-              element.appendChild(newParagraph);
-          } else {
-              if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-                  const newParagraph = document.createElement('p');
-                  element.appendChild(newParagraph);
-              }
-              element.lastElementChild.innerHTML += currentChar;
-          }
-          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-          setTimeout(typeCharacter, 20);
-      }
-  };
+    const typeCharacter = () => {
+        if (index < text.length) {
+            const currentChar = text[index++];
+            if (currentChar === '\n') {
+                const newParagraph = document.createElement('p');
+                element.appendChild(newParagraph);
+            } else {
+                if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+                    const newParagraph = document.createElement('p');
+                    element.appendChild(newParagraph);
+                }
+                element.lastElementChild.innerHTML += currentChar;
+            }
+            scrollToBottom();
+            setTimeout(typeCharacter, 20);
+        }
+    };
 
-  typeCharacter();
+    typeCharacter();
 }
-  
-  
-function chatStripe(isAi, value, uniqueId) {
-    // to focus scroll to the bottom here
+
+function scrollToBottom() {
     chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+}
+
+function chatStripe(isAi, value, uniqueId) {
+    scrollToBottom();
     return (
         `
         <div class="wrapper ${isAi && 'ai'}">
@@ -77,160 +76,138 @@ function chatStripe(isAi, value, uniqueId) {
             </div>
         </div>
     `
-    )
+    );
 }
 
 function updateChatHistoryDisplay() {
     chatHistoryContainer.innerHTML = '';
     chatHistory.forEach((history, index) => {
-      const chatHistoryRow = document.createElement('div');
-      chatHistoryRow.classList.add('chat-history-row');
-      chatHistoryRow.textContent = history.prompts[0].substring(0, 50) + (history.prompts[0].length > 50 ? '...' : '');
-      chatHistoryContainer.appendChild(chatHistoryRow);
-  
-      chatHistoryRow.addEventListener('click', () => {
-        showChatHistoryPopup(history);
-      });
-    });
-  }
+        const chatHistoryRow = document.createElement('div');
+        chatHistoryRow.classList.add('chat-history-row');
+        chatHistoryRow.textContent = history.prompts[0].substring(0, 50) + (history.prompts[0].length > 50 ? '...' : '');
+        chatHistoryContainer.appendChild(chatHistoryRow);
 
-// Chat history handling
-const chatHistoryContainer = document.querySelector('#chat_history_container');
-const chatHistory = [];
+        chatHistoryRow.addEventListener('click', () => {
+            showChatHistoryPopup(history);
+        });
+    });
+}
 
 function addChatHistory(prompt, response) {
     const existingChat = chatHistory.find((chat) => chat.conversationId === conversationId);
     if (existingChat) {
-      existingChat.prompts.push(prompt);
-      existingChat.responses.push(response);
+        existingChat.prompts.push(prompt);
+        existingChat.responses.push(response);
     } else {
-      chatHistory.push({
-        conversationId,
-        prompts: [prompt],
-        responses: [response],
-      });
+        chatHistory.push({
+            conversationId,
+            prompts: [prompt],
+            responses: [response],
+        });
     }
-  
+
     updateChatHistoryDisplay();
-  }
-
-function showChatHistoryPopup(prompt, response) {
-  const overlay = document.createElement('div');
-  overlay.classList.add('overlay');
-
-  const popup = document.createElement('div');
-  popup.classList.add('popup');
-
-  const closeButton = document.createElement('button');
-  closeButton.textContent = 'X';
-  closeButton.style.float = 'right';
-  closeButton.style.border = 'none';
-  closeButton.style.background = 'none';
-  closeButton.style.cursor = 'pointer';
-  closeButton.style.fontSize = '20px';
-  closeButton.style.fontWeight = 'bold';
-
-  history.prompts.forEach((prompt, index) => {
-    const promptElement = document.createElement('div');
-    promptElement.innerHTML = '<strong>User:</strong><br>' + prompt.replace(/\n/g, '<br>');
-    const responseElement = document.createElement('div');
-    responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + history.responses[index].replace(/\n/g, '<br>');
-
-    popup.appendChild(promptElement);
-    popup.appendChild(responseElement);
-  });
-
-  popup.appendChild(closeButton);
-  popup.appendChild(promptElement);
-  popup.appendChild(responseElement);
-  overlay.appendChild(popup);
-  document.body.appendChild(overlay);
-
-  closeButton.addEventListener('click', () => {
-    document.body.removeChild(overlay);
-  });
+    saveChatHistory();
 }
 
-// Load chat history from localStorage
-function loadChatHistory() {
-    const storedChatHistory = localStorage.getItem('chatHistory');
-    if (storedChatHistory) {
-      chatHistory = JSON.parse(storedChatHistory);
-      chatHistory.forEach((history) => {
-        addChatHistory(history.prompt, history.response);
-      });
-    }
-  }
-  
-  // Save chat history to localStorage
-  function saveChatHistory() {
-    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-  }
+function showChatHistoryPopup(history) {
+    const overlay = document.createElement('div');
+    overlay.classList.add('overlay');
 
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    const data = new FormData(form);
-  
-    // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
-  
-    // to clear the textarea input
-    form.reset();
-  
-    // bot's chatstripe
-    const uniqueId = generateUniqueId();
-    chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
-  
-    // specific message div
-    const messageDiv = document.getElementById(uniqueId);
-  
-    // messageDiv.innerHTML = "..."
-    loader(messageDiv);
-  
-    const response = await fetch('https://securitygpt.onrender.com', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        prompt: data.get('prompt')
-      })
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.style.float = 'right';
+    closeButton.style.border = 'none';
+    closeButton.style.background = 'none';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.fontSize = '20px';
+    closeButton.style.fontWeight = 'bold';
+
+    history.prompts.forEach((prompt, index) => {
+        const promptElement = document.createElement('div');
+        promptElement.innerHTML = '<strong>User:</strong><br>' + prompt.replace(/\n/g, '<br>');
+        const responseElement = document.createElement('div');
+        responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + history.responses[index].replace(/\n/g, '<br>');
+
+        popup.appendChild(promptElement);
+        popup.appendChild(responseElement);
     });
-  
-    // to focus scroll to the bottom here
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-  
+
+    popup.appendChild(closeButton);
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+
+    closeButton.addEventListener('click', () => {
+        document.body.removeChild(overlay);
+    });
+}
+
+function loadChatHistory() {
+    if (chatHistory.length > 0) {
+        updateChatHistoryDisplay();
+    }
+}
+
+function saveChatHistory() {
+    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+}
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData(form);
+    const prompt = data.get('prompt');
+
+    chatContainer.innerHTML += chatStripe(false, prompt);
+    form.reset();
+
+    const uniqueId = generateUniqueId();
+    chatContainer.innerHTML += chatStripe(true, ' ', uniqueId);
+    const messageDiv = document.getElementById(uniqueId);
+    loader(messageDiv);
+
+    const response = await fetch('https://securitygpt.onrender.com', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            prompt,
+        }),
+    });
+
     clearInterval(loadInterval);
-    messageDiv.innerHTML = "";
-  
+    messageDiv.innerHTML = '';
+
     if (response.ok) {
-        const data = await response.json();
-        const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
-    
+        const { bot } = await response.json();
+        const parsedData = bot.trim();
+
         typeText(messageDiv, parsedData);
-    
-        addChatHistory(data.get('prompt'), parsedData);
-        saveChatHistory(); // Save the updated chat history to localStorage
-      } else {
+
+        addChatHistory(prompt, parsedData);
+    } else {
         const err = await response.text();
-    
-        messageDiv.innerHTML = "Something went wrong";
+        messageDiv.innerHTML = 'Something went wrong';
         alert(err);
-      }
-    };
+    }
+};
 
-// Clear chat button functionality
-const clearButton = document.getElementById('clear_chat_button');
-clearButton.addEventListener('click', () => {
-  chatContainer.innerHTML = '';
-  isNewConversation = true;
-});
+const handleClearChat = () => {
+    chatContainer.innerHTML = '';
+    isNewConversation = true;
+};
 
-form.addEventListener('submit', handleSubmit)
+form.addEventListener('submit', handleSubmit);
 form.addEventListener('keyup', (e) => {
     if (e.keyCode === 13) {
-        handleSubmit(e)
+        handleSubmit(e);
     }
-})
+});
+
+clearButton.addEventListener('click', handleClearChat);
+
+loadChatHistory();
