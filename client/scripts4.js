@@ -1,7 +1,7 @@
 import bot from './assets/bot.svg';
 import user from './assets/user.svg';
 
-const form = document.querySelector('form');
+const form = document.querySelector('#chat_form');
 const chatContainer = document.querySelector('#chat_container');
 const chatHistoryContainer = document.querySelector('#chat_history_container');
 const clearButton = document.getElementById('clear_chat_button');
