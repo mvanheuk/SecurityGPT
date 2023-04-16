@@ -134,12 +134,19 @@ function showChatHistoryPopup(history) {
 
     const closeButton = document.createElement('button');
     closeButton.textContent = 'X';
-    closeButton.style.float = 'right';
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '10px';
+    closeButton.style.right = '10px';
     closeButton.style.border = 'none';
     closeButton.style.background = 'none';
     closeButton.style.cursor = 'pointer';
     closeButton.style.fontSize = '20px';
     closeButton.style.fontWeight = 'bold';
+
+    const chatContent = document.createElement('div');
+    chatContent.style.overflowY = 'auto';
+    chatContent.style.maxHeight = '80vh';
+    chatContent.style.paddingRight = '30px';
 
     history.prompts.forEach((prompt, index) => {
         const promptElement = document.createElement('div');
@@ -147,11 +154,12 @@ function showChatHistoryPopup(history) {
         const responseElement = document.createElement('div');
         responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + history.responses[index].replace(/\n/g, '<br>');
 
-        popup.appendChild(promptElement);
-        popup.appendChild(responseElement);
+        chatContent.appendChild(promptElement);
+        chatContent.appendChild(responseElement);
     });
 
     popup.appendChild(closeButton);
+    popup.appendChild(chatContent);
     overlay.appendChild(popup);
     document.body.appendChild(overlay);
 
@@ -159,6 +167,41 @@ function showChatHistoryPopup(history) {
         document.body.removeChild(overlay);
     });
 }
+
+// function showChatHistoryPopup(history) {
+//     const overlay = document.createElement('div');
+//     overlay.classList.add('overlay');
+
+//     const popup = document.createElement('div');
+//     popup.classList.add('popup');
+
+//     const closeButton = document.createElement('button');
+//     closeButton.textContent = 'X';
+//     closeButton.style.float = 'right';
+//     closeButton.style.border = 'none';
+//     closeButton.style.background = 'none';
+//     closeButton.style.cursor = 'pointer';
+//     closeButton.style.fontSize = '20px';
+//     closeButton.style.fontWeight = 'bold';
+
+//     history.prompts.forEach((prompt, index) => {
+//         const promptElement = document.createElement('div');
+//         promptElement.innerHTML = '<strong>User:</strong><br>' + prompt.replace(/\n/g, '<br>');
+//         const responseElement = document.createElement('div');
+//         responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + history.responses[index].replace(/\n/g, '<br>');
+
+//         popup.appendChild(promptElement);
+//         popup.appendChild(responseElement);
+//     });
+
+//     popup.appendChild(closeButton);
+//     overlay.appendChild(popup);
+//     document.body.appendChild(overlay);
+
+//     closeButton.addEventListener('click', () => {
+//         document.body.removeChild(overlay);
+//     });
+// }
 
 function loadChatHistory() {
     if (chatHistory.length > 0) {
