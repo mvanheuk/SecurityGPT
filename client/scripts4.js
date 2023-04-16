@@ -83,30 +83,20 @@ function updateChatHistoryDisplay() {
     chatHistoryContainer.innerHTML = '';
     if (chatHistory.length > 0) {
         chatHistory.forEach((history, index) => {
-            const chatHistoryRow = document.createElement('div');
-            chatHistoryRow.classList.add('chat-history-row');
-            chatHistoryRow.textContent = history.prompts[0].substring(0, 50) + (history.prompts[0].length > 50 ? '...' : '');
-            chatHistoryContainer.appendChild(chatHistoryRow);
-
-            chatHistoryRow.addEventListener('click', () => {
-                showChatHistoryPopup(history);
-            });
+            addChatHistoryRow(history);
         });
     }
+}
 
-    // check isNewConversation flag and add a new chat history row for a new conversation
-    if (isNewConversation) {
-        const chatHistoryRow = document.createElement('div');
-        chatHistoryRow.classList.add('chat-history-row');
-        chatHistoryRow.textContent = chatHistory[0].prompts[0].substring(0, 50) + (chatHistory[0].prompts[0].length > 50 ? '...' : '');
-        chatHistoryContainer.insertBefore(chatHistoryRow, chatHistoryContainer.firstChild);
+function addChatHistoryRow(history) {
+    const chatHistoryRow = document.createElement('div');
+    chatHistoryRow.classList.add('chat-history-row');
+    chatHistoryRow.textContent = history.prompts[0].substring(0, 50) + (history.prompts[0].length > 50 ? '...' : '');
+    chatHistoryContainer.appendChild(chatHistoryRow);
 
-        chatHistoryRow.addEventListener('click', () => {
-            showChatHistoryPopup(chatHistory[0]);
-        });
-
-        isNewConversation = false; // reset isNewConversation flag
-    }
+    chatHistoryRow.addEventListener('click', () => {
+        showChatHistoryPopup(history);
+    });
 }
 
 function addChatHistory(prompt, response) {
@@ -118,9 +108,8 @@ function addChatHistory(prompt, response) {
         responses: [response],
     });
 
-    isNewConversation = true; // set isNewConversation to true after adding new conversation
+    addChatHistoryRow(chatHistory[0]);
     saveChatHistory();
-    updateChatHistoryDisplay();
 }
 
 function showChatHistoryPopup(history) {
