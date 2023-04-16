@@ -129,6 +129,22 @@ function showChatHistoryPopup(prompt, response) {
   });
 }
 
+// Load chat history from localStorage
+function loadChatHistory() {
+    const storedChatHistory = localStorage.getItem('chatHistory');
+    if (storedChatHistory) {
+      chatHistory = JSON.parse(storedChatHistory);
+      chatHistory.forEach((history) => {
+        addChatHistory(history.prompt, history.response);
+      });
+    }
+  }
+  
+  // Save chat history to localStorage
+  function saveChatHistory() {
+    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+  }
+
 
 const handleSubmit = async (e) => {
     e.preventDefault()
@@ -175,6 +191,7 @@ const handleSubmit = async (e) => {
         typeText(messageDiv, parsedData);
 
         addChatHistory(data.get('prompt'), parsedData);
+        saveChatHistory(); // Save the updated chat history to localStorage
     } else {
         const err = await response.text()
 
@@ -182,6 +199,8 @@ const handleSubmit = async (e) => {
         alert(err)
     }
 }
+
+loadChatHistory();
 
 form.addEventListener('submit', handleSubmit)
 form.addEventListener('keyup', (e) => {
