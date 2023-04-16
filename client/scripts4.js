@@ -24,6 +24,10 @@ function loader(element) {
     }, 300);
 }
 
+function startNewConversation() {
+    isNewConversation = true;
+}
+
 function generateUniqueId() {
     const timestamp = Date.now();
     const randomNumber = Math.random();
@@ -100,16 +104,25 @@ function addChatHistoryRow(history) {
 }
 
 function addChatHistory(prompt, response) {
-    const conversationId = generateUniqueId();
+    if (isNewConversation) {
+        const conversationId = generateUniqueId();
 
-    chatHistory.unshift({
-        conversationId,
-        prompts: [prompt],
-        responses: [response],
-    });
+        chatHistory.unshift({
+            conversationId,
+            prompts: [prompt],
+            responses: [response],
+        });
 
-    addChatHistoryRow(chatHistory[0]);
-    saveChatHistory();
+        addChatHistoryRow(chatHistory[0]);
+        saveChatHistory();
+
+        isNewConversation = false;
+    } else {
+        const currentConversation = chatHistory[0];
+        currentConversation.prompts.push(prompt);
+        currentConversation.responses.push(response);
+        saveChatHistory();
+    }
 }
 
 function showChatHistoryPopup(history) {
@@ -213,7 +226,6 @@ const handleSubmit = async (e) => {
 
 const handleClearChat = () => {
     chatContainer.innerHTML = '';
-    chatHistory = [];
     isNewConversation = true;
     updateChatHistoryDisplay();
 };
