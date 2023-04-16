@@ -185,48 +185,13 @@ function showChatHistoryPopup(history) {
     overlay.addEventListener('remove', () => {
         document.removeEventListener('keydown', handleKeyDown);
     });
-    
+
     document.body.appendChild(overlay);
 
     closeButton.addEventListener('click', () => {
         document.body.removeChild(overlay);
     });
 }
-
-// function showChatHistoryPopup(history) {
-//     const overlay = document.createElement('div');
-//     overlay.classList.add('overlay');
-
-//     const popup = document.createElement('div');
-//     popup.classList.add('popup');
-
-//     const closeButton = document.createElement('button');
-//     closeButton.textContent = 'X';
-//     closeButton.style.float = 'right';
-//     closeButton.style.border = 'none';
-//     closeButton.style.background = 'none';
-//     closeButton.style.cursor = 'pointer';
-//     closeButton.style.fontSize = '20px';
-//     closeButton.style.fontWeight = 'bold';
-
-//     history.prompts.forEach((prompt, index) => {
-//         const promptElement = document.createElement('div');
-//         promptElement.innerHTML = '<strong>User:</strong><br>' + prompt.replace(/\n/g, '<br>');
-//         const responseElement = document.createElement('div');
-//         responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + history.responses[index].replace(/\n/g, '<br>');
-
-//         popup.appendChild(promptElement);
-//         popup.appendChild(responseElement);
-//     });
-
-//     popup.appendChild(closeButton);
-//     overlay.appendChild(popup);
-//     document.body.appendChild(overlay);
-
-//     closeButton.addEventListener('click', () => {
-//         document.body.removeChild(overlay);
-//     });
-// }
 
 function loadChatHistory() {
     if (chatHistory.length > 0) {
