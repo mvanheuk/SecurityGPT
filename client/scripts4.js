@@ -8,6 +8,7 @@ const clearButton = document.getElementById('clear_chat_button');
 
 let loadInterval;
 let isNewConversation = true;
+let conversationHistory = [];
 
 let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
 
@@ -24,8 +25,22 @@ function loader(element) {
     }, 300);
 }
 
+function addUserMessage(message) {
+    conversationHistory.push({ role: "user", text: message });
+  }
+  
+function addBotMessage(message) {
+    conversationHistory.push({ role: "bot", text: message });
+}
+
 function startNewConversation() {
     isNewConversation = true;
+}
+
+function formatConversationHistory() {
+    return conversationHistory
+      .map((msg) => `${msg.role === "user" ? "User:" : "Chatbot:"} ${msg.text}`)
+      .join("\n");
 }
 
 function generateUniqueId() {
@@ -216,6 +231,11 @@ const handleSubmit = async (e) => {
     const data = new FormData(form);
     const prompt = data.get('prompt');
 
+    addUserMessage(prompt); // Add user message to conversation history
+
+    // Format the conversation history as context
+    const context = formatConversationHistory();
+
     chatContainer.innerHTML += chatStripe(false, prompt);
     form.reset();
 
@@ -226,13 +246,14 @@ const handleSubmit = async (e) => {
 
     try {
         const response = await fetchWithTimeout('https://securitygpt.onrender.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                prompt,
-            }),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            context: context, // Add context to the request body
+            prompt,
+          }),
         }, 20000); // Set the desired timeout (in milliseconds)
 
         clearInterval(loadInterval);
@@ -244,6 +265,7 @@ const handleSubmit = async (e) => {
 
             typeText(messageDiv, parsedData);
 
+            addBotMessage(parsedData); // Add bot message to conversation history
             addChatHistory(prompt, parsedData);
         } else {
             const err = await response.text();
