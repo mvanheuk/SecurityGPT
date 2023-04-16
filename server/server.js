@@ -24,9 +24,9 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const prompt = req.body.prompt;
-    const model = "gpt-3.5-turbo";
+    const model = "gpt-4";
 
-    const response = await openai.createCompletion({
+    const response = await openai.createChatCompletion({
       model: model,
       prompt: `${prompt}`,
       temperature: 0.8, // Higher values means the model will take more risks.
