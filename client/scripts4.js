@@ -157,6 +157,13 @@ function saveChatHistory() {
     localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
 }
 
+function fetchWithTimeout(resource, options, timeout = 8000) {
+    return Promise.race([
+        fetch(resource, options),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout))
+    ]);
+}
+
 const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -171,30 +178,36 @@ const handleSubmit = async (e) => {
     const messageDiv = document.getElementById(uniqueId);
     loader(messageDiv);
 
-    const response = await fetch('https://securitygpt.onrender.com', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            prompt,
-        }),
-    });
+    try {
+        const response = await fetchWithTimeout('https://securitygpt.onrender.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt,
+            }),
+        }, 20000); // Set the desired timeout (in milliseconds)
 
-    clearInterval(loadInterval);
-    messageDiv.innerHTML = '';
+        clearInterval(loadInterval);
+        messageDiv.innerHTML = '';
 
-    if (response.ok) {
-        const { bot } = await response.json();
-        const parsedData = bot.trim();
+        if (response.ok) {
+            const { bot } = await response.json();
+            const parsedData = bot.trim();
 
-        typeText(messageDiv, parsedData);
+            typeText(messageDiv, parsedData);
 
-        addChatHistory(prompt, parsedData);
-    } else {
-        const err = await response.text();
-        messageDiv.innerHTML = 'Something went wrong';
-        alert(err);
+            addChatHistory(prompt, parsedData);
+        } else {
+            const err = await response.text();
+            messageDiv.innerHTML = 'Something went wrong';
+            alert(err);
+        }
+    } catch (error) {
+        clearInterval(loadInterval);
+        messageDiv.innerHTML = 'Request timeout or something went wrong';
+        console.error(error);
     }
 };
 
