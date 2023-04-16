@@ -32,16 +32,18 @@ app.post('/', async (req, res) => {
         { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: userMessage },
       ],
-      max_tokens: 2000,
+      max_tokens: 150,
     });
+
+    console.log('API response:', response);
 
     res.status(200).send({
       bot: response.choices[0].message.content
     });
 
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error || 'Something went wrong');
+    console.error('Error during API call:', error.message);
+    res.status(500).send('Something went wrong');
   }
 })
 
