@@ -29,10 +29,10 @@ app.post('/', async (req, res) => {
     const response = await openai.createChatCompletion({
       model: model,
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
         { role: 'user', content: userMessage },
       ],
-      max_tokens: 150,
+      max_tokens: 3500,
     });
 
     console.log('API response:', response);
