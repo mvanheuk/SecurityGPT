@@ -38,7 +38,7 @@ app.post('/', async (req, res) => {
     console.log('API response:', response);
 
     res.status(200).send({
-      bot: response.choices[0].message.content
+      bot: response.data.choices[0].message.content
     });
 
   } catch (error) {
