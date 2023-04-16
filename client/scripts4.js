@@ -151,14 +151,6 @@ const handleSubmit = async (e) => {
 
     const data = new FormData(form)
 
-    // Save the chat history
-    const chat = {
-        promptSnippet: data.get('prompt').substring(0, 30) + '...',
-        fullChat: data.get('prompt'),
-    }
-    chatHistory.push(chat)
-    updateChatHistoryDisplay()
-    
     // user's chatstripe
     chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
 
@@ -206,6 +198,15 @@ const handleSubmit = async (e) => {
         messageDiv.innerHTML = "Something went wrong"
         alert(err)
     }
+
+
+    // Save the chat history
+    const chat = {
+        promptSnippet: data.get('prompt').substring(0, 30) + '...',
+        fullChat: data.get('prompt'),
+    }
+    chatHistory.push(chat)
+    updateChatHistoryDisplay()
 }
 
 loadChatHistory();
