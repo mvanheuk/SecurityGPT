@@ -211,7 +211,9 @@ const handleSubmit = async (e) => {
 
 const handleClearChat = () => {
     chatContainer.innerHTML = '';
+    chatHistory = [];
     isNewConversation = true;
+    updateChatHistoryDisplay();
 };
 
 form.addEventListener('submit', handleSubmit);
