@@ -37,7 +37,7 @@ app.post('/', async (req, res) => {
         role: role.slice(0, -1).toLowerCase(),
         content: messageContent,
       };
-    });
+    }).filter(msg => msg.content.trim() !== ''); // Filter out any empty messages
 
     // Add the latest user message to the messages array
     messages.push({ role: 'user', content: userMessage });
