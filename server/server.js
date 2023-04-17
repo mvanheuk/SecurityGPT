@@ -42,12 +42,14 @@ app.post('/', async (req, res) => {
     // Add the latest user message to the messages array
     messages.push({ role: 'user', content: userMessage });
 
-    const response = await openai.createChatCompletion({
+    const formattedPrompt = [
+      { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
+      ...messages,
+    ].map(message => `${message.role === 'user' ? 'User' : message.role === 'system' ? 'System' : 'Chatbot'}: ${message.content}`).join('\n');
+    
+    const response = await openai.createCompletion({
       model: model,
-      messages: [
-        { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
-        ...messages,
-      ],
+      prompt: formattedPrompt,
       max_tokens: 3500,
     });
 
