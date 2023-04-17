@@ -251,7 +251,7 @@ const handleSubmit = async (e) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                context: context,
+                context: conversationHistory,
             }),
         }, 20000); // Set the desired timeout (in milliseconds)
 
