@@ -252,7 +252,7 @@ const handleSubmit = async (e) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          context: conversationHistory.map(({ role, text }) => ({ role, content: text })),
+          context: conversationHistory.map(({ role, text }) => ({ role, message: text })),
         }),
       }, 20000); // Set the desired timeout (in milliseconds)
   
