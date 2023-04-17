@@ -24,10 +24,10 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     console.log("Received data:", req.body);
-    const messages = req.body.context.map(({ role, text }) => {
+    const messages = req.body.context.map(({ role, message }) => {
       return {
         role: role,
-        message: text,
+        content: message,
       };
     });
 
