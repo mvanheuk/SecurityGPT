@@ -49,7 +49,7 @@ app.post('/', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error during API call:', error.message);
+    console.error('Error during API call:', error.message, error.response?.data);
     res.status(500).send('Something went wrong');
   }
 });
