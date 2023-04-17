@@ -80,13 +80,30 @@ function chatStripe(isAi, value, uniqueId) {
 }
 
 
+function createChatHistoryEntry(question) {
+    const chatHistoryContainer = document.querySelector('#chat_history_container');
+    const chatHistoryRow = document.createElement('div');
+    chatHistoryRow.classList.add('chat-history-row');
+    chatHistoryRow.textContent = question;
+    chatHistoryContainer.appendChild(chatHistoryRow);
+    return chatHistoryRow;
+  }
+
+
 const handleSubmit = async (e) => {
     e.preventDefault()
 
     const data = new FormData(form)
 
     // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
+    const userMessage = data.get('prompt');
+    chatContainer.innerHTML += chatStripe(false, userMessage);
+
+    // Create a new conversation entry in the chat history container
+    const chatHistoryRow = createChatHistoryEntry(userMessage);
+
+    // Add the user's message to the current conversation
+    currentConversation.push({ role: 'user', content: userMessage });
 
     // to clear the textarea input 
     form.reset()
@@ -123,6 +140,12 @@ const handleSubmit = async (e) => {
         const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
 
         typeText(messageDiv, parsedData);
+
+        // Add the bot's message to the current conversation
+        currentConversation.push({ role: 'assistant', content: parsedData });
+
+        // Store the conversation history in the chatHistoryRow
+        chatHistoryRow.conversationHistory = [...currentConversation];
     } else {
         const err = await response.text()
 

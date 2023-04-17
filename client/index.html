@@ -28,22 +28,6 @@
         <button id="clear_chat_button">Clear</button>
       </div>
       <script type="module" src="scripts4.js"></script>
-      <script>
-        let currentModel = 'model_name_1'; // Set the default model
-
-        document.querySelectorAll('.model_button').forEach((button) => {
-          button.addEventListener('click', (event) => {
-            currentModel = event.target.dataset.model;
-            console.log('Model changed to:', currentModel);
-            // Send an AJAX request to the server to change the model (implementation depends on your server-side code)
-          });
-        });
-
-        document.getElementById('chat_form').addEventListener('submit', (event) => {
-          event.preventDefault();
-          // Include the currentModel in your API call (implementation depends on your existing code)
-        });
-      </script>
     </div>
 
     <footer></footer>
