@@ -1,49 +1,30 @@
-import bot from './assets/bot.svg';
-import user from './assets/user.svg';
+import bot from './assets/bot.svg'
+import user from './assets/user.svg'
 
-const form = document.querySelector('#chat_form');
-const chatContainer = document.querySelector('#chat_container');
-const chatHistoryContainer = document.querySelector('#chat_history_container');
-const clearButton = document.getElementById('clear_chat_button');
+const form = document.querySelector('form')
+const chatContainer = document.querySelector('#chat_container')
 
-let loadInterval;
-let isNewConversation = true;
-let conversationHistory = [];
-
-let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+let loadInterval
 
 function loader(element) {
-    element.textContent = '';
-    scrollToBottom();
+    element.textContent = ''
+    // to focus scroll to the bottom here
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
 
     loadInterval = setInterval(() => {
+        // Update the text content of the loading indicator
         element.textContent += '.';
 
+        // If the loading indicator has reached three dots, reset it
         if (element.textContent === '....') {
             element.textContent = '';
         }
     }, 300);
 }
 
-function addUserMessage(message) {
-    conversationHistory.push({ role: "user", text: message.replace(/\n/g, ' ') });
-}
-  
-function addBotMessage(message) {
-    conversationHistory.push({ role: "bot", text: message.replace(/\n/g, ' ') });
-}
-
-
-function startNewConversation() {
-    isNewConversation = true;
-}
-
-function formatConversationHistory() {
-    return conversationHistory
-      .map((msg) => `${msg.role === "user" ? "User:" : "Chatbot:"} ${msg.text}`)
-      .join("\n");
-}
-
+// generate unique ID for each message div of bot
+// necessary for typing text effect for that specific reply
+// without unique ID, typing text will work on every element
 function generateUniqueId() {
     const timestamp = Date.now();
     const randomNumber = Math.random();
@@ -52,36 +33,35 @@ function generateUniqueId() {
     return `id-${timestamp}-${hexadecimalString}`;
 }
 
+
 function typeText(element, text) {
-    let index = 0;
+  let index = 0;
 
-    const typeCharacter = () => {
-        if (index < text.length) {
-            const currentChar = text[index++];
-            if (currentChar === '\n') {
-                const newParagraph = document.createElement('p');
-                element.appendChild(newParagraph);
-            } else {
-                if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-                    const newParagraph = document.createElement('p');
-                    element.appendChild(newParagraph);
-                }
-                element.lastElementChild.innerHTML += currentChar;
-            }
-            scrollToBottom();
-            setTimeout(typeCharacter, 20);
-        }
-    };
+  const typeCharacter = () => {
+      if (index < text.length) {
+          const currentChar = text[index++];
+          if (currentChar === '\n') {
+              const newParagraph = document.createElement('p');
+              element.appendChild(newParagraph);
+          } else {
+              if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+                  const newParagraph = document.createElement('p');
+                  element.appendChild(newParagraph);
+              }
+              element.lastElementChild.innerHTML += currentChar;
+          }
+          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+          setTimeout(typeCharacter, 20);
+      }
+  };
 
-    typeCharacter();
+  typeCharacter();
 }
-
-function scrollToBottom() {
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-}
-
+  
+  
 function chatStripe(isAi, value, uniqueId) {
-    scrollToBottom();
+    // to focus scroll to the bottom here
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
     return (
         `
         <div class="wrapper ${isAi && 'ai'}">
@@ -96,202 +76,64 @@ function chatStripe(isAi, value, uniqueId) {
             </div>
         </div>
     `
-    );
+    )
 }
 
-function updateChatHistoryDisplay() {
-    chatHistoryContainer.innerHTML = '';
-    if (chatHistory.length > 0) {
-        chatHistory.forEach((history, index) => {
-            addChatHistoryRow(history);
-        });
-    }
-}
-
-function addChatHistoryRow(history) {
-    const chatHistoryRow = document.createElement('div');
-    chatHistoryRow.classList.add('chat-history-row');
-    chatHistoryRow.textContent = history.prompts[0].substring(0, 50) + (history.prompts[0].length > 50 ? '...' : '');
-    chatHistoryContainer.appendChild(chatHistoryRow);
-
-    chatHistoryRow.addEventListener('click', () => {
-        showChatHistoryPopup(history);
-    });
-}
-
-function addChatHistory(prompt, response) {
-    if (isNewConversation) {
-        const conversationId = generateUniqueId();
-
-        chatHistory.unshift({
-            conversationId,
-            prompts: [prompt],
-            responses: [response],
-        });
-
-        addChatHistoryRow(chatHistory[0]);
-        saveChatHistory();
-
-        isNewConversation = false;
-    } else {
-        const currentConversation = chatHistory[0];
-        currentConversation.prompts.push(prompt);
-        currentConversation.responses.push(response);
-        saveChatHistory();
-    }
-}
-
-function showChatHistoryPopup(history) {
-    const overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-
-    const popup = document.createElement('div');
-    popup.classList.add('popup');
-
-    const closeButton = document.createElement('button');
-    closeButton.textContent = 'X';
-    closeButton.style.position = 'absolute';
-    closeButton.style.top = '10px';
-    closeButton.style.right = '10px';
-    closeButton.style.border = 'none';
-    closeButton.style.background = 'none';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.fontSize = '20px';
-    closeButton.style.fontWeight = 'bold';
-
-    const chatContent = document.createElement('div');
-    chatContent.style.overflowY = 'auto';
-    chatContent.style.maxHeight = '80vh';
-    chatContent.style.paddingRight = '30px';
-
-    history.prompts.forEach((prompt, index) => {
-        const promptElement = document.createElement('div');
-        promptElement.innerHTML = '<strong>User:</strong><br>' + prompt.replace(/\n/g, '<br>');
-        const responseElement = document.createElement('div');
-        responseElement.innerHTML = '<br><strong>Bot:</strong><br>' + history.responses[index].replace(/\n/g, '<br>');
-
-        chatContent.appendChild(promptElement);
-        chatContent.appendChild(responseElement);
-    });
-
-    popup.appendChild(closeButton);
-    popup.appendChild(chatContent);
-    overlay.appendChild(popup);
-
-    const closePopup = () => {
-        document.body.removeChild(overlay);
-    };
-
-    const handleOverlayClick = (event) => {
-        if (event.target === overlay) {
-            closePopup();
-        }
-    };
-
-    const handleKeyDown = (event) => {
-        if (event.key === 'Escape') {
-            closePopup();
-        }
-    };
-
-    overlay.addEventListener('click', handleOverlayClick);
-    closeButton.addEventListener('click', closePopup);
-    document.addEventListener('keydown', handleKeyDown);
-
-    overlay.addEventListener('remove', () => {
-        document.removeEventListener('keydown', handleKeyDown);
-    });
-
-    document.body.appendChild(overlay);
-
-    closeButton.addEventListener('click', () => {
-        document.body.removeChild(overlay);
-    });
-}
-
-function loadChatHistory() {
-    if (chatHistory.length > 0) {
-        updateChatHistoryDisplay();
-    }
-}
-
-function saveChatHistory() {
-    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-}
-
-function fetchWithTimeout(resource, options, timeout = 8000) {
-    return Promise.race([
-        fetch(resource, options),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout))
-    ]);
-}
 
 const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    const data = new FormData(form);
-    const prompt = data.get('prompt');
-  
-    addUserMessage(prompt); // Add user message to conversation history
-  
-    // Format the conversation history as context
-    const context = formatConversationHistory();
-  
-    chatContainer.innerHTML += chatStripe(false, prompt);
-    form.reset();
-  
-    const uniqueId = generateUniqueId();
-    chatContainer.innerHTML += chatStripe(true, ' ', uniqueId);
-    const messageDiv = document.getElementById(uniqueId);
-    loader(messageDiv);
-  
-    try {
-      const response = await fetchWithTimeout('https://securitygpt.onrender.com', {
+    e.preventDefault()
+
+    const data = new FormData(form)
+
+    // user's chatstripe
+    chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
+
+    // to clear the textarea input 
+    form.reset()
+
+    // bot's chatstripe
+    const uniqueId = generateUniqueId()
+    chatContainer.innerHTML += chatStripe(true, " ", uniqueId)
+
+    // specific message div 
+    const messageDiv = document.getElementById(uniqueId)
+
+    // messageDiv.innerHTML = "..."
+    loader(messageDiv)
+
+    const response = await fetch('https://securitygpt.onrender.com', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          context: conversationHistory.map(({ role, text }) => ({ role, message: text })),
-        }),
-      }, 20000); // Set the desired timeout (in milliseconds)
-  
-      clearInterval(loadInterval);
-      messageDiv.innerHTML = '';
-  
-      if (response.ok) {
-        const { bot } = await response.json();
-        const parsedData = bot.trim();
-  
+            prompt: data.get('prompt')
+        })
+    })
+
+    // to focus scroll to the bottom here
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight; 
+
+    clearInterval(loadInterval)
+    messageDiv.innerHTML = ""
+
+    if (response.ok) {
+        const data = await response.json();
+        const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
+        const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
+
         typeText(messageDiv, parsedData);
-  
-        addBotMessage(parsedData); // Add bot message to conversation history
-        addChatHistory(prompt, parsedData);
-      } else {
-        const err = await response.text();
-        messageDiv.innerHTML = 'Something went wrong';
-        alert(err);
-      }
-    } catch (error) {
-      clearInterval(loadInterval);
-      messageDiv.innerHTML = 'Request timeout or something went wrong';
-      console.error(error);
+    } else {
+        const err = await response.text()
+
+        messageDiv.innerHTML = "Something went wrong"
+        alert(err)
     }
-  };
+}
 
-const handleClearChat = () => {
-    chatContainer.innerHTML = '';
-    isNewConversation = true;
-    updateChatHistoryDisplay();
-};
-
-form.addEventListener('submit', handleSubmit);
+form.addEventListener('submit', handleSubmit)
 form.addEventListener('keyup', (e) => {
     if (e.keyCode === 13) {
-        handleSubmit(e);
+        handleSubmit(e)
     }
-});
-
-clearButton.addEventListener('click', handleClearChat);
-
-loadChatHistory();
+})
