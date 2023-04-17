@@ -27,7 +27,7 @@ app.post('/', async (req, res) => {
     const messages = req.body.context.map(({ role, message }) => {
       return {
         role: role,
-        text: message,
+        content: message,
       };
     });
 
