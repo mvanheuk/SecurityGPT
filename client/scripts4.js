@@ -3,7 +3,7 @@ import user from './assets/user.svg'
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
-
+let currentConversation
 let loadInterval
 
 function loader(element) {
@@ -130,7 +130,7 @@ const handleSubmit = async (e) => {
     // user's chatstripe
     chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
     const userMessage = data.get('prompt');
-    
+
     // Create a new conversation entry in the chat history container
     const chatHistoryRow = createChatHistoryEntry(userMessage);
 
