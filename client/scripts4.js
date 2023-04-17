@@ -26,12 +26,13 @@ function loader(element) {
 }
 
 function addUserMessage(message) {
-    conversationHistory.push({ role: "user", text: message });
-  }
+    conversationHistory.push({ role: "user", text: message.replace(/\n/g, ' ') });
+}
   
 function addBotMessage(message) {
-    conversationHistory.push({ role: "bot", text: message });
+    conversationHistory.push({ role: "bot", text: message.replace(/\n/g, ' ') });
 }
+
 
 function startNewConversation() {
     isNewConversation = true;
