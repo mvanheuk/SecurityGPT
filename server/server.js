@@ -54,47 +54,4 @@ app.post('/', async (req, res) => {
   }
 });
 
-
-// app.post('/', async (req, res) => {
-//   try {
-//     const userMessage = req.body.prompt;
-//     console.log("Received data:", req.body);
-//     const context = req.body.context;
-//     const model = "gpt-3.5-turbo";
-
-//     // Separate the context into individual messages
-//     const messages = context.split('\n').map(content => {
-//       const [role, ...messageParts] = content.split(' ');
-//       const messageContent = messageParts.join(' ');
-
-//       return {
-//         role: role.slice(0, -1).toLowerCase(),
-//         content: messageContent,
-//       };
-//     }).filter(msg => msg.content.trim() !== ''); // Filter out any empty messages
-
-//     // Add the latest user message to the messages array
-//     const latestUserMessage = messages[messages.length - 1].content;
-
-//     const response = await openai.createChatCompletion({
-//       model: model,
-//       messages: [
-//         { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
-//         ...messages,
-//       ],
-//       max_tokens: 3500,
-//     });
-    
-//     console.log('API response:', response);
-
-//     res.status(200).send({
-//       bot: response.data.choices[0].message.content
-//     });
-
-//   } catch (error) {
-//     console.error('Error during API call:', error.message);
-//     res.status(500).send('Something went wrong');
-//   }
-// });
-
 app.listen(5000, () => console.log('AI server started on http://localhost:5000'))

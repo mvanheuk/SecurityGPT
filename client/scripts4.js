@@ -228,57 +228,56 @@ function fetchWithTimeout(resource, options, timeout = 8000) {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const data = new FormData(form);
     const prompt = data.get('prompt');
-
+  
     addUserMessage(prompt); // Add user message to conversation history
-
+  
     // Format the conversation history as context
     const context = formatConversationHistory();
-
+  
     chatContainer.innerHTML += chatStripe(false, prompt);
     form.reset();
-
+  
     const uniqueId = generateUniqueId();
     chatContainer.innerHTML += chatStripe(true, ' ', uniqueId);
     const messageDiv = document.getElementById(uniqueId);
     loader(messageDiv);
-
+  
     try {
-        const response = await fetchWithTimeout('https://securitygpt.onrender.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                context: conversationHistory,
-            }),
-        }, 20000); // Set the desired timeout (in milliseconds)
-
-
-        clearInterval(loadInterval);
-        messageDiv.innerHTML = '';
-
-        if (response.ok) {
-            const { bot } = await response.json();
-            const parsedData = bot.trim();
-
-            typeText(messageDiv, parsedData);
-
-            addBotMessage(parsedData); // Add bot message to conversation history
-            addChatHistory(prompt, parsedData);
-        } else {
-            const err = await response.text();
-            messageDiv.innerHTML = 'Something went wrong';
-            alert(err);
-        }
+      const response = await fetchWithTimeout('https://securitygpt.onrender.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          context: conversationHistory.map(({ role, text }) => ({ role, content: text })),
+        }),
+      }, 20000); // Set the desired timeout (in milliseconds)
+  
+      clearInterval(loadInterval);
+      messageDiv.innerHTML = '';
+  
+      if (response.ok) {
+        const { bot } = await response.json();
+        const parsedData = bot.trim();
+  
+        typeText(messageDiv, parsedData);
+  
+        addBotMessage(parsedData); // Add bot message to conversation history
+        addChatHistory(prompt, parsedData);
+      } else {
+        const err = await response.text();
+        messageDiv.innerHTML = 'Something went wrong';
+        alert(err);
+      }
     } catch (error) {
-        clearInterval(loadInterval);
-        messageDiv.innerHTML = 'Request timeout or something went wrong';
-        console.error(error);
+      clearInterval(loadInterval);
+      messageDiv.innerHTML = 'Request timeout or something went wrong';
+      console.error(error);
     }
-};
+  };
 
 const handleClearChat = () => {
     chatContainer.innerHTML = '';
