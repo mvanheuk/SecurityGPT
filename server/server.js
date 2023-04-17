@@ -24,6 +24,7 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const userMessage = req.body.prompt;
+    console.log("Received data:", req.body);
     const context = req.body.context;
     const model = "gpt-3.5-turbo";
 
