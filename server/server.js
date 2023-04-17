@@ -27,7 +27,7 @@ app.post('/', async (req, res) => {
     const messages = req.body.context.map(({ role, text }) => {
       return {
         role: role,
-        content: text,
+        message: text,
       };
     });
 
@@ -36,7 +36,7 @@ app.post('/', async (req, res) => {
     const response = await openai.createChatCompletion({
       model: model,
       messages: [
-        { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
+        { role: 'system', message: 'You are a helpful Security focused assistant called SecurityGPT.' },
         ...messages,
       ],
       max_tokens: 3500,
