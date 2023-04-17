@@ -40,7 +40,7 @@ app.post('/', async (req, res) => {
     }).filter(msg => msg.content.trim() !== ''); // Filter out any empty messages
 
     // Add the latest user message to the messages array
-    messages.push({ role: 'user', content: userMessage });
+    const latestUserMessage = messages[messages.length - 1].content;
 
     const response = await openai.createChatCompletion({
       model: model,

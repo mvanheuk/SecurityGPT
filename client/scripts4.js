@@ -246,15 +246,15 @@ const handleSubmit = async (e) => {
 
     try {
         const response = await fetchWithTimeout('https://securitygpt.onrender.com', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            context: context, // Add context to the request body
-            prompt,
-          }),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                context: context,
+            }),
         }, 20000); // Set the desired timeout (in milliseconds)
+
 
         clearInterval(loadInterval);
         messageDiv.innerHTML = '';
