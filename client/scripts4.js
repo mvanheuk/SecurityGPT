@@ -3,7 +3,7 @@ import user from './assets/user.svg'
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
-let currentConversation
+
 let loadInterval
 
 function loader(element) {
@@ -80,62 +80,13 @@ function chatStripe(isAi, value, uniqueId) {
 }
 
 
-function createChatHistoryEntry(question) {
-    const chatHistoryContainer = document.querySelector('#chat_history_container');
-    const chatHistoryRow = document.createElement('div');
-    chatHistoryRow.classList.add('chat-history-row');
-    chatHistoryRow.textContent = question;
-    chatHistoryContainer.appendChild(chatHistoryRow);
-
-    chatHistoryRow.addEventListener('click', () => {
-        showConversationPopup(chatHistoryRow.conversationHistory);
-      });
-    
-    return chatHistoryRow;
-  }
-
-
-function showConversationPopup(conversation) {
-    const overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-
-    const popup = document.createElement('div');
-    popup.classList.add('popup');
-
-    const closeButton = document.createElement('button');
-    closeButton.classList.add('close-popup-button');
-    closeButton.innerHTML = '&times;';
-    closeButton.addEventListener('click', () => {
-        document.body.removeChild(overlay);
-    });
-    popup.appendChild(closeButton);
-
-    conversation.forEach((message) => {
-        const messageParagraph = document.createElement('p');
-        messageParagraph.classList.add(message.role);
-        messageParagraph.textContent = message.content;
-        popup.appendChild(messageParagraph);
-    });
-
-    overlay.appendChild(popup);
-    document.body.appendChild(overlay);
-}
-
-
 const handleSubmit = async (e) => {
     e.preventDefault()
 
     const data = new FormData(form)
 
     // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
-    const userMessage = data.get('prompt');
-
-    // Create a new conversation entry in the chat history container
-    const chatHistoryRow = createChatHistoryEntry(userMessage);
-
-    // Add the user's message to the current conversation
-    currentConversation.push({ role: 'user', content: userMessage });
+    chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
 
     // to clear the textarea input 
     form.reset()
@@ -172,12 +123,6 @@ const handleSubmit = async (e) => {
         const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
 
         typeText(messageDiv, parsedData);
-
-        // Add the bot's message to the current conversation
-        currentConversation.push({ role: 'assistant', content: parsedData });
-
-        // Store the conversation history in the chatHistoryRow
-        chatHistoryRow.conversationHistory = [...currentConversation];
     } else {
         const err = await response.text()
 
