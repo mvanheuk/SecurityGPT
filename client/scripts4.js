@@ -128,8 +128,7 @@ const handleSubmit = async (e) => {
     const data = new FormData(form)
 
     // user's chatstripe
-    const userMessage = data.get('prompt');
-    chatContainer.innerHTML += chatStripe(false, userMessage);
+    chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
 
     // Create a new conversation entry in the chat history container
     const chatHistoryRow = createChatHistoryEntry(userMessage);
@@ -174,10 +173,10 @@ const handleSubmit = async (e) => {
         typeText(messageDiv, parsedData);
 
         // Add the bot's message to the current conversation
-        //currentConversation.push({ role: 'assistant', content: parsedData });
+        currentConversation.push({ role: 'assistant', content: parsedData });
 
         // Store the conversation history in the chatHistoryRow
-        //chatHistoryRow.conversationHistory = [...currentConversation];
+        chatHistoryRow.conversationHistory = [...currentConversation];
     } else {
         const err = await response.text()
 
