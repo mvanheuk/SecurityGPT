@@ -86,8 +86,40 @@ function createChatHistoryEntry(question) {
     chatHistoryRow.classList.add('chat-history-row');
     chatHistoryRow.textContent = question;
     chatHistoryContainer.appendChild(chatHistoryRow);
+
+    chatHistoryRow.addEventListener('click', () => {
+        showConversationPopup(chatHistoryRow.conversationHistory);
+      });
+    
     return chatHistoryRow;
   }
+
+
+function showConversationPopup(conversation) {
+    const overlay = document.createElement('div');
+    overlay.classList.add('overlay');
+
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
+
+    const closeButton = document.createElement('button');
+    closeButton.classList.add('close-popup-button');
+    closeButton.innerHTML = '&times;';
+    closeButton.addEventListener('click', () => {
+        document.body.removeChild(overlay);
+    });
+    popup.appendChild(closeButton);
+
+    conversation.forEach((message) => {
+        const messageParagraph = document.createElement('p');
+        messageParagraph.classList.add(message.role);
+        messageParagraph.textContent = message.content;
+        popup.appendChild(messageParagraph);
+    });
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+}
 
 
 const handleSubmit = async (e) => {
