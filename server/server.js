@@ -50,7 +50,7 @@ app.post('/', async (req, res) => {
       ],
       max_tokens: 3500,
     });
-
+    
     console.log('API response:', response);
 
     res.status(200).send({
