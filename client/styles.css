@@ -68,6 +68,7 @@
   
   form {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin: 20px;
@@ -95,6 +96,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    margin-left: 10px;
   }
   
   button[type="submit"]:focus,
@@ -108,7 +110,7 @@
     fill: #fff;
   }
 
-  button#clear_chat_button {
+  button#clear_button {
     background-color: #1d3c5c;
     border: none;
     border-radius: 25px;
@@ -116,9 +118,9 @@
     cursor: pointer;
     font-size: 14px;
     color: #fff;
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-top: 10px;
+    margin: 10px auto;
+    width: 25%; /* Quarter width of the text area */
+    text-align: center;
   }
   
   button#clear_chat_button:focus,
@@ -226,6 +228,13 @@
 
 .close-popup-button:hover {
   color: #333;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .buttons-container {
