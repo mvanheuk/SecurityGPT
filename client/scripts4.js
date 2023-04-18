@@ -141,7 +141,6 @@ const handleSubmit = async (e) => {
     }
 }
 
-form.addEventListener('submit', handleSubmit)
 const clearButton = document.getElementById('clear_button');
 clearButton.addEventListener('click', clearChat);
 
