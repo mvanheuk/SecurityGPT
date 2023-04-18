@@ -79,6 +79,16 @@ function chatStripe(isAi, value, uniqueId) {
     )
 }
 
+function clearChat() {
+    // Clear the chat container
+    chatContainer.innerHTML = '';
+  
+    // Reset the conversation history
+    conversationHistory = [
+      { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
+    ];
+  }
+
 
 const handleSubmit = async (e) => {
     e.preventDefault()
@@ -132,6 +142,9 @@ const handleSubmit = async (e) => {
 }
 
 form.addEventListener('submit', handleSubmit)
+const clearButton = document.getElementById('clear_button');
+clearButton.addEventListener('click', clearChat);
+
 form.addEventListener('keyup', (e) => {
     if (e.keyCode === 13) {
         handleSubmit(e)
