@@ -141,8 +141,8 @@ const handleSubmit = async (e) => {
     }
 }
 
-const sendButton = document.getElementById("send_button");
-sendButton.addEventListener('submit', handleSubmit);
+
+form.addEventListener('submit', handleSubmit);
 
 const clearButton = document.getElementById('clear_button');
 clearButton.addEventListener('submit', clearChat);
