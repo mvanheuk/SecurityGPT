@@ -145,7 +145,7 @@ const handleSubmit = async (e) => {
 form.addEventListener('submit', handleSubmit);
 
 const clearButton = document.getElementById('clear_button');
-clearButton.addEventListener('clear', clearChat);
+clearButton.addEventListener('button', clearChat);
 
 form.addEventListener('keyup', (e) => {
     if (e.keyCode === 13) {
