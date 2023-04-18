@@ -227,26 +227,57 @@
 }
 
   
-  /* Responsive styles */
-  @media (max-width: 768px) {
-    #app {
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-  
-    textarea {
-      width: 60%;
-    }
+ /* ... your previous CSS code ... */
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  #app {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    flex-direction: column;
   }
-  
-  @media (max-width: 576px) {
-    #app {
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-  
-    textarea {
-      width: 50%;
-    }
+
+  #chat_history_container {
+    width: 100%;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid #eee;
   }
+
+  textarea {
+    width: 60%;
+    font-size: 18px;
+  }
+
+  button[type="submit"] {
+    padding: 15px 30px;
+  }
+
+  button#clear_chat_button {
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  #app {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 50%;
+    font-size: 18px;
+  }
+
+  button[type="submit"] {
+    padding: 15px 30px;
+  }
+
+  button#clear_chat_button {
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+}
+
   
