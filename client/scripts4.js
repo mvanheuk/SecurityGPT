@@ -140,7 +140,8 @@ const handleSubmit = async (e) => {
         alert(err)
     }
 }
-
+const sendButton = document.getElementById("send_button");
+sendButton.addEventListener('submit', handleSubmit);
 const clearButton = document.getElementById('clear_button');
 clearButton.addEventListener('click', clearChat);
 
