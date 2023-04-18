@@ -23,7 +23,10 @@
         <div id="chat_container"></div>
         <form id="chat_form">
           <textarea name="prompt" rows="1" cols="1" placeholder="Ask SecurityGPT..."></textarea>
-          <button type="submit"><img src="assets/send.svg" /></button>
+          <div class="buttons-container">
+            <button type="submit"><img src="assets/send.svg" /></button>
+            <button id="clear_chat_button">Clear</button>
+          </div>
         </form>
         <button id="clear_chat_button">Clear</button>
       </div>
