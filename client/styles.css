@@ -128,46 +128,6 @@
     background-color: #0052a3;
   }
 
-  .wrapper {
-    padding: 15px;
-  }
-  
-  .ai {
-    background: #dcdcdd;
-  }
-  
-  .chat {
-    width: 100%;
-    max-width: 1280px;
-    gap: 10px;
-  }
-  
-  .profile {
-    width: 36px;
-    height: 36px;
-    border-radius: 5px;
-  
-    background: #7b7999;
-  
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .ai .profile {
-    background: #91ccbd;
-  }
-  
-  .profile img {
-    width: 60%;
-    height: 60%;
-    object-fit: contain;
-  }
-
-  .message {
-    color: #333333;
-  }
-
   #chat_history_container {
     height: calc(50vh - 150px);
     width: calc(33.33% - 20px);
@@ -175,67 +135,6 @@
     padding: 20px;
     border-right: 1px solid #eee;
   }
-  
-  .chat-history-row {
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-  }
-  
-  .chat-history-row:hover {
-    background-color: #eee;
-  }
-  
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-  
-  .popup {
-    background-color: #fff;
-    padding: 20px;
-    padding-right: 40px;
-    padding-left: 40px;
-    border-radius: 8px;
-    width: 80%;
-    max-height: 90%;
-    overflow-y: visible;
-    box-sizing: border-box;
-    position: relative;
-}
-
-.close-popup-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #555;
-}
-
-.close-popup-button:hover {
-  color: #333;
-}
-
-.buttons-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-}
 
 .buttons-container {
   display: flex;
@@ -245,37 +144,5 @@
 }
 
 
-  
- /* ... your previous CSS code ... */
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  #app {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    flex-direction: column;
-  }
-
-  #chat_history_container {
-    width: 100%;
-    max-height: 200px;
-    border-right: none;
-    border-bottom: 1px solid #eee;
-  }
-
-  textarea {
-    width: 60%;
-    font-size: 18px;
-  }
-
-  button[type="submit"] {
-    padding: 15px 30px;
-  }
-
-  button#clear_chat_button {
-    padding: 10px 15px;
-    font-size: 16px;
-  }
-}
 
   
