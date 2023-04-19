@@ -79,15 +79,27 @@ function chatStripe(isAi, value, uniqueId) {
     )
 }
 
-function clearChat() {
+async function clearChat() {
     // Clear the chat container
     chatContainer.innerHTML = '';
-  
-    // Reset the conversation history
-    conversationHistory = [
-      { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
-    ];
-  }
+
+    // Send a request to the server to clear the conversation history
+    try {
+        const response = await fetch('/clear_conversation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to clear conversation history on the server');
+        }
+    } catch (error) {
+        console.error('Error while clearing conversation history:', error.message);
+        alert('Something went wrong while clearing the conversation history');
+    }
+}
 
 
 const handleSubmit = async (e) => {

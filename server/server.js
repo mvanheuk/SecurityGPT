@@ -54,4 +54,12 @@ app.post('/', async (req, res) => {
   }
 });
 
+app.post('/clear_conversation', (req, res) => {
+  // Reset the conversationHistory variable
+  conversationHistory = [
+    { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
+  ];
+  res.sendStatus(200); // Send a success status code
+});
+
 app.listen(5000, () => console.log('AI server started on http://localhost:5000'));
