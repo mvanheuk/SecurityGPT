@@ -26,6 +26,23 @@ let conversationHistory = [
   { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
 ];
 
+function truncateConversation(history, maxTokens) {
+  let currentTokens = 0;
+  let truncatedHistory = [];
+
+  for (let i = history.length - 1; i >= 0; i--) {
+    const messageTokens = history[i].content.length + 2; // Add 2 for role and content keys
+    if (currentTokens + messageTokens > maxTokens) {
+      break;
+    }
+    truncatedHistory.unshift(history[i]);
+    currentTokens += messageTokens;
+  }
+
+  return truncatedHistory;
+}
+
+
 app.post('/', async (req, res) => {
   try {
     const userMessage = req.body.prompt;
@@ -34,9 +51,13 @@ app.post('/', async (req, res) => {
     // Add the user's message to the conversation history
     conversationHistory.push({ role: 'user', content: userMessage });
 
+    // Truncate the conversation history to stay within the token limit
+    const maxTokens = 4096 - 100; // Reserve some tokens for the API response
+    const truncatedHistory = truncateConversation(conversationHistory, maxTokens);
+
     const response = await openai.createChatCompletion({
       model: model,
-      messages: conversationHistory,
+      messages: truncatedHistory,
       max_tokens: 4000,
     });
 
