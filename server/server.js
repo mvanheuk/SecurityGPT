@@ -58,7 +58,7 @@ app.post('/', async (req, res) => {
     const response = await openai.createChatCompletion({
       model: model,
       messages: truncatedHistory,
-      max_tokens: 4000,
+      max_tokens: 3500,
     });
 
     console.log('API response:', response);
