@@ -165,7 +165,7 @@ form.addEventListener('keyup', (e) => {
     }
 })
 
-window.addEventListener('beforeunload', async (e) => {
+window.addEventListener('onload', async (e) => {
     try {
         await fetch('https://securitygpt.onrender.com/clear', {
             method: 'POST',
