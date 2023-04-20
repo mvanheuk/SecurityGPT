@@ -82,17 +82,24 @@
     border: none;
     border-radius: 25px;
     padding: 30px;
+    padding-right: 60px; /* Add right padding to prevent text from going under the button */
     resize: none;
     font-size: 16px;
     box-shadow: 0px 0px 20px rgba(46, 46, 46, 0.1);
     margin-right: 15px;
+    position: relative; /* Add this to allow positioning of the send button relative to the textarea */
+  }
+  
+  .buttons-container {
+    position: absolute; /* Change display to position */
+    top: 8px; /* Position the container 8px from the top */
+    right: 8px; /* Position the container 8px from the right */
   }
   
   button[type="submit"] {
-    background-color: #1d3c5c;
+    background-color: #fff; /* Change the background color to white */
     border: none;
-    border-radius: 25px;
-    padding: 15px 50px;
+    padding: 0; /* Remove padding */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -101,13 +108,13 @@
   
   button[type="submit"]:focus,
   button[type="submit"]:hover {
-    background-color: #0052a3;
+    background-color: #f5f5f5; /* Change hover background color to a light gray */
   }
   
   button[type="submit"] img {
     width: 20px;
     height: 20px;
-    fill: #fff;
+    fill: #1d3c5c; /* Change the fill color of the arrow to the original blue */
   }
 
   button#clear_button {
