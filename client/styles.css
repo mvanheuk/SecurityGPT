@@ -156,10 +156,7 @@
 @media (max-width: 767px) {
   
   .buttons-container {
-    position: absolute;
-    top: 50%;
-    right: 5%;
-    
+    right: 1%;
   }
 
   header {
@@ -197,11 +194,6 @@
     max-width: 100%;
     margin-right: 0;
     padding-right: 50px; /* Update right padding */
-  }
-
-  button[type="submit"] {
-    padding: 15px 30px;
-    margin-left: 0;
   }
 
   button#clear_button {
