@@ -85,7 +85,7 @@ async function clearChat() {
 
     // Send a request to the server to clear the conversation history
     try {
-        const response = await fetch('/', {
+        const response = await fetch('/clear', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ form.addEventListener('keyup', (e) => {
 
 window.addEventListener('beforeunload', async (e) => {
     try {
-        await fetch('/clear_conversation', {
+        await fetch('/clear', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

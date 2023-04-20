@@ -75,7 +75,7 @@ app.post('/', async (req, res) => {
   }
 });
 
-app.post('/', (req, res) => {
+app.post('/clear', (req, res) => {
   // Reset the conversationHistory variable
   conversationHistory = [
     { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
