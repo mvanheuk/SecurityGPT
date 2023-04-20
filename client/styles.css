@@ -154,6 +154,14 @@
 
 /* Media query for mobile devices */
 @media (max-width: 767px) {
+  
+  .buttons-container {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    
+  }
+
   header {
     flex-wrap: wrap;
   }
