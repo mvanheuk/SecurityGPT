@@ -152,14 +152,6 @@
   align-items: flex-end;
 }
 
-@media (max-width: 1300px) {
-  
-  .buttons-container {
-    right: 8%;
-  }
-
-}
-
 /* Media query for mobile devices */
 @media (max-width: 767px) {
   
