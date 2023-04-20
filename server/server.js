@@ -52,7 +52,7 @@ app.post('/', async (req, res) => {
     // Add the user's message to the conversation history
     conversationHistory.push({ role: 'user', content: userMessage });
 
-    const maxCompletionTokens = 150;
+    const maxCompletionTokens = 350;
     const truncatedHistory = truncateConversation(conversationHistory, maxCompletionTokens);
 
     const response = await openai.createChatCompletion({
