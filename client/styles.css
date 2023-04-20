@@ -94,7 +94,7 @@
   .buttons-container {
     position: absolute; /* Change display to position */
     top: 30%; /* Position the container in the middle vertically */
-    right: 20%; /* Position the container 16px from the right */
+    right: 10%; /* Position the container 16px from the right */
     transform: translateY(-50%); /* Align the container vertically centered */
   }
   
@@ -152,10 +152,10 @@
   align-items: flex-end;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1300px) {
   
   .buttons-container {
-    right: 10%;
+    right: 8%;
   }
 
 }
