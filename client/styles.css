@@ -152,6 +152,7 @@
   align-items: flex-end;
 }
 
+/* Media query for mobile devices */
 @media (max-width: 767px) {
   header {
     flex-wrap: wrap;
@@ -187,6 +188,7 @@
     min-width: 100%;
     max-width: 100%;
     margin-right: 0;
+    padding-right: 50px; /* Update right padding */
   }
 
   button[type="submit"] {
