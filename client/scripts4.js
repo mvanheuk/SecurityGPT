@@ -164,3 +164,16 @@ form.addEventListener('keyup', (e) => {
         handleSubmit(e)
     }
 })
+
+window.addEventListener('beforeunload', async (e) => {
+    try {
+        await fetch('/clear_conversation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    } catch (error) {
+        console.error('Error while clearing conversation history on page unload:', error.message);
+    }
+});
