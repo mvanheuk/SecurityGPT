@@ -42,7 +42,7 @@ function updateModelButtons() {
   }
 
 // Add the loadImage function
-function loadImage() {
+window.loadImage = function() {
     const imageInput = document.getElementById('imageInput');
     const file = imageInput.files[0];
     const image = new Image();
@@ -50,7 +50,7 @@ function loadImage() {
     image.onload = () => {
       recognizeText(image);
     };
-  }
+  };
   
   // Add the recognizeText function
   function recognizeText(image) {
@@ -62,6 +62,7 @@ function loadImage() {
         console.error('Error during OCR recognition:', err);
       });
   }
+
 
 function loader(element) {
     element.textContent = ''
