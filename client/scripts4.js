@@ -8,23 +8,37 @@ let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 
 function switchModel(model) {
-  currentModel = model;
-
-  // Send the selected model to the server
-  fetch('https://securitygpt.onrender.com/change-model', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ model }),
-  }).then((response) => {
-    if (response.ok) {
-      console.log('Model switched to', model);
-    } else {
-      console.error('Failed to switch model');
-    }
-  });
+    currentModel = model;
+  
+    // Send the selected model to the server
+    fetch('https://securitygpt.onrender.com/change-model', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ model }),
+    }).then((response) => {
+      if (response.ok) {
+        console.log('Model switched to', model);
+        updateModelButtons(); // Update the button styles
+      } else {
+        console.error('Failed to switch model');
+      }
+    });
 }
+
+function updateModelButtons() {
+    const gpt3Button = document.getElementById('gpt3-btn');
+    const gpt4Button = document.getElementById('gpt4-btn');
+  
+    if (currentModel === 'gpt-3.5-turbo') {
+      gpt3Button.style.backgroundColor = '#1d3c5c';
+      gpt4Button.style.backgroundColor = 'gray';
+    } else {
+      gpt3Button.style.backgroundColor = 'gray';
+      gpt4Button.style.backgroundColor = '#1d3c5c';
+    }
+  }
 
 function loader(element) {
     element.textContent = ''
