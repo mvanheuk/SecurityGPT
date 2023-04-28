@@ -198,3 +198,9 @@ window.addEventListener('load', async (e) => {
         console.error('Error while clearing conversation history on page unload:', error.message);
     }
 });
+
+const gpt3Button = document.getElementById('gpt3-btn');
+const gpt4Button = document.getElementById('gpt4-btn');
+
+gpt3Button.addEventListener('click', () => switchModel('gpt-3.5-turbo'));
+gpt4Button.addEventListener('click', () => switchModel('gpt-4'));
