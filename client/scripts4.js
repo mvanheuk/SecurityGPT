@@ -3,6 +3,9 @@ import user from './assets/user.svg'
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
+const gpt3Button = document.getElementById('gpt3-btn');
+const gpt4Button = document.getElementById('gpt4-btn');
+gpt4Button.style.backgroundColor = 'gray';
 
 let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
@@ -28,9 +31,6 @@ function switchModel(model) {
 }
 
 function updateModelButtons() {
-    const gpt3Button = document.getElementById('gpt3-btn');
-    const gpt4Button = document.getElementById('gpt4-btn');
-  
     if (currentModel === 'gpt-3.5-turbo') {
       gpt3Button.style.backgroundColor = '#1d3c5c';
       gpt4Button.style.backgroundColor = 'gray';
@@ -212,9 +212,6 @@ window.addEventListener('load', async (e) => {
         console.error('Error while clearing conversation history on page unload:', error.message);
     }
 });
-
-const gpt3Button = document.getElementById('gpt3-btn');
-const gpt4Button = document.getElementById('gpt4-btn');
 
 gpt3Button.addEventListener('click', () => switchModel('gpt-3.5-turbo'));
 gpt4Button.addEventListener('click', () => switchModel('gpt-4'));
