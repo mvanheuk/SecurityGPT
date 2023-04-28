@@ -49,7 +49,7 @@ function truncateConversation(history, maxCompletionTokens) {
 app.post('/', async (req, res) => {
   try {
     const userMessage = req.body.prompt;
-    const model = req.body.model || currentModel; // Use the model from the request or the currentModel
+    const model = req.body.model; // Use the model from the request or the currentModel
 
     // Add the user's message to the conversation history
     conversationHistory.push({ role: 'user', content: userMessage });
