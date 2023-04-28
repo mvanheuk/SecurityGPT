@@ -9,6 +9,7 @@ gpt4Button.style.backgroundColor = 'gray';
 
 let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
+let recognizedImageText = ''; // Store the recognized text from the image
 
 function switchModel(model) {
     currentModel = model;
@@ -38,6 +39,28 @@ function updateModelButtons() {
       gpt3Button.style.backgroundColor = 'gray';
       gpt4Button.style.backgroundColor = '#1d3c5c';
     }
+  }
+
+// Add the loadImage function
+function loadImage() {
+    const imageInput = document.getElementById('imageInput');
+    const file = imageInput.files[0];
+    const image = new Image();
+    image.src = URL.createObjectURL(file);
+    image.onload = () => {
+      recognizeText(image);
+    };
+  }
+  
+  // Add the recognizeText function
+  function recognizeText(image) {
+    Tesseract.recognize(image, 'eng', { logger: m => console.log(m) })
+      .then(({ data: { text } }) => {
+        recognizedImageText = text;
+      })
+      .catch(err => {
+        console.error('Error during OCR recognition:', err);
+      });
   }
 
 function loader(element) {
@@ -140,6 +163,13 @@ const handleSubmit = async (e) => {
     e.preventDefault()
 
     const data = new FormData(form)
+
+    // Append the recognized image text to the user's message
+    let userMessage = data.get('prompt');
+    if (recognizedImageText) {
+      userMessage += `\n[Image text: ${recognizedImageText}]`;
+      recognizedImageText = ''; // Clear the recognized image text for the next message
+    }
 
     // user's chatstripe
     chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
