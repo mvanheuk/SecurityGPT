@@ -127,7 +127,7 @@
     cursor: pointer;
     font-size: 14px;
     color: #fff;
-    margin-right: 10px; /* add this to create space between buttons */
+    margin: 10px, auto; /* add this to create space between buttons */
     width: 25%; /* Quarter width of the text area */
     text-align: center;
   }
