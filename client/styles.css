@@ -152,6 +152,24 @@
     align-items: flex-end;
   }
 
+  .model-button {
+    background-color: #1d3c5c;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+    text-align: center;
+    transition: background-color 0.3s;
+  }
+  
+  .model-button:hover,
+  .model-button:focus {
+    background-color: #0052a3;
+  }
+
 /* Media query for mobile devices */
 @media (max-width: 767px) {
 

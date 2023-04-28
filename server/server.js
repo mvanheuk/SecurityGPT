@@ -26,6 +26,8 @@ let conversationHistory = [
   { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
 ];
 
+let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
+
 function truncateConversation(history, maxCompletionTokens) {
   const maxTokens = 4096 - maxCompletionTokens;
   let currentTokens = 0;
@@ -47,7 +49,7 @@ function truncateConversation(history, maxCompletionTokens) {
 app.post('/', async (req, res) => {
   try {
     const userMessage = req.body.prompt;
-    const model = 'gpt-3.5-turbo';
+    const model = req.body.model || currentModel; // Use the model from the request or the currentModel
 
     // Add the user's message to the conversation history
     conversationHistory.push({ role: 'user', content: userMessage });
@@ -72,6 +74,17 @@ app.post('/', async (req, res) => {
   } catch (error) {
     console.error('Error during API call:', error.message, error.response?.data);
     res.status(500).send('Something went wrong');
+  }
+});
+
+// Add a new route to handle model changes
+app.post('/change-model', (req, res) => {
+  const model = req.body.model;
+  if (model) {
+    currentModel = model;
+    res.sendStatus(200);
+  } else {
+    res.status(400).send('Invalid model');
   }
 });
 

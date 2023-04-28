@@ -5,6 +5,26 @@ const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
 
 let loadInterval
+let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
+
+function switchModel(model) {
+  currentModel = model;
+
+  // Send the selected model to the server
+  fetch('https://securitygpt.onrender.com/change-model', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ model }),
+  }).then((response) => {
+    if (response.ok) {
+      console.log('Model switched to', model);
+    } else {
+      console.error('Failed to switch model');
+    }
+  });
+}
 
 function loader(element) {
     element.textContent = ''
@@ -129,7 +149,8 @@ const handleSubmit = async (e) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            prompt: data.get('prompt')
+            prompt: data.get('prompt'),
+            model: currentModel, // Pass the currentModel to the server
         })
     })
 
