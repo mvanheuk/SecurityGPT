@@ -170,6 +170,13 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
   background-color: #0052a3;
 }
 
+#button-container2 {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Media query for mobile devices */
 @media (max-width: 767px) {
 
