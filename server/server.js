@@ -108,7 +108,7 @@ app.post('/google-vision-api', async (req, res) => {
     res.status(200).send(response.data);
   } catch (error) {
     console.error('Error during API call:', error.message, error.response?.data);
-    res.status(500).send('Something went wrong');
+    res.status(500).send({ error: 'Something went wrong' });
   }
 });
 
