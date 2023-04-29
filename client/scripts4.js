@@ -173,7 +173,7 @@ const handleSubmit = async (e) => {
     }
 
     // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
+    chatContainer.innerHTML += chatStripe(false, userMessage) // Use userMessage instead of data.get('prompt')
 
     // to clear the textarea input 
     form.reset()
@@ -194,7 +194,7 @@ const handleSubmit = async (e) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            prompt: data.get('prompt'),
+            prompt: userMessage, // Use userMessage instead of data.get('prompt')
             model: currentModel, // Pass the currentModel to the server
         })
     })
