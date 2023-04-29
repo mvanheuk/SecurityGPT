@@ -210,6 +210,13 @@ const handleSubmit = async (e) => {
 
     clearInterval(loadInterval)
     messageDiv.innerHTML = ""
+    
+    //reset recongnizedImageText
+    recognizedImageText = '';
+
+    // Clear the file input
+    const imageInput = document.getElementById('imageInput');
+    imageInput.value = '';
 
     if (response.ok) {
         const data = await response.json();
@@ -224,6 +231,7 @@ const handleSubmit = async (e) => {
         alert(err)
     }
 };
+
 
 
 form.addEventListener('submit', handleSubmit);

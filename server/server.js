@@ -57,9 +57,6 @@ app.post('/', async (req, res) => {
       conversationHistory.push({ role: 'user', content: `RecognizedTextFromImage: ${recognizedText}` });
     }
 
-    //reset recongnzedText
-    recognizedText = '';
-    
     // Add the user's message to the conversation history
     conversationHistory.push({ role: 'user', content: userMessage });
 
