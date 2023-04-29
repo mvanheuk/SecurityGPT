@@ -3,12 +3,15 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
+import { ImageAnnotatorClient } from '@google-cloud/vision';
 
 dotenv.config();
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const client = new ImageAnnotatorClient();
 
 const openai = new OpenAIApi(configuration);
 
@@ -80,6 +83,24 @@ app.post('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Error during API call:', error.message, error.response?.data);
+    res.status(500).send('Something went wrong');
+  }
+});
+
+app.post('/process-image', async (req, res) => {
+  const imageBase64 = req.body.imageBase64;
+
+  try {
+    const [result] = await client.documentTextDetection({
+      image: {
+        content: imageBase64,
+      },
+    });
+
+    const recognizedText = result.fullTextAnnotation.text;
+    res.status(200).send({ recognizedText });
+  } catch (error) {
+    console.error('Error during Vision API call:', error.message);
     res.status(500).send('Something went wrong');
   }
 });
