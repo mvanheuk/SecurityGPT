@@ -57,8 +57,9 @@ app.post('/', async (req, res) => {
 
      // Add the TesseractImage2Text role to the conversation history if the recognized text is present
      if (recognizedText) {
-      conversationHistory.push({ role: 'TesseractImage2Text', content: recognizedText });
+      conversationHistory.push({ role: 'user', content: `RecognizedTextFromImage: ${recognizedText}` });
     }
+    conversationHistory.push({ role: 'user', content: userMessage });
 
     const maxCompletionTokens = 350;
     const truncatedHistory = truncateConversation(conversationHistory, maxCompletionTokens);
