@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
-const vision = require('@google-cloud/vision');
+import { Configuration, vision } from '@google-cloud/vision';
 
 const client = new vision.ImageAnnotatorClient({
   keyFilename: process.env.SecGPT_SA,
