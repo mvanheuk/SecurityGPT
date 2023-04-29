@@ -5,11 +5,14 @@ const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
 const gpt3Button = document.getElementById('gpt3-btn');
 const gpt4Button = document.getElementById('gpt4-btn');
+const imageInput = document.getElementById('imageInput');
+
 gpt4Button.style.backgroundColor = 'gray';
 
 let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 let recognizedImageText = ''; // Store the recognized text from the image
+
 
 function switchModel(model) {
     currentModel = model;
@@ -215,7 +218,6 @@ const handleSubmit = async (e) => {
     recognizedImageText = '';
 
     // Clear the file input
-    const imageInput = document.getElementById('imageInput');
     imageInput.value = '';
 
     if (response.ok) {
