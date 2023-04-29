@@ -175,7 +175,6 @@ const handleSubmit = async (e) => {
 
     const data = new FormData(form)
 
-    // Append the recognized image text to the user's message
     let userMessage = data.get('prompt');
 
     // user's chatstripe
@@ -199,12 +198,12 @@ const handleSubmit = async (e) => {
         headers: {
             'Content-Type': 'application/json',
         },
-         body: JSON.stringify({
-            prompt: userMessage,
-            model: currentModel,
+        body: JSON.stringify({
+            prompt: data.get('prompt'),
+            model: currentModel, // Pass the currentModel to the server
             recognizedText: recognizedImageText, // Pass the recognized text as a separate field
         })
-  });
+    })
 
     // to focus scroll to the bottom here
     chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight; 
