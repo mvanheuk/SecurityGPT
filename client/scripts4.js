@@ -33,23 +33,6 @@ imageInput.addEventListener('change', (event) => {
   });
 });
 
-async function processImage(imageBase64) {
-  try {
-    const response = await fetch('https://securitygpt.onrender.com/google-vision-api', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ imageBase64 }),
-    });
-
-    const data = await response.json();
-    console.log('Google Cloud Vision API response:', data);
-  } catch (error) {
-    console.error('Error during API call:', error);
-  }
-}
-
 function switchModel(model) {
     currentModel = model;
   
@@ -91,17 +74,6 @@ function updateModelButtons() {
       gpt4Button.style.backgroundColor = '#1d3c5c';
     }
   }
-
-// Add the loadImage function
-window.loadImage = function() {
-    const imageInput = document.getElementById('imageInput');
-    const file = imageInput.files[0];
-    const image = new Image();
-    image.src = URL.createObjectURL(file);
-    image.onload = () => {
-      processImage(image);
-    };
-  };
 
 function loader(element) {
     element.textContent = ''
