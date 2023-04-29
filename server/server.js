@@ -98,7 +98,6 @@ app.post('/google-vision-api', async (req, res) => {
             features: [
               {
                 type: 'TEXT_DETECTION',
-                maxResults: 10,
               },
             ],
           },
