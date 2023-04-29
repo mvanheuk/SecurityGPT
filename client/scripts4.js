@@ -6,6 +6,7 @@ const chatContainer = document.querySelector('#chat_container')
 const gpt3Button = document.getElementById('gpt3-btn');
 const gpt4Button = document.getElementById('gpt4-btn');
 const imageInput = document.getElementById('imageInput');
+const progressPercentage = document.getElementById("progressPercentage");
 
 gpt4Button.style.backgroundColor = 'gray';
 
@@ -57,7 +58,6 @@ window.loadImage = function() {
   
   // Add the recognizeText function
   function recognizeText(image) {
-    const progressPercentage = document.getElementById("progressPercentage");
     Tesseract.recognize(image, "eng", {
       logger: (m) => {
         console.log(m);
@@ -219,6 +219,9 @@ const handleSubmit = async (e) => {
 
     // Clear the file input
     imageInput.value = '';
+
+    //Clear % value
+    progressPercentage.textContent = ``;
 
     if (response.ok) {
         const data = await response.json();
