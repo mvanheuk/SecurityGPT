@@ -29,24 +29,6 @@ imageInput.addEventListener('change', (e) => {
   reader.readAsDataURL(e.target.files[0]);
 });
 
-async function sendImageToServer() {
-  const response = await fetch('/process-image', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ imageBase64: ImageBase64 }),
-  });
-
-  if (response.ok) {
-    const data = await response.json();
-    recognizedImageText = data.recognizedText;
-    console.log('Recognized text:', recognizedImageText);
-  } else {
-    console.error('Failed to process image');
-  }
-}
-
 function switchModel(model) {
     currentModel = model;
   

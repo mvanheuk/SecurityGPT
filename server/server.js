@@ -3,15 +3,12 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
-import { ImageAnnotatorClient } from '@google-cloud/vision';
 
 dotenv.config();
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-const client = new ImageAnnotatorClient();
 
 const openai = new OpenAIApi(configuration);
 
