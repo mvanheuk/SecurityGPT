@@ -177,10 +177,6 @@ const handleSubmit = async (e) => {
 
     // Append the recognized image text to the user's message
     let userMessage = data.get('prompt');
-    if (recognizedImageText) {
-      userMessage += `\n[Image text: ${recognizedImageText}]`;
-      recognizedImageText = ''; // Clear the recognized image text for the next message
-    }
 
     // user's chatstripe
     chatContainer.innerHTML += chatStripe(false, userMessage) // Use userMessage instead of data.get('prompt')
