@@ -35,7 +35,7 @@ imageInput.addEventListener('change', (event) => {
 
 async function processImage(imageBase64) {
   try {
-    const response = await fetch('/google-vision-api', {
+    const response = await fetch('https://securitygpt.onrender.com/google-vision-api', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
