@@ -84,21 +84,6 @@ app.post('/', async (req, res) => {
   }
 });
 
-app.post('/google-vision-api', async (req, res) => {
-  const imageBase64 = req.body.imageBase64;
-  try {
-    const [result] = await client.textDetection({
-      image: {
-        content: imageBase64,
-      },
-    });
-    res.status(200).send(result);
-  } catch (error) {
-    console.error('Error during API call:', error.message, error.response?.data);
-    res.status(500).send({ error: 'Something went wrong' });
-  }
-});
-
 // Add a new route to handle model changes
 app.post('/change-model', (req, res) => {
   const model = req.body.model;

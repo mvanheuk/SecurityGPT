@@ -14,31 +14,16 @@ let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 let recognizedImageText = ''; // Store the recognized text from the image
 
-imageInput.addEventListener('change', async (event) => {
-  imageToBase64(event.target, async (base64) => {
-    try {
-      const response = await fetch('https://securitygpt.onrender.com/google-vision-api', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ imageBase64: base64 }),
-      });
+let ImageBase64;
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error);
-      }
-
-      const data = await response.json();
-      console.log('Google Cloud Vision API response:', data);
-      recognizedImageText = data.recognizedText; // Store the recognized text
-    } catch (error) {
-      console.error('Error during API call:', error);
-    }
-  });
+imageInput.addEventListener('change', (e) => {
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    ImageBase64 = event.target.result;
+    console.log('Image converted to base64:', ImageBase64);
+  };
+  reader.readAsDataURL(e.target.files[0]);
 });
-
 
 function switchModel(model) {
     currentModel = model;
@@ -58,18 +43,6 @@ function switchModel(model) {
         console.error('Failed to switch model');
       }
     });
-}
-
-function imageToBase64(inputElement, callback) {
-  const file = inputElement.files[0];
-  const reader = new FileReader();
-
-  reader.onload = (event) => {
-    const base64 = event.target.result;
-    callback(base64);
-  };
-
-  reader.readAsDataURL(file);
 }
 
 function updateModelButtons() {
