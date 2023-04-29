@@ -54,12 +54,22 @@ window.loadImage = function() {
   
   // Add the recognizeText function
   function recognizeText(image) {
-    Tesseract.recognize(image, 'eng', { logger: m => console.log(m) })
+    const progressPercentage = document.getElementById("progressPercentage");
+    Tesseract.recognize(image, "eng", {
+      logger: (m) => {
+        console.log(m);
+        if (m.status === "recognizing text") {
+          const percentage = Math.round(m.progress * 100);
+          progressPercentage.textContent = `${percentage}%`;
+        }
+      },
+    })
       .then(({ data: { text } }) => {
         recognizedImageText = text;
+        progressPercentage.textContent = "100%";
       })
-      .catch(err => {
-        console.error('Error during OCR recognition:', err);
+      .catch((err) => {
+        console.error("Error during OCR recognition:", err);
       });
   }
 
