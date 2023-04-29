@@ -23,7 +23,7 @@ app.get('/', async (req, res) => {
 
 // Create a variable to store the conversation history
 let conversationHistory = [
-  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT.' },
+  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT. You have the ability to pull context from images using tesseract.js, image text is saved as RecognizedTextFromImage within conversations.'},
 ];
 
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
