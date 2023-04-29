@@ -5,7 +5,6 @@ const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
 const gpt3Button = document.getElementById('gpt3-btn');
 const gpt4Button = document.getElementById('gpt4-btn');
-const imageInput = document.getElementById('imageInput');
 const progressPercentage = document.getElementById("progressPercentage");
 
 gpt4Button.style.backgroundColor = 'gray';
@@ -14,6 +13,42 @@ let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 let recognizedImageText = ''; // Store the recognized text from the image
 
+imageInput.addEventListener('change', (event) => {
+  imageToBase64(event.target, async (base64) => {
+    try {
+      const response = await fetch('/google-vision-api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageBase64: base64 }),
+      });
+
+      const data = await response.json();
+      console.log('Google Cloud Vision API response:', data);
+      recognizedImageText = data.recognizedText; // Store the recognized text
+    } catch (error) {
+      console.error('Error during API call:', error);
+    }
+  });
+});
+
+async function processImage(imageBase64) {
+  try {
+    const response = await fetch('/google-vision-api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ imageBase64 }),
+    });
+
+    const data = await response.json();
+    console.log('Google Cloud Vision API response:', data);
+  } catch (error) {
+    console.error('Error during API call:', error);
+  }
+}
 
 function switchModel(model) {
     currentModel = model;
@@ -35,6 +70,18 @@ function switchModel(model) {
     });
 }
 
+function imageToBase64(inputElement, callback) {
+  const file = inputElement.files[0];
+  const reader = new FileReader();
+
+  reader.onload = (event) => {
+    const base64 = event.target.result;
+    callback(base64);
+  };
+
+  reader.readAsDataURL(file);
+}
+
 function updateModelButtons() {
     if (currentModel === 'gpt-3.5-turbo') {
       gpt3Button.style.backgroundColor = '#1d3c5c';
@@ -52,30 +99,9 @@ window.loadImage = function() {
     const image = new Image();
     image.src = URL.createObjectURL(file);
     image.onload = () => {
-      recognizeText(image);
+      processImage(image);
     };
   };
-  
-  // Add the recognizeText function
-  function recognizeText(image) {
-    Tesseract.recognize(image, "eng", {
-      logger: (m) => {
-        console.log(m);
-        if (m.status === "recognizing text") {
-          const percentage = Math.round(m.progress * 100);
-          progressPercentage.textContent = `${percentage}%`;
-        }
-      },
-    })
-      .then(({ data: { text } }) => {
-        recognizedImageText = text;
-        progressPercentage.textContent = "100%";
-      })
-      .catch((err) => {
-        console.error("Error during OCR recognition:", err);
-      });
-  }
-
 
 function loader(element) {
     element.textContent = ''

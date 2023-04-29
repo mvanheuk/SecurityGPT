@@ -1,4 +1,5 @@
 import express from 'express';
+import axios from 'axios';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
@@ -23,7 +24,7 @@ app.get('/', async (req, res) => {
 
 // Create a variable to store the conversation history
 let conversationHistory = [
-  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT. You have the ability to pull context from images using tesseract.js, image text is saved as RecognizedTextFromImage within conversations.'},
+  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT. You have the ability to pull context from images using Google Cloud Vission API, image text is saved as RecognizedTextFromImage within conversations.'},
 ];
 
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
@@ -77,6 +78,35 @@ app.post('/', async (req, res) => {
     res.status(200).send({
       bot: response.data.choices[0].message.content,
     });
+  } catch (error) {
+    console.error('Error during API call:', error.message, error.response?.data);
+    res.status(500).send('Something went wrong');
+  }
+});
+
+app.post('/google-vision-api', async (req, res) => {
+  const imageBase64 = req.body.imageBase64;
+  try {
+    const response = await axios.post(
+      'https://vision.googleapis.com/v1/images:annotate?key=' + process.env.GOOGLE_API_KEY,
+      {
+        requests: [
+          {
+            image: {
+              content: imageBase64,
+            },
+            features: [
+              {
+                type: 'LABEL_DETECTION',
+                maxResults: 10,
+              },
+            ],
+          },
+        ],
+      }
+    );
+
+    res.status(200).send(response.data);
   } catch (error) {
     console.error('Error during API call:', error.message, error.response?.data);
     res.status(500).send('Something went wrong');
