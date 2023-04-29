@@ -6,6 +6,7 @@ const chatContainer = document.querySelector('#chat_container')
 const gpt3Button = document.getElementById('gpt3-btn');
 const gpt4Button = document.getElementById('gpt4-btn');
 const progressPercentage = document.getElementById("progressPercentage");
+const imageInput = document.getElementById('imageInput');
 
 gpt4Button.style.backgroundColor = 'gray';
 
@@ -13,7 +14,7 @@ let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 let recognizedImageText = ''; // Store the recognized text from the image
 
-imageInput.addEventListener('change', (event) => {
+imageInput.addEventListener('change', async (event) => {
   imageToBase64(event.target, async (base64) => {
     try {
       const response = await fetch('https://securitygpt.onrender.com/google-vision-api', {
@@ -24,6 +25,11 @@ imageInput.addEventListener('change', (event) => {
         body: JSON.stringify({ imageBase64: base64 }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error);
+      }
+
       const data = await response.json();
       console.log('Google Cloud Vision API response:', data);
       recognizedImageText = data.recognizedText; // Store the recognized text
@@ -33,22 +39,6 @@ imageInput.addEventListener('change', (event) => {
   });
 });
 
-async function processImage(imageBase64) {
-  try {
-    const response = await fetch('https://securitygpt.onrender.com/google-vision-api', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ imageBase64 }),
-    });
-
-    const data = await response.json();
-    console.log('Google Cloud Vision API response:', data);
-  } catch (error) {
-    console.error('Error during API call:', error);
-  }
-}
 
 function switchModel(model) {
     currentModel = model;
@@ -91,17 +81,6 @@ function updateModelButtons() {
       gpt4Button.style.backgroundColor = '#1d3c5c';
     }
   }
-
-// Add the loadImage function
-window.loadImage = function() {
-    const imageInput = document.getElementById('imageInput');
-    const file = imageInput.files[0];
-    const image = new Image();
-    image.src = URL.createObjectURL(file);
-    image.onload = () => {
-      processImage(image);
-    };
-  };
 
 function loader(element) {
     element.textContent = ''
