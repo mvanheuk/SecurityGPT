@@ -50,9 +50,15 @@ app.post('/', async (req, res) => {
   try {
     const userMessage = req.body.prompt;
     const model = req.body.model; // Use the model from the request or the currentModel
+    const recognizedText = req.body.recognizedText; // Get the recognized text from the request
 
     // Add the user's message to the conversation history
     conversationHistory.push({ role: 'user', content: userMessage });
+
+     // Add the TesseractImage2Text role to the conversation history if the recognized text is present
+     if (recognizedText) {
+      conversationHistory.push({ role: 'TesseractImage2Text', content: recognizedText });
+    }
 
     const maxCompletionTokens = 350;
     const truncatedHistory = truncateConversation(conversationHistory, maxCompletionTokens);

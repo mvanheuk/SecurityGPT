@@ -203,11 +203,12 @@ const handleSubmit = async (e) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            prompt: userMessage, // Use userMessage instead of data.get('prompt')
-            model: currentModel, // Pass the currentModel to the server
+         body: JSON.stringify({
+            prompt: userMessage,
+            model: currentModel,
+            recognizedText: recognizedImageText, // Pass the recognized text as a separate field
         })
-    })
+  });
 
     // to focus scroll to the bottom here
     chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight; 
@@ -227,7 +228,7 @@ const handleSubmit = async (e) => {
         messageDiv.innerHTML = "Something went wrong"
         alert(err)
     }
-}
+};
 
 
 form.addEventListener('submit', handleSubmit);
