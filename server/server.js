@@ -3,6 +3,11 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
+const vision = require('@google-cloud/vision');
+
+const client = new vision.ImageAnnotatorClient({
+  keyFilename: process.env.SecGPT_SA,
+});
 
 dotenv.config();
 
@@ -87,25 +92,12 @@ app.post('/', async (req, res) => {
 app.post('/google-vision-api', async (req, res) => {
   const imageBase64 = req.body.imageBase64;
   try {
-    const response = await axios.post(
-      'https://vision.googleapis.com/v1/images:annotate?key=' + process.env.GOOGLE_API_KEY,
-      {
-        requests: [
-          {
-            image: {
-              content: imageBase64,
-            },
-            features: [
-              {
-                type: 'TEXT_DETECTION',
-              },
-            ],
-          },
-        ],
-      }
-    );
-
-    res.status(200).send(response.data);
+    const [result] = await client.textDetection({
+      image: {
+        content: imageBase64,
+      },
+    });
+    res.status(200).send(result);
   } catch (error) {
     console.error('Error during API call:', error.message, error.response?.data);
     res.status(500).send('Something went wrong');
