@@ -3,7 +3,6 @@ import user from './assets/user.svg'
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
-const Tesseract = require('tesseract.js');
 const gpt3Button = document.getElementById('gpt3-btn');
 const gpt4Button = document.getElementById('gpt4-btn');
 gpt4Button.style.backgroundColor = 'gray';
