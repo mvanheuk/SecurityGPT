@@ -19,11 +19,16 @@ let ImageBase64;
 imageInput.addEventListener('change', (e) => {
   const reader = new FileReader();
   reader.onload = (event) => {
-    ImageBase64 = event.target.result;
-    console.log('Image converted to base64:', ImageBase64);
+    const dataURL = event.target.result;
+    // Remove the Data URL prefix
+    ImageBase64 = dataURL.split(',')[1];
+    console.log(ImageBase64);
+
+    // You can now use `ImageBase64` when sending a request to the Google Cloud Vision API
   };
   reader.readAsDataURL(e.target.files[0]);
 });
+
 
 function switchModel(model) {
     currentModel = model;
