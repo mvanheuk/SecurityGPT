@@ -16,7 +16,7 @@ let recognizedImageText = ''; // Store the recognized text from the image
 imageInput.addEventListener('change', (event) => {
   imageToBase64(event.target, async (base64) => {
     try {
-      const response = await fetch('/google-vision-api', {
+      const response = await fetch('https://securitygpt.onrender.com/google-vision-api', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
