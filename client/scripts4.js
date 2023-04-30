@@ -23,12 +23,38 @@ imageInput.addEventListener('change', (e) => {
     // Remove the Data URL prefix
     ImageBase64 = dataURL.split(',')[1];
     console.log(ImageBase64);
-
+    // Call the processImage function after obtaining the ImageBase64 variable
+    processImage(ImageBase64);
     // You can now use `ImageBase64` when sending a request to the Google Cloud Vision API
   };
   reader.readAsDataURL(e.target.files[0]);
 });
 
+async function processImage(imageBase64) {
+    try {
+      const response = await fetch('https://securitygpt.onrender.com/process-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageBase64,
+        }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        recognizedImageText = data.recognizedText;
+        console.log('Recognized text:', recognizedImageText);
+      } else {
+        throw new Error('Failed to process image');
+      }
+    } catch (error) {
+      console.error('Error during image processing:', error.message);
+      alert('Something went wrong while processing the image');
+    }
+  }
+  
 function switchModel(model) {
     currentModel = model;
   
