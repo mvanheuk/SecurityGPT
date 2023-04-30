@@ -242,6 +242,7 @@ const handleSubmit = async (e) => {
     recognizedImageText = '';
     recognizedLabels = '';
     webDetectionResults = '';
+    ImageBase64 = '';
 
     // Clear the file input
     imageInput.value = '';
