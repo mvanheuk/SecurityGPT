@@ -45,7 +45,7 @@ app.get('/', async (req, res) => {
 
 // Create a variable to store the conversation history
 let conversationHistory = [
-  { role: 'system', content: 'Analyze the user input, which may include text or image context (Recognized Text, Labels, etc.) provided by the Google Cloud Vision API. If an image is provided, use all aspects of the image to help describe it to the user, unless they specify otherwise. For text inputs, engage in a conversation addressing user concerns or questions related to security or other topics. In either case, provide any additional information the user may require regarding their input.'},
+  { role: 'system', content: 'Analyze the user input, which may consist of text or image context (Recognized Text, Labels, Web Data, etc.) provided by the Google Cloud Vision API. When an image is submitted, use all aspects of the image for a comprehensive description, unless the user specifies otherwise (Do not simply list labels, but rather use them as context for describing the images content). For text inputs, engage in a conversation addressing user concerns or questions related to security and other topics. In all cases, be sure to offer any additional information the user might need in relation to their input.'},
 ];
 
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
