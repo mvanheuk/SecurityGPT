@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
 
+
 dotenv.config();
 
 const configuration = new Configuration({
@@ -15,6 +16,10 @@ const openai = new OpenAIApi(configuration);
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const vision = require('@google-cloud/vision');
+
+const client = new vision.ImageAnnotatorClient();
 
 app.get('/', async (req, res) => {
   res.status(200).send({
@@ -88,11 +93,10 @@ app.post('/process-image', async (req, res) => {
   const imageBase64 = req.body.imageBase64;
 
   try {
-    const [result] = await client.documentTextDetection({
-      image: {
-        content: imageBase64,
-      },
-    });
+    const [result] = await client.labelDetection(imageBase64);
+    const labels = result.labelAnnotations;
+    console.log('Labels:');
+    labels.forEach(label => console.log(label.description));
 
     const recognizedText = result.fullTextAnnotation.text;
     res.status(200).send({ recognizedText });
