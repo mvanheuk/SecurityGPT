@@ -96,7 +96,7 @@ app.post('/process-image', async (req, res) => {
     console.log('Labels:');
     labels.forEach(label => console.log(label.description));
 
-    const recognizedText = result.fullTextAnnotation.text;
+    RecognizedTextFromImage = result.fullTextAnnotation.text;
     res.status(200).send({ recognizedText });
   } catch (error) {
     console.error('Error during Vision API call:', error.message);
