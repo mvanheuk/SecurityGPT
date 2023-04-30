@@ -74,6 +74,7 @@ app.post('/', async (req, res) => {
     const model = req.body.model; // Use the model from the request or the currentModel
     const recognizedText = req.body.recognizedText; // Get the recognized text from the request
     const recognizedLabels = req.body.recognizedLabels;
+    const recongnizedWeb = req.body.webDetectionResults;
 
     // Add the TesseractImage2Text role to the conversation history if the recognized text is present
     if (recognizedText) {
@@ -82,6 +83,10 @@ app.post('/', async (req, res) => {
 
     if (recognizedLabels) {
       conversationHistory.push({ role: 'user', content: `recognizedLabels: ${recognizedLabels}` });
+    }
+
+    if (recongnizedWeb) {
+      conversationHistory.push({ role: 'user', content: `recognizedWeb: ${recongnizedWeb}` });
     }
 
     // Add the user's message to the conversation history
@@ -125,6 +130,7 @@ app.post('/process-image', async (req, res) => {
 
     console.log('Recognized text to be sent to the client:', recognizedText);
     console.log('Recognized labels to be sent to the client:', labels);
+    console.log('Web Detection', webEntities);
     res.status(200).send({ recognizedImageText: recognizedText, recognizedLabels: labels, webDetectionResult: webEntities });
   } catch (error) {
     console.error('Error during Vision API call:', error.message);
