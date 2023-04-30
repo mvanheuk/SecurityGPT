@@ -14,6 +14,7 @@ let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 let recognizedImageText = ''; // Store the recognized text from the image
 let recognizedLabels = ''; // Store the recognized labels from the image
+let webDetectionResults = '';
 
 
 let ImageBase64;
