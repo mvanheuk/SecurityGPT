@@ -56,6 +56,10 @@ async function processImage(imageBase64) {
         console.log('Recognized text:', recognizedImageText);
         console.log('Recognized labels:', recognizedLabels);
         console.log('Web detection results:', webDetectionResults);
+
+        // Update progress percentage to 100% after the data is received
+        progressPercentage.textContent = '100%';
+        
       } else {
         throw new Error('Failed to process image');
       }
