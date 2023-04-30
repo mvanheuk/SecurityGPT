@@ -222,7 +222,38 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
   * {
     margin: 0;
   }
+
+  /* Adjust button and text size for textarea */
+  textarea {
+    font-size: 14px;
+    padding: 15px 15px 15px 15px;
+    padding-right: 40px;
+  }
+
+  /* Adjust button and text size for send button */
+  button[type="submit"] img {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Adjust font size and padding for other buttons */
+  button#clear_button, button#gpt3-btn, button#gpt4-btn {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  /* Make button round for a more modern look */
+  .custom-file-upload {
+    border-radius: 50%;
+    padding: 10px;
+  }
   
+  /* Adjust font size for chat container */
+  #chat_container {
+    font-size: 14px;
+  }
+
+  /* Other existing styles */
   .buttons-container {
     right: 8%;
   }
@@ -262,7 +293,7 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
     min-width: 100%;
     max-width: 100%;
     margin-right: 0;
-    padding-right: 50px; /* Update right padding */
+    padding-right: 50px;
   }
 
   button#clear_button {
