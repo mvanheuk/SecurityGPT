@@ -108,9 +108,9 @@ app.post('/process-image', async (req, res) => {
 
   try {
     const [result] = await client.textDetection({image: {content: imageBase64}});
-    const labels = result.labelAnnotations;
-    console.log('Labels:');
-    labels.forEach(label => console.log(label.description));
+    const annotations = result.textAnnotations;
+    console.log('Text Annotations:');
+    annotations.forEach(annotation => console.log(annotation.description));
 
     recognizedImageText = result.fullTextAnnotation.text;
     res.status(200).send({ recognizedImageText });
