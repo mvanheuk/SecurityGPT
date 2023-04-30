@@ -227,7 +227,7 @@ const handleSubmit = async (e) => {
             prompt: data.get('prompt'),
             model: currentModel, // Pass the currentModel to the server
             recognizedText: recognizedImageText, // Pass the recognized text as a separate field
-            recognizedLabels: recognizedLabels, // Pass the recognized labels as a separate field
+            // recognizedLabels: recognizedLabels, // Pass the recognized labels as a separate field
             webDetectionResults: webDetectionResults
         })
     })
