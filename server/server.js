@@ -131,7 +131,7 @@ app.post('/process-image', async (req, res) => {
     console.log('Recognized text to be sent to the client:', recognizedText);
     console.log('Recognized labels to be sent to the client:', labels);
     console.log('Web Detection', webEntities);
-    res.status(200).send({ recognizedImageText: recognizedText, recognizedLabels: labels, webDetectionResult: webEntities });
+    res.status(200).send({ recognizedImageText: recognizedText, recognizedLabels: labels, webDetectionResults: webEntities });
   } catch (error) {
     console.error('Error during Vision API call:', error.message);
     res.status(500).send('Something went wrong');
