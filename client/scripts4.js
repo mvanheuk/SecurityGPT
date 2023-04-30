@@ -13,6 +13,8 @@ gpt4Button.style.backgroundColor = 'gray';
 let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 let recognizedImageText = ''; // Store the recognized text from the image
+let recognizedLabels = ''; // Store the recognized labels from the image
+
 
 let ImageBase64;
 
@@ -45,7 +47,9 @@ async function processImage(imageBase64) {
       if (response.ok) {
         const data = await response.json();
         recognizedImageText = data.recognizedImageText;
+        recognizedLabels = data.recognizedLabels;
         console.log('Recognized text:', recognizedImageText);
+        console.log('Recognized labels:', recognizedLabels);
       } else {
         throw new Error('Failed to process image');
       }
@@ -213,6 +217,7 @@ const handleSubmit = async (e) => {
             prompt: data.get('prompt'),
             model: currentModel, // Pass the currentModel to the server
             recognizedText: recognizedImageText, // Pass the recognized text as a separate field
+            recognizedLabels: recognizedLabels, // Pass the recognized labels as a separate field
         })
     })
 
@@ -224,6 +229,7 @@ const handleSubmit = async (e) => {
     
     //reset recongnizedImageText
     recognizedImageText = '';
+    recognizedLabels = '';
 
     // Clear the file input
     imageInput.value = '';

@@ -45,7 +45,7 @@ app.get('/', async (req, res) => {
 
 // Create a variable to store the conversation history
 let conversationHistory = [
-  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT. You have the ability to pull context from images using Google Cloud Vission API, image text is saved as RecognizedTextFromImage within conversations.'},
+  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT. You have the ability to pull context from images using Google Cloud Vission API, image text is saved as RecognizedTextFromImage and  within conversations.'},
 ];
 
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
@@ -109,14 +109,15 @@ app.post('/process-image', async (req, res) => {
   const imageBase64 = req.body.imageBase64;
 
   try {
-    const [result] = await client.textDetection({image: {content: imageBase64}});
-    const annotations = result.textAnnotations;
-    console.log('Text Annotations:');
-    annotations.forEach(annotation => console.log(annotation.description));
+    let [textResult] = await client.textDetection({image: {content: imageBase64}});
+    let recognizedText = textResult.fullTextAnnotation?.text;
 
-    recognizedImageText = result.fullTextAnnotation.text;
-    console.log('Recognized text to be sent to the client:', recognizedImageText); // Add this line
-    res.status(200).send({ recognizedImageText });
+    const [labelResult] = await client.labelDetection({image: {content: imageBase64}});
+    const labels = labelResult.labelAnnotations.map(annotation => annotation.description).join(', ');
+
+    console.log('Recognized text to be sent to the client:', recognizedText);
+    console.log('Recognized labels to be sent to the client:', labels);
+    res.status(200).send({ recognizedImageText: recognizedText, recognizedLabels: labels });
   } catch (error) {
     console.error('Error during Vision API call:', error.message);
     res.status(500).send('Something went wrong');
