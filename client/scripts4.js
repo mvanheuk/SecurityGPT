@@ -41,15 +41,20 @@ async function processImage(imageBase64) {
         },
         body: JSON.stringify({
           imageBase64,
+          webDetection: true, // Add this line to request web detection
         }),
       });
   
       if (response.ok) {
         const data = await response.json();
+
         recognizedImageText = data.recognizedImageText;
         recognizedLabels = data.recognizedLabels;
+        webDetectionResults = data.webDetectionResults; // Store the web detection results
+
         console.log('Recognized text:', recognizedImageText);
         console.log('Recognized labels:', recognizedLabels);
+        console.log('Web detection results:', webDetectionResults);
       } else {
         throw new Error('Failed to process image');
       }
@@ -218,6 +223,7 @@ const handleSubmit = async (e) => {
             model: currentModel, // Pass the currentModel to the server
             recognizedText: recognizedImageText, // Pass the recognized text as a separate field
             recognizedLabels: recognizedLabels, // Pass the recognized labels as a separate field
+            webDetectionResults: webDetectionResults
         })
     })
 
@@ -230,6 +236,7 @@ const handleSubmit = async (e) => {
     //reset recongnizedImageText
     recognizedImageText = '';
     recognizedLabels = '';
+    webDetectionResults = '';
 
     // Clear the file input
     imageInput.value = '';

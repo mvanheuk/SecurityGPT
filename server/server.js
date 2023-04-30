@@ -120,9 +120,12 @@ app.post('/process-image', async (req, res) => {
     const [labelResult] = await client.labelDetection({image: {content: imageBase64}});
     const labels = labelResult.labelAnnotations.map(annotation => annotation.description).join(', ');
 
+    const [webResults] = await client.webDetection({image: {content: imageBase64}});
+    const webEntities = webResults.webDetection.webEntities.map(entity => entity.description).join(', ');
+
     console.log('Recognized text to be sent to the client:', recognizedText);
     console.log('Recognized labels to be sent to the client:', labels);
-    res.status(200).send({ recognizedImageText: recognizedText, recognizedLabels: labels });
+    res.status(200).send({ recognizedImageText: recognizedText, recognizedLabels: labels, webDetectionResult: webEntities });
   } catch (error) {
     console.error('Error during Vision API call:', error.message);
     res.status(500).send('Something went wrong');
