@@ -146,26 +146,30 @@ function typeText(element, text) {
 
   typeCharacter();
 }
+ 
   
-  
-function chatStripe(isAi, value, uniqueId) {
-    // to focus scroll to the bottom here
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-    return (
-        `
-        <div class="wrapper ${isAi && 'ai'}">
-            <div class="chat">
-                <div class="profile">
-                    <img 
-                      src=${isAi ? bot : user} 
-                      alt="${isAi ? 'bot' : 'user'}" 
-                    />
-                </div>
-                <div class="message" id=${uniqueId}>${value}</div>
-            </div>
-        </div>
-    `
-    )
+function chatStripe(isAi, value, uniqueId, imageBase64) {
+  const imageMarkup = imageBase64 ? `<img src="data:image/jpeg;base64,${imageBase64}" class="uploaded-image" />` : '';
+  // to focus scroll to the bottom here
+  chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight; 
+  return (
+      `
+      <div class="wrapper ${isAi && 'ai'}">
+          <div class="chat">
+              <div class="profile">
+                  <img 
+                    src=${isAi ? bot : user} 
+                    alt="${isAi ? 'bot' : 'user'}" 
+                  />
+              </div>
+              <div class="message" id=${uniqueId}>
+                  ${imageMarkup}
+                  ${value}
+              </div>
+          </div>
+      </div>
+  `
+  )
 }
 
 async function clearChat() {
@@ -199,7 +203,7 @@ const handleSubmit = async (e) => {
     let userMessage = data.get('prompt');
 
     // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, userMessage) // Use userMessage instead of data.get('prompt')
+    chatContainer.innerHTML += chatStripe(false, userMessage, null, ImageBase64)
 
     // to clear the textarea input 
     form.reset()

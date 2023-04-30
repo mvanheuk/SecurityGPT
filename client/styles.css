@@ -177,6 +177,12 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
   gap: 10px;
 }
 
+.uploaded-image {
+  max-width: 100%;
+  display: block;
+  margin-bottom: 8px;
+}
+
 /* Media query for mobile devices */
 @media (max-width: 767px) {
 
