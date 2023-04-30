@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
-
+import vision from '@google-cloud/vision';
 
 dotenv.config();
 
@@ -16,8 +16,6 @@ const openai = new OpenAIApi(configuration);
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-const vision = require('@google-cloud/vision');
 
 const client = new vision.ImageAnnotatorClient();
 
@@ -93,7 +91,7 @@ app.post('/process-image', async (req, res) => {
   const imageBase64 = req.body.imageBase64;
 
   try {
-    const [result] = await client.labelDetection(imageBase64);
+    const [result] = await client.textDetection({image: {content: imageBase64}});
     const labels = result.labelAnnotations;
     console.log('Labels:');
     labels.forEach(label => console.log(label.description));
