@@ -3,6 +3,20 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+
+const encodedCredentials = process.env.GOOGLE_APPLICATION_CREDENTIALS_BASE64;
+if (encodedCredentials) {
+  const credentialsBuffer = Buffer.from(encodedCredentials, 'base64');
+  const credentialsJson = credentialsBuffer.toString('utf-8');
+  const tmpDir = os.tmpdir();
+  const credentialsPath = path.join(tmpDir, 'google_application_credentials.json');
+  fs.writeFileSync(credentialsPath, credentialsJson);
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = credentialsPath;
+}
+
 import vision from '@google-cloud/vision';
 
 dotenv.config();
