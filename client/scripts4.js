@@ -29,6 +29,7 @@ imageInput.addEventListener('change', (e) => {
     // Call the processImage function after obtaining the ImageBase64 variable
     processImage(ImageBase64);
     // You can now use `ImageBase64` when sending a request to the Google Cloud Vision API
+    progressPercentage.textContent = 'Please wait for image to upload...';
   };
   reader.readAsDataURL(e.target.files[0]);
 });
@@ -59,7 +60,7 @@ async function processImage(imageBase64) {
 
         // Update progress percentage to 100% after the data is received
         progressPercentage.textContent = '100%';
-        
+
       } else {
         throw new Error('Failed to process image');
       }
