@@ -44,7 +44,7 @@ async function processImage(imageBase64) {
   
       if (response.ok) {
         const data = await response.json();
-        recognizedImageText = data.recognizedText;
+        recognizedImageText = data.recognizedImageText;
         console.log('Recognized text:', recognizedImageText);
       } else {
         throw new Error('Failed to process image');
