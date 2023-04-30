@@ -45,7 +45,7 @@ app.get('/', async (req, res) => {
 
 // Create a variable to store the conversation history
 let conversationHistory = [
-  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT. You have the ability to pull context from images using Google Cloud Vission API, image text is saved as RecognizedTextFromImage and  within conversations.'},
+  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT. You have the ability to pull context from images using Google Cloud Vission API, image text or labels are saved as RecognizedTextFromImage or recognizedLabels within conversations.'},
 ];
 
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
@@ -73,10 +73,15 @@ app.post('/', async (req, res) => {
     const userMessage = req.body.prompt;
     const model = req.body.model; // Use the model from the request or the currentModel
     const recognizedText = req.body.recognizedText; // Get the recognized text from the request
+    const recognizedLabels = req.body.recognizedLabels;
 
     // Add the TesseractImage2Text role to the conversation history if the recognized text is present
     if (recognizedText) {
       conversationHistory.push({ role: 'user', content: `RecognizedTextFromImage: ${recognizedText}` });
+    }
+
+    if (recognizedLabels) {
+      conversationHistory.push({ role: 'user', content: `recognizedLabels: ${recognizedLabels}` });
     }
 
     // Add the user's message to the conversation history
