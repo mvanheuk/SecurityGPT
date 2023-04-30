@@ -7,6 +7,8 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
+let recognizedImageText = '';
+
 const encodedCredentials = process.env.GOOGLE_APPLICATION_CREDENTIALS_BASE64;
 if (encodedCredentials) {
   const credentialsBuffer = Buffer.from(encodedCredentials, 'base64');
