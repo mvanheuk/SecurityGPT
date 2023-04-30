@@ -202,6 +202,7 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
   text-decoration: none;
   transition: background-color 0.2s ease;
   font-size: 14px; /* Add this line to match the font size of other buttons */
+  margin-left: 10%;
 }
 
 .custom-file-upload:hover {
