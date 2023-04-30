@@ -74,7 +74,7 @@ app.post('/', async (req, res) => {
     const model = req.body.model; // Use the model from the request or the currentModel
     const recognizedText = req.body.recognizedText; // Get the recognized text from the request
     const recognizedLabels = req.body.recognizedLabels;
-    const recongnizedWeb = req.body.webDetectionResults;
+    const recognizedWeb = req.body.webDetectionResults;
 
     // Add the TesseractImage2Text role to the conversation history if the recognized text is present
     if (recognizedText) {
@@ -85,8 +85,8 @@ app.post('/', async (req, res) => {
       conversationHistory.push({ role: 'user', content: `recognizedLabels: ${recognizedLabels}` });
     }
 
-    if (recongnizedWeb) {
-      conversationHistory.push({ role: 'user', content: `recognizedWeb: ${recongnizedWeb}` });
+    if (recognizedWeb) {
+      conversationHistory.push({ role: 'user', content: `recognizedWeb: ${recognizedWeb}` });
     }
 
     // Add the user's message to the conversation history
