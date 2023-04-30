@@ -45,7 +45,7 @@ app.get('/', async (req, res) => {
 
 // Create a variable to store the conversation history
 let conversationHistory = [
-  { role: 'system', content: 'You are a helpful Security focused assistant called SecurityGPT. You have the ability to pull context from images using Google Cloud Vission API. You will get labels describing the image to help you understand what it is. You will get the entire text recognized from the image as well.'},
+  { role: 'system', content: 'Analyze the user input, which may include text or image context (Recognized Text, Labels, etc.) provided by the Google Cloud Vision API. If an image is provided, use all aspects of the image to help describe it to the user, unless they specify otherwise. For text inputs, engage in a conversation addressing user concerns or questions related to security or other topics. In either case, provide any additional information the user may require regarding their input.'},
 ];
 
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
