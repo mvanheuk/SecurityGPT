@@ -201,7 +201,6 @@ image-upload-container {
   padding: 10px 20px;
   border-radius: 25px;
   cursor: pointer;
-  font-weight: bold;
   display: inline-block;
   text-align: center;
   text-decoration: none;
@@ -216,8 +215,8 @@ image-upload-container {
 
 /* Progress percentage */
 #progressPercentage {
+  margin-right: 1em;
   margin-left: 1em;
-  font-weight: bold;
 }
 
 
