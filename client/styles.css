@@ -245,6 +245,7 @@ image-upload-container {
   /* Make all buttons in button-container2 round */
   #button-container2 button, #button-container2 .custom-file-upload {
     border-radius: 18px;
+    width: 20px;
   }
 
   /* Style button-container2 for mobile layout */
