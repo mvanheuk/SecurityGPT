@@ -237,7 +237,7 @@ const handleSubmit = async (e) => {
         // Check if the extracted information is valid
         if (!cveInfo.includes("undefined")) {
           // Pass the CVE information as a separate field
-          requestBody.cveInfo = cveInfo;
+          // requestBody.cveInfo = cveInfo;
         }
       }
     }
