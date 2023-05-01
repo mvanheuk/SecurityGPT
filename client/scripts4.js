@@ -69,6 +69,22 @@ async function processImage(imageBase64) {
       alert('Something went wrong while processing the image');
     }
   }
+
+  // Add this function to extract CVE ID from user input
+function extractCveId(userInput) {
+  const regex = /CVE-\d{4}-\d+/;
+  const match = userInput.match(regex);
+  return match ? match[0] : null;
+}
+
+// Add this function to fetch CVE data
+async function fetchCveData(cveId) {
+  const response = await fetch(`https://services.nvd.nist.gov/rest/json/cve/1.0/${cveId}`);
+  if (response.ok) {
+    return response.json();
+  }
+  return null;
+}
   
 function switchModel(model) {
     currentModel = model;
@@ -207,6 +223,17 @@ const handleSubmit = async (e) => {
 
     let userMessage = data.get('prompt');
 
+    // Extract CVE ID from user input
+    const cveId = extractCveId(userMessage);
+    let cveInfo = '';
+
+    if (cveId) {
+      const jsonCveData = await fetchCveData(cveId);
+      if (jsonCveData) {
+        // Extract CVE information (customize this as needed)
+        cveInfo = `CVE ID: ${jsonCveData.result.CVE_data_meta.ID}\nDescription: ${jsonCveData.result.description.description_data[0].value}\nPublished Date: ${jsonCveData.result.publishedDate}\nLast Modified Date: ${jsonCveData.result.lastModifiedDate}`;
+      }
+    }
     // user's chatstripe
     chatContainer.innerHTML += chatStripe(false, userMessage, null, ImageBase64)
 
@@ -233,7 +260,8 @@ const handleSubmit = async (e) => {
             model: currentModel, // Pass the currentModel to the server
             recognizedText: recognizedImageText, // Pass the recognized text as a separate field
             recognizedLabels: recognizedLabels, // Pass the recognized labels as a separate field
-            webDetectionResults: webDetectionResults
+            webDetectionResults: webDetectionResults,
+            cveInfo: cveInfo // Pass the CVE information as a separate field
         })
     })
 
@@ -248,6 +276,7 @@ const handleSubmit = async (e) => {
     recognizedLabels = '';
     webDetectionResults = '';
     ImageBase64 = '';
+    cveInfo = '';
 
     // Clear the file input
     imageInput.value = '';
