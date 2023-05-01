@@ -229,12 +229,19 @@ const handleSubmit = async (e) => {
 
     if (cveId) {
       const jsonCveData = await fetchCveData(cveId);
-      console.log('jsonCveData:', jsonCveData); // Add this line to log the JSON response
+      console.log('jsonCveData:', jsonCveData);
       if (jsonCveData) {
         // Extract CVE information (customize this as needed)
-        cveInfo = `CVE ID: ${jsonCveData?.result?.CVE_data_meta?.ID}\nDescription: ${jsonCveData?.result?.description?.description_data[0]?.value}\nPublished Date: ${jsonCveData?.result?.publishedDate}\nLast Modified Date: ${jsonCveData?.result?.lastModifiedDate}`;
+        cveInfo = `CVE ID: ${jsonCveData?.result?.CVE_Items[0]?.cve?.CVE_data_meta?.ID}\nDescription: ${jsonCveData?.result?.CVE_Items[0]?.cve?.description?.description_data[0]?.value}\nPublished Date: ${jsonCveData?.result?.CVE_Items[0]?.publishedDate}\nLast Modified Date: ${jsonCveData?.result?.CVE_Items[0]?.lastModifiedDate}\nCVSS v3 Base Score: ${jsonCveData?.result?.CVE_Items[0]?.impact?.baseMetricV3?.cvssV3?.baseScore}`;
+    
+        // Check if the extracted information is valid
+        if (!cveInfo.includes("undefined")) {
+          // Pass the CVE information as a separate field
+          requestBody.cveInfo = cveInfo;
+        }
       }
     }
+    
     // user's chatstripe
     chatContainer.innerHTML += chatStripe(false, userMessage, null, ImageBase64)
 
