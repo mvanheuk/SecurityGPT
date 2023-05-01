@@ -231,7 +231,7 @@ const handleSubmit = async (e) => {
       const jsonCveData = await fetchCveData(cveId);
       if (jsonCveData) {
         // Extract CVE information (customize this as needed)
-        cveInfo = `CVE ID: ${jsonCveData.result.CVE_data_meta.ID}\nDescription: ${jsonCveData.result.description.description_data[0].value}\nPublished Date: ${jsonCveData.result.publishedDate}\nLast Modified Date: ${jsonCveData.result.lastModifiedDate}`;
+        cveInfo = `CVE ID: ${jsonCveData?.result?.CVE_data_meta?.ID}\nDescription: ${jsonCveData?.result?.description?.description_data[0]?.value}\nPublished Date: ${jsonCveData?.result?.publishedDate}\nLast Modified Date: ${jsonCveData?.result?.lastModifiedDate}`;
       }
     }
     // user's chatstripe
