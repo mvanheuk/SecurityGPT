@@ -189,6 +189,10 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
   display: none;
 }
 
+image-upload-container {
+  display: none;
+}
+
 /* Style the custom file upload button */
 .custom-file-upload {
   background-color: #1d3c5c;
@@ -232,7 +236,7 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
 
   /* Adjust font size and padding for all buttons in button-container2 */
   #button-container2 button, #button-container2 .custom-file-upload {
-    font-size: 12px;
+    font-size: 8px;
     padding: 8px 16px;
     height: 36px;
     min-width: 36px;
@@ -248,7 +252,7 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
     display: flex;
     justify-content: space-around;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     padding: 0 10px;
     margin-bottom: 10px;
   }
@@ -303,6 +307,12 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
 
   button#clear_button {
     width: 100%;
+  }
+
+  #clear_button {
+    position: relative;
+    left: 0;
+    top: 0;
   }
 }
 
