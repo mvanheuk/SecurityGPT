@@ -7,6 +7,9 @@ const gpt3Button = document.getElementById('gpt3-btn');
 const gpt4Button = document.getElementById('gpt4-btn');
 const progressPercentage = document.getElementById("progressPercentage");
 const imageInput = document.getElementById('imageInput');
+const imagePreviewContainer = document.getElementById('image-preview-container');
+const imagePreview = document.getElementById('image-preview');
+const removeImageButton = document.getElementById('remove-image');
 
 gpt4Button.style.backgroundColor = 'gray';
 
@@ -23,13 +26,12 @@ imageInput.addEventListener('change', (e) => {
   const reader = new FileReader();
   reader.onload = (event) => {
     const dataURL = event.target.result;
-    // Remove the Data URL prefix
     ImageBase64 = dataURL.split(',')[1];
     console.log(ImageBase64);
-    // Call the processImage function after obtaining the ImageBase64 variable
     processImage(ImageBase64);
-    // You can now use `ImageBase64` when sending a request to the Google Cloud Vision API
     progressPercentage.textContent = 'Please wait for image to upload...';
+    imagePreview.src = dataURL;
+    showImagePreview();
   };
   reader.readAsDataURL(e.target.files[0]);
 });
@@ -85,6 +87,30 @@ async function fetchCveData(cveId) {
   }
   return null;
 }
+
+// Show the image preview and remove button
+function showImagePreview() {
+  imagePreviewContainer.classList.remove('hidden');
+}
+
+// Hide the image preview and remove button
+function hideImagePreview() {
+  imagePreviewContainer.classList.add('hidden');
+}
+
+// Add an event listener for the remove button
+removeImageButton.addEventListener('click', () => {
+  // Clear the file input, image preview, and hide the preview container
+  imageInput.value = '';
+  imagePreview.src = '';
+  hideImagePreview();
+  ImageBase64 = '';
+  recognizedImageText = '';
+  recognizedLabels = '';
+  webDetectionResults = '';
+  progressPercentage.textContent = '';
+});
+
   
 function switchModel(model) {
     currentModel = model;

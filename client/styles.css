@@ -219,6 +219,41 @@ image-upload-container {
   margin-left: 1em;
 }
 
+#image-preview-container {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+}
+
+#image-preview {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.remove-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ccc;
+  color: white;
+  font-size: 10px;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+.hidden {
+  display: none;
+}
+
 
 /* Media query for mobile devices */
 @media (max-width: 767px) {
