@@ -206,7 +206,7 @@ image-upload-container {
   text-decoration: none;
   transition: background-color 0.2s ease;
   font-size: 14px; /* Add this line to match the font size of other buttons */
-  margin-left: 10%;
+  margin-left: 13%;
 }
 
 .custom-file-upload:hover {
@@ -215,7 +215,7 @@ image-upload-container {
 
 /* Progress percentage */
 #progressPercentage {
-  margin-right: 1em;
+  margin-right: 2em;
   margin-left: 1em;
 }
 
