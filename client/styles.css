@@ -236,10 +236,10 @@ image-upload-container {
 
   /* Adjust font size and padding for all buttons in button-container2 */
   #button-container2 button, #button-container2 .custom-file-upload {
-    font-size: 8px;
+    font-size: 6px;
     padding: 8px 16px;
-    height: 36px;
-    min-width: 36px;
+    height: 40px;
+    min-width: 40px;
   }
 
   /* Make all buttons in button-container2 round */
