@@ -60,7 +60,7 @@
   }
   
   #chat_container {
-    height: calc(50vh - 150px);
+    height: calc(50vh - 250px);
     width: 100%;
     overflow-y: auto;
     padding: 20px;
@@ -237,7 +237,7 @@ image-upload-container {
 
   /* Adjust font size and padding for all buttons in button-container2 */
   #button-container2 button, #button-container2 .custom-file-upload {
-    font-size: 8px;
+    font-size: 7px;
     padding: 8px 16px;
     height: 40px;
     min-width: 40px;
