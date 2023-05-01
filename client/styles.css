@@ -230,22 +230,27 @@ button#clear_button:focus,button#clear_button:hover,button#gpt3-btn:focus,button
     padding-right: 40px;
   }
 
-  /* Adjust button and text size for send button */
-  button[type="submit"] img {
-    width: 15px;
-    height: 15px;
-  }
-
-  /* Adjust font size and padding for other buttons */
-  button#clear_button, button#gpt3-btn, button#gpt4-btn {
+  /* Adjust font size and padding for all buttons in button-container2 */
+  #button-container2 button, #button-container2 .custom-file-upload {
     font-size: 12px;
     padding: 8px 16px;
+    height: 36px;
+    min-width: 36px;
   }
 
-  /* Make button round for a more modern look */
-  .custom-file-upload {
-    border-radius: 50%;
-    padding: 10px;
+  /* Make all buttons in button-container2 round */
+  #button-container2 button, #button-container2 .custom-file-upload {
+    border-radius: 18px;
+  }
+
+  /* Style button-container2 for mobile layout */
+  #button-container2 {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+    padding: 0 10px;
+    margin-bottom: 10px;
   }
   
   /* Adjust font size for chat container */
