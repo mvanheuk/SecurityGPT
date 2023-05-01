@@ -253,7 +253,7 @@ image-upload-container {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     padding: 0 10px;
     margin-bottom: 10px;
   }
