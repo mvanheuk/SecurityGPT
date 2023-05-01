@@ -232,7 +232,9 @@ const handleSubmit = async (e) => {
       console.log('jsonCveData:', jsonCveData);
       if (jsonCveData) {
         // Extract CVE information (customize this as needed)
-        cveInfo = `CVE ID: ${jsonCveData?.result?.CVE_Items[0]?.cve?.CVE_data_meta?.ID}\nDescription: ${jsonCveData?.result?.CVE_Items[0]?.cve?.description?.description_data[0]?.value}\nPublished Date: ${jsonCveData?.result?.CVE_Items[0]?.publishedDate}\nLast Modified Date: ${jsonCveData?.result?.CVE_Items[0]?.lastModifiedDate}`;
+        cveInfo = `CVE ID: ${jsonCveData?.result?.CVE_Items[0]?.cve?.CVE_data_meta?.ID}\nDescription: ${jsonCveData?.result?.CVE_Items[0]?.cve?.description?.description_data[0]?.value}\nPublished Date: ${jsonCveData?.result?.CVE_Items[0]?.publishedDate}\nLast Modified Date: ${jsonCveData?.result?.CVE_Items[0]?.lastModifiedDate}\nCVSSv3 Score: ${jsonCveData?.result?.CVE_Items[0]?.impact?.baseMetricV3?.cvssV3?.baseScore}`;
+
+        // cveInfo = `CVE ID: ${jsonCveData?.result?.CVE_Items[0]?.cve?.CVE_data_meta?.ID}\nDescription: ${jsonCveData?.result?.CVE_Items[0]?.cve?.description?.description_data[0]?.value}\nPublished Date: ${jsonCveData?.result?.CVE_Items[0]?.publishedDate}\nLast Modified Date: ${jsonCveData?.result?.CVE_Items[0]?.lastModifiedDate}`;
     
         // Check if the extracted information is valid
         if (!cveInfo.includes("undefined")) {
