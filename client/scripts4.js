@@ -229,6 +229,7 @@ const handleSubmit = async (e) => {
 
     if (cveId) {
       const jsonCveData = await fetchCveData(cveId);
+      console.log('jsonCveData:', jsonCveData); // Add this line to log the JSON response
       if (jsonCveData) {
         // Extract CVE information (customize this as needed)
         cveInfo = `CVE ID: ${jsonCveData?.result?.CVE_data_meta?.ID}\nDescription: ${jsonCveData?.result?.description?.description_data[0]?.value}\nPublished Date: ${jsonCveData?.result?.publishedDate}\nLast Modified Date: ${jsonCveData?.result?.lastModifiedDate}`;
