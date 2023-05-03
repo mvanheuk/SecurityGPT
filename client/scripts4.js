@@ -91,11 +91,13 @@ async function fetchCveData(cveId) {
 // Show the image preview and remove button
 function showImagePreview() {
   imagePreviewContainer.classList.remove('hidden');
+  imagePreview.classList.remove('hidden');
 }
 
 // Hide the image preview and remove button
 function hideImagePreview() {
   imagePreviewContainer.classList.add('hidden');
+  imagePreview.classList.add('hidden');
 }
 
 // Add an event listener for the remove button
