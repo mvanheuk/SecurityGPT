@@ -222,12 +222,10 @@ image-upload-container {
 #image-preview-container {
   position: absolute;
   bottom: 100%;
-  left: 50%;
+  left: 10%;
   width: 80px;
   height: 80px;
   background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
