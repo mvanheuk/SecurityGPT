@@ -222,7 +222,7 @@ image-upload-container {
 #image-preview-container {
   position: absolute;
   bottom: 100%;
-  left: 0;
+  left: 50%;
   width: 80px;
   height: 80px;
   background-color: white;
@@ -234,7 +234,9 @@ image-upload-container {
   overflow: hidden;
   z-index: 2;
   margin-bottom: 8px;
+  transform: translateX(-50%); /* Add this line to center the container horizontally */
 }
+
 
 #image-preview {
   max-width: 100%;
