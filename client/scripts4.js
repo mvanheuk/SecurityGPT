@@ -105,6 +105,11 @@ function hideImagePreview() {
 // Add an event listener for the remove button
 removeImageButton.addEventListener('click', () => {
   // Clear the file input, image preview, and hide the preview container
+  clearImageUpload();
+});
+
+function clearImageUpload() {
+  // Clear the file input, image preview, and hide the preview container
   imageInput.value = '';
   imagePreview.src = '';
   hideImagePreview();
@@ -113,7 +118,7 @@ removeImageButton.addEventListener('click', () => {
   recognizedLabels = '';
   webDetectionResults = '';
   progressPercentage.textContent = '';
-});
+}
 
   
 function switchModel(model) {
@@ -317,6 +322,7 @@ const handleSubmit = async (e) => {
     webDetectionResults = '';
     ImageBase64 = '';
     cveInfo = '';
+    clearImageUpload();
 
     // Clear the file input
     imageInput.value = '';

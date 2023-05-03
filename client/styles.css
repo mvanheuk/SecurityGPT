@@ -222,7 +222,7 @@ image-upload-container {
 #image-preview-container {
   position: absolute;
   bottom: 100%;
-  left: 10%;
+  left: 15%;
   width: 80px;
   height: 80px;
   background-color: white;
