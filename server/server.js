@@ -32,7 +32,14 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: true,
+  methods: ['GET', 'POST', 'OPTIONS'], // Add other HTTP methods if needed
+  allowedHeaders: ['Content-Type'], // Add other headers if needed
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+}));
 app.use(express.json({ limit: '50mb' }));
 
 const client = new vision.ImageAnnotatorClient();
