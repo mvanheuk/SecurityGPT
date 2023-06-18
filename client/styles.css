@@ -56,11 +56,12 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    width: 100%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added box-shadow */
   }
   
   #chat_container {
-    height: calc(70vh - 200px);
+    height: 70vh;
     width: 100%;
     overflow-y: auto;
     padding: 20px;
@@ -136,14 +137,6 @@
   button#clear_chat_button:focus,
   button#clear_chat_button:hover {
     background-color: #0052a3;
-  }
-
-  #chat_history_container {
-    height: calc(50vh - 150px);
-    width: calc(33.33% - 200px);
-    overflow-y: auto;
-    padding: 20px;
-    border-right: 3px solid #eee;
   }
 
   .buttons-container {
@@ -321,13 +314,6 @@ image-upload-container {
     flex-direction: column;
     margin-top: 20px;
     margin-bottom: 20px;
-  }
-
-  #chat_history_container {
-    width: 100%;
-    height: 50px;
-    border-right: none;
-    border-bottom: 1px solid #eee;
   }
 
   #chat_wrapper {
