@@ -316,6 +316,7 @@ const handleSubmit = async (e) => {
         const rssData = await response.json();
         // Do something with rssData...
         rssInfo = rssData; // Modify as needed based on your requirements
+        console.log(rssInfo);
       }
     }
 
