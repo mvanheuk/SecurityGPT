@@ -84,6 +84,7 @@ app.post('/', async (req, res) => {
     const recognizedLabels = req.body.recognizedLabels;
     const recognizedWeb = req.body.webDetectionResults;
     const cveInfo = req.body.cveInfo;
+    const rssInfo = req.body.rssInfo;
 
     // Add the TesseractImage2Text role to the conversation history if the recognized text is present
     if (recognizedText) {
@@ -100,6 +101,10 @@ app.post('/', async (req, res) => {
 
     if (cveInfo) {
       conversationHistory.push({ role: 'user', content: `cveInfo: ${cveInfo}` });
+    }
+
+    if (rssInfo) {
+      conversationHistory.push({ role: 'user', content: `rssInfo: ${rssInfo}` });
     }
 
     // Add the user's message to the conversation history
