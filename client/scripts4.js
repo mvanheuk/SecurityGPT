@@ -72,7 +72,13 @@ async function processImage(imageBase64) {
     }
   }
 
-  // Add this function to extract CVE ID from user input
+// Add this function to detect "rss" in user input
+function detectRssKeyword(userInput) {
+  const regex = /\brss\b/i; // Matches the word "rss" case-insensitive, surrounded by word boundaries
+  return regex.test(userInput);
+}
+
+// Add this function to extract CVE ID from user input
 function extractCveId(userInput) {
   const regex = /CVE-\d{4}-\d+/;
   const match = userInput.match(regex);
@@ -295,6 +301,24 @@ const handleSubmit = async (e) => {
     // messageDiv.innerHTML = "..."
     loader(messageDiv)
 
+    // Detect "rss" keyword in user input
+    const hasRssKeyword = detectRssKeyword(userMessage);
+    let rssInfo = '';
+
+    if (hasRssKeyword) {
+      const response = await fetch('https://your-server-url/getFeed', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const rssData = await response.json();
+        // Do something with rssData...
+        rssInfo = rssData; // Modify as needed based on your requirements
+      }
+    }
+
     const response = await fetch('https://securitygpt.onrender.com', {
         method: 'POST',
         headers: {
@@ -306,7 +330,8 @@ const handleSubmit = async (e) => {
             recognizedText: recognizedImageText, // Pass the recognized text as a separate field
             recognizedLabels: recognizedLabels, // Pass the recognized labels as a separate field
             webDetectionResults: webDetectionResults,
-            cveInfo: cveInfo // Pass the CVE information as a separate field
+            cveInfo: cveInfo, // Pass the CVE information as a separate field
+            rssInfo: rssInfo // Pass the RSS information as a separate field
         })
     })
 
@@ -322,6 +347,7 @@ const handleSubmit = async (e) => {
     webDetectionResults = '';
     ImageBase64 = '';
     cveInfo = '';
+    rssInfo = '';
     clearImageUpload();
 
     // Clear the file input

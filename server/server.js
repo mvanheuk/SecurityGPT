@@ -7,6 +7,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import bodyParser from 'body-parser';
+import Parser from 'rss-parser';
 
 
 let recognizedImageText = '';
@@ -167,6 +168,22 @@ app.post('/clear', (req, res) => {
     { role: 'system', content: 'Assess user inputs, including text and images, leveraging Google Cloud Vision API data. For images, provide in-depth descriptions, not just label listings, unless otherwise directed by the user. For text, address any security-related queries or other topics.' },
   ];
   res.sendStatus(200); // Send a success status code
+});
+
+let parser = new Parser();
+
+// Add a new route to fetch RSS data
+app.get('/getFeed', async (req, res) => {
+  try {
+    let feed = await parser.parseURL('https://www.cshub.com/rss/categories/attacks'); // replace with your RSS feed URL
+
+    // Do what you want with feed data here
+    // For instance, send it to the client as JSON
+    res.json(feed);
+  } catch (error) {
+    console.error("Error during RSS feed parsing:", error.message);
+    res.status(500).send('Something went wrong');
+  }
 });
 
 app.listen(5000, () => console.log('AI server started on http://localhost:5000'));
