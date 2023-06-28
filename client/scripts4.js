@@ -314,9 +314,14 @@ const handleSubmit = async (e) => {
       });
       if (response.ok) {
         const rssData = await response.json();
-        // Do something with rssData...
-        rssInfo = rssData; // Modify as needed based on your requirements
-        console.log(rssInfo);
+        if (response.ok) {
+          const rssData = await response.json();
+          // Extract title, link, pubDate, author, and summary of each item
+          rssInfo = rssData.items.slice(0, 5).map(item => 
+            `Title: ${item.title}\nLink: ${item.link}\nPublished Date: ${item.pubDate}\nAuthor: ${item.author}\nSummary: ${item.summary.trim()}`
+          ).join('\n\n');
+          console.log(rssInfo);
+        }
       }
     }
 
