@@ -306,7 +306,7 @@ const handleSubmit = async (e) => {
     let rssInfo = '';
 
     if (hasRssKeyword) {
-      const response = await fetch('https://your-server-url/getFeed', {
+      const response = await fetch('https://securitygpt.onrender.com/getFeed', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
