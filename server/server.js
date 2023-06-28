@@ -53,7 +53,7 @@ app.get('/', async (req, res) => {
 
 // Create a variable to store the conversation history
 let conversationHistory = [
-  { role: 'system', content: 'Assess user inputs, including text and images, leveraging Google Cloud Vision API data. For images, provide in-depth descriptions, not just label listings, unless otherwise directed by the user. For text, address any security-related queries or other topics.'},
+  { role: 'system', content: 'Assess user inputs, including text and images, leveraging Google Cloud Vision API data. For images, provide in-depth descriptions, not just label listings, unless otherwise directed by the user. For text, address any security-related queries or other topics. cveInfo and rssInfo are data sources, provide a summary of that data when it gets added or answer questions about it based on user input.'},
 ];
 
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
@@ -170,7 +170,7 @@ app.post('/change-model', (req, res) => {
 app.post('/clear', (req, res) => {
   // Reset the conversationHistory variable
   conversationHistory = [
-    { role: 'system', content: 'Assess user inputs, including text and images, leveraging Google Cloud Vision API data. For images, provide in-depth descriptions, not just label listings, unless otherwise directed by the user. For text, address any security-related queries or other topics.' },
+    { role: 'system', content: 'Assess user inputs, including text and images, leveraging Google Cloud Vision API data. For images, provide in-depth descriptions, not just label listings, unless otherwise directed by the user. For text, address any security-related queries or other topics. cveInfo and rssInfo are data sources, provide a summary of that data when it gets added or answer questions about it based on user input.' },
   ];
   res.sendStatus(200); // Send a success status code
 });
