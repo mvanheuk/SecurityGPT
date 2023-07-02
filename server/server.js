@@ -59,7 +59,7 @@ let conversationHistory = [
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 
 function truncateConversation(history, maxCompletionTokens) {
-  const maxTokens = 4096 - maxCompletionTokens;
+  const maxTokens = 8000 - maxCompletionTokens;
   let currentTokens = 0;
   let truncatedHistory = [];
 
@@ -110,7 +110,7 @@ app.post('/', async (req, res) => {
     // Add the user's message to the conversation history
     conversationHistory.push({ role: 'user', content: userMessage });
 
-    const maxCompletionTokens = 350;
+    const maxCompletionTokens = 1000;
     const truncatedHistory = truncateConversation(conversationHistory, maxCompletionTokens);
 
     const response = await openai.createChatCompletion({
