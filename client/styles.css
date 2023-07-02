@@ -61,7 +61,7 @@
   }
   
   #chat_container {
-    height: 60vh;
+    height: 50vh;
     width: 100%;
     overflow-y: auto;
     padding: 20px;
