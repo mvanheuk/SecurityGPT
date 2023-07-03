@@ -3,6 +3,9 @@ import user from './assets/user.svg'
 
 import { clearImageUpload } from './processImage.js';
 import { getImageFromMod } from './processImage.js';
+import { getRITfromMod } from './processImage.js';
+import { getRLfromMod } from './processImage.js';
+import { getWDRfromMod } from './processImage.js';
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
@@ -267,6 +270,9 @@ const handleSubmit = async (e) => {
     let userMessage = data.get('prompt');
 
     ImageBase64 = getImageFromMod();
+    recognizedImageText = getRITfromMod();
+    recognizedLabels = getRLfromMod();
+    webDetectionResults = getWDRfromMod();
 
     // Extract CVE ID from user input
     const cveId = extractCveId(userMessage);

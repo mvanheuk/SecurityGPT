@@ -94,3 +94,15 @@ export function clearImageUpload() {
 export function getImageFromMod() {
     return ImageBase64;
 }
+
+export function getRITfromMod() {
+    return recognizedImageText;
+}
+
+export function getRLfromMod() {
+    return recognizedLabels;
+}
+
+export function getWDRfromMod() {
+    return webDetectionResults;
+}
