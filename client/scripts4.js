@@ -2,6 +2,7 @@ import bot from './assets/bot.svg'
 import user from './assets/user.svg'
 
 import { clearImageUpload } from './processImage.js';
+import { getImageFromMod } from './processImage.js';
 
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
@@ -18,12 +19,10 @@ gpt4Button.style.backgroundColor = 'gray';
 let loadInterval
 let currentModel = 'gpt-3.5-turbo'; // Initialize the currentModel variable
 
-// let recognizedImageText = ''; // Store the recognized text from the image
-// let recognizedLabels = ''; // Store the recognized labels from the image
-// let webDetectionResults = '';
-
-
-// let ImageBase64;
+let recognizedImageText = ''; // Store the recognized text from the image
+let recognizedLabels = ''; // Store the recognized labels from the image
+let webDetectionResults = '';
+let ImageBase64;
 
 // imageInput.addEventListener('change', (e) => {
 //   const reader = new FileReader();
@@ -266,6 +265,8 @@ const handleSubmit = async (e) => {
     const data = new FormData(form)
 
     let userMessage = data.get('prompt');
+
+    ImageBase64 = getImageFromMod();
 
     // Extract CVE ID from user input
     const cveId = extractCveId(userMessage);

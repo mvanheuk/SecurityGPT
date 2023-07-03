@@ -90,3 +90,7 @@ export function clearImageUpload() {
     webDetectionResults = '';
     progressPercentage.textContent = '';
 }
+
+export function getImageFromMod() {
+    return ImageBase64;
+}
