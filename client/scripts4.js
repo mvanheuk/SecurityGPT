@@ -70,30 +70,6 @@ function loader(element) {
     }, 300);
 }
 
-// function typeText(element, text) {
-//   let index = 0;
-
-//   const typeCharacter = () => {
-//       if (index < text.length) {
-//           const currentChar = text[index++];
-//           if (currentChar === '\n') {
-//               const newParagraph = document.createElement('p');
-//               element.appendChild(newParagraph);
-//           } else {
-//               if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-//                   const newParagraph = document.createElement('p');
-//                   element.appendChild(newParagraph);
-//               }
-//               element.lastElementChild.innerHTML += currentChar;
-//           }
-//           chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-//           setTimeout(typeCharacter, 20);
-//       }
-//   };
-
-//   typeCharacter();
-// }
-
 function typeText(element, text) {
   let index = 0;
   
@@ -118,7 +94,6 @@ function typeText(element, text) {
 
    requestAnimationFrame(typeCharacter);
 }
- 
   
 function chatStripe(isAi, value, uniqueId, imageBase64) {
   const imageMarkup = imageBase64 ? `<img src="data:image/jpeg;base64,${imageBase64}" class="uploaded-image" />` : '';
