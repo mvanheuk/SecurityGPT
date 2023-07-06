@@ -24,28 +24,6 @@ let recognizedLabels = ''; // Store the recognized labels from the image
 let webDetectionResults = '';
 let ImageBase64;
 
-// // Add this function to detect "rss" in user input
-// function detectRssKeyword(userInput) {
-//   const regex = /\brss\b/i; // Matches the word "rss" case-insensitive, surrounded by word boundaries
-//   return regex.test(userInput);
-// }
-
-// // Add this function to extract CVE ID from user input
-// function extractCveId(userInput) {
-//   const regex = /CVE-\d{4}-\d+/;
-//   const match = userInput.match(regex);
-//   return match ? match[0] : null;
-// }
-
-// // Add this function to fetch CVE data
-// async function fetchCveData(cveId) {
-//   const response = await fetch(`https://services.nvd.nist.gov/rest/json/cve/1.0/${cveId}`);
-//   if (response.ok) {
-//     return response.json();
-//   }
-//   return null;
-// }
-
 function switchModel(model) {
     currentModel = model;
   
@@ -92,40 +70,53 @@ function loader(element) {
     }, 300);
 }
 
-// // generate unique ID for each message div of bot
-// // necessary for typing text effect for that specific reply
-// // without unique ID, typing text will work on every element
-// function generateUniqueId() {
-//     const timestamp = Date.now();
-//     const randomNumber = Math.random();
-//     const hexadecimalString = randomNumber.toString(16);
+// function typeText(element, text) {
+//   let index = 0;
 
-//     return `id-${timestamp}-${hexadecimalString}`;
+//   const typeCharacter = () => {
+//       if (index < text.length) {
+//           const currentChar = text[index++];
+//           if (currentChar === '\n') {
+//               const newParagraph = document.createElement('p');
+//               element.appendChild(newParagraph);
+//           } else {
+//               if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+//                   const newParagraph = document.createElement('p');
+//                   element.appendChild(newParagraph);
+//               }
+//               element.lastElementChild.innerHTML += currentChar;
+//           }
+//           chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+//           setTimeout(typeCharacter, 20);
+//       }
+//   };
+
+//   typeCharacter();
 // }
-
 
 function typeText(element, text) {
   let index = 0;
-
+  
   const typeCharacter = () => {
-      if (index < text.length) {
-          const currentChar = text[index++];
-          if (currentChar === '\n') {
-              const newParagraph = document.createElement('p');
-              element.appendChild(newParagraph);
-          } else {
-              if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-                  const newParagraph = document.createElement('p');
-                  element.appendChild(newParagraph);
-              }
-              element.lastElementChild.innerHTML += currentChar;
-          }
-          chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-          setTimeout(typeCharacter, 20);
+      const currentChar = text[index++];
+        
+      if (currentChar === '\n') {
+         element.appendChild(document.createElement('p'));
+      } else {
+         if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+             element.appendChild(document.createElement('p'));
+         }
+         element.lastElementChild.innerHTML += currentChar;
       }
-  };
+        
+      chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+      
+      if(index < text.length){
+        requestAnimationFrame(typeCharacter);
+      }
+   };
 
-  typeCharacter();
+   requestAnimationFrame(typeCharacter);
 }
  
   
