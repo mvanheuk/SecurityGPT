@@ -89,11 +89,12 @@ function typeText(element, text) {
       
       if(index < text.length){
         requestAnimationFrame(typeCharacter);
+      } else {
+        Prism.highlightAll();
       }
    };
 
    requestAnimationFrame(typeCharacter);
-   Prism.highlightAll();
 }
 
 // function chatStripe(isAi, value, uniqueId, imageBase64) {
