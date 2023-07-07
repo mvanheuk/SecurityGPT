@@ -93,6 +93,7 @@ function typeText(element, text) {
    };
 
    requestAnimationFrame(typeCharacter);
+   Prism.highlightAll();
 }
 
 function chatStripe(isAi, value, uniqueId, imageBase64) {
@@ -198,7 +199,6 @@ const handleSubmit = async (e) => {
     // bot's chatstripe
     const uniqueId = generateUniqueId();
     chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
-    Prism.highlightAll();
 
     // specific message div 
     const messageDiv = document.getElementById(uniqueId);
