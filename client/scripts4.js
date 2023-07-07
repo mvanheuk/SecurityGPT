@@ -1,5 +1,6 @@
 import bot from './assets/bot.svg'
 import user from './assets/user.svg'
+import Prism from './prism.js';
 
 import { clearImageUpload } from './processImage.js';
 import { getImageFromMod } from './processImage.js';
@@ -94,30 +95,54 @@ function typeText(element, text) {
 
    requestAnimationFrame(typeCharacter);
 }
-  
+
 // function chatStripe(isAi, value, uniqueId, imageBase64) {
 //   const imageMarkup = imageBase64 ? `<img src="data:image/jpeg;base64,${imageBase64}" class="uploaded-image" />` : '';
+
+//   let isCode = false;
+//   let language = null;
+
+//   // Check if value is a code block 
+//   if (value.trim().startsWith("```") && value.trim().endsWith("```")) {
+//     value = value.trim().slice(3, -3); // Trim the backticks
+//     const firstLineEndIndex = value.indexOf("\n");
+//     language = value.slice(0, firstLineEndIndex).trim(); // Get the language from the first line
+//     value = value.slice(firstLineEndIndex + 1); // Get the rest of the string after the first line
+//     isCode = true;
+//   }
+
+//   const valueMarkup = isCode ? `<pre><code class="language-${language}">${value}</code></pre>` : value;
+
 //   // to focus scroll to the bottom here
-//   chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight; 
+//   chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
 //   return (
-//       `
-//       <div class="wrapper ${isAi && 'ai'}">
-//           <div class="chat">
-//               <div class="profile">
-//                   <img 
-//                     src=${isAi ? bot : user} 
-//                     alt="${isAi ? 'bot' : 'user'}" 
-//                   />
-//               </div>
-//               <div class="message" id=${uniqueId}>
-//                   ${imageMarkup}
-//                   ${value}
-//               </div>
-//           </div>
-//       </div>
-//   `
-//   )
+//     `
+//     <div class="wrapper ${isAi && 'ai'}">
+//         <div class="chat">
+//             <div class="profile">
+//                 <img 
+//                   src=${isAi ? bot : user} 
+//                   alt="${isAi ? 'bot' : 'user'}" 
+//                 />
+//             </div>
+//             <div class="message" id=${uniqueId}>
+//                 ${imageMarkup}
+//                 ${valueMarkup}
+//             </div>
+//         </div>
+//     </div>
+//     `
+//   );
 // }
+
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 function chatStripe(isAi, value, uniqueId, imageBase64) {
   const imageMarkup = imageBase64 ? `<img src="data:image/jpeg;base64,${imageBase64}" class="uploaded-image" />` : '';
@@ -134,7 +159,7 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     isCode = true;
   }
 
-  const valueMarkup = isCode ? `<pre><code class="language-${language}">${value}</code></pre>` : value;
+  const valueMarkup = isCode ? `<pre><code class="language-${language}">${escapeHtml(value)}</code></pre>` : value;
 
   // to focus scroll to the bottom here
   chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
@@ -214,20 +239,21 @@ const handleSubmit = async (e) => {
     }
 
     // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, userMessage, null, ImageBase64)
+    chatContainer.innerHTML += chatStripe(false, userMessage, null, ImageBase64);
 
     // to clear the textarea input 
-    form.reset()
+    form.reset();
 
     // bot's chatstripe
-    const uniqueId = generateUniqueId()
-    chatContainer.innerHTML += chatStripe(true, " ", uniqueId)
+    const uniqueId = generateUniqueId();
+    chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
+    Prism.highlightAll();
 
     // specific message div 
-    const messageDiv = document.getElementById(uniqueId)
+    const messageDiv = document.getElementById(uniqueId);
 
     // messageDiv.innerHTML = "..."
-    loader(messageDiv)
+    loader(messageDiv);
 
     // Detect "rss" keyword in user input
     const hasRssKeyword = detectRssKeyword(userMessage);
