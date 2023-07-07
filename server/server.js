@@ -34,8 +34,8 @@ const openai = new OpenAIApi(configuration);
 
 const app = express();
 
-//added this to fix prism.js error.
-app.use(express.static(path.join(__dirname, 'client')));
+// //added this to fix prism.js error.
+// app.use(express.static(path.join(__dirname, 'client')));
 
 app.use(cors({
   origin: true,
