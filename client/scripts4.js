@@ -201,7 +201,7 @@ async function clearChat() {
         }
     } catch (error) {
         console.error('Error while clearing conversation history:', error.message);
-        alert('Something went wrong while clearing the conversation history');
+        alert('Something went wrong while clearing the conversation history!');
     }
 }
 
