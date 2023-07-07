@@ -9,6 +9,8 @@ import { getWDRfromMod } from './processImage.js';
 
 import {extractCveId, fetchCveData, detectRssKeyword, generateUniqueId} from './chatFunctions.js';
 
+import Prism from './prism.js';
+
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
 const gpt3Button = document.getElementById('gpt3-btn');
