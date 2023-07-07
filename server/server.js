@@ -8,7 +8,6 @@ import os from 'os';
 import path from 'path';
 import bodyParser from 'body-parser';
 import Parser from 'rss-parser';
-import Prism from './prism.js';
 
 let recognizedImageText = '';
 
