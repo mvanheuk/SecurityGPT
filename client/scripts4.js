@@ -1,6 +1,5 @@
 import bot from './assets/bot.svg'
 import user from './assets/user.svg'
-import Prism from './prism.js';
 
 import { clearImageUpload } from './processImage.js';
 import { getImageFromMod } from './processImage.js';
