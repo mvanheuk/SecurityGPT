@@ -75,31 +75,32 @@ function typeText(element, text) {
   let isCodeBlock = false;
 
   const typeCharacter = () => {
-    const currentChar = text[index++];
-
+    let currentChar = text[index++];
+    
     // Check if we are entering or exiting a code block
-    if (currentChar === '<' && text.slice(index, index + 5) === 'code>') {
-      isCodeBlock = true;
-    } else if (currentChar === '<' && text.slice(index, index + 7) === '/code>') {
-      isCodeBlock = false;
+    if (currentChar === '<') {
+      if (text.slice(index, index + 5) === 'code>') {
+        isCodeBlock = true;
+        index += 5;
+        currentChar += 'code>';
+      } else if (text.slice(index, index + 7) === '/code>') {
+        isCodeBlock = false;
+        index += 7;
+        currentChar += '/code>';
+      }
     }
 
-    // Handle newline tokens
-    if (currentChar === '<' && text.slice(index, index + 8) === 'newline>') {
-      index += 8;
-      if (isCodeBlock) {
-        element.lastElementChild.innerHTML += '\n';
-      } else {
-        element.lastElementChild.innerHTML += '<br>';
+    // Handle newline characters
+    if (currentChar === '\n') {
+      if (!isCodeBlock) {
+        currentChar = '<br>';
       }
-    } 
-    // Normal character typing
-    else {
-      if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-        element.appendChild(document.createElement('p'));
-      }
-      element.lastElementChild.innerHTML += currentChar;
     }
+
+    if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+      element.appendChild(document.createElement('p'));
+    }
+    element.lastElementChild.innerHTML += currentChar;
 
     chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
 
@@ -209,7 +210,7 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     isCode = true;
   }
 
-  const valueMarkup = isCode ? `<pre><code class="language-${language}">${escapeHtml(value).replace(/\n/g, '<newline>')}</code></pre>` : value;
+  const valueMarkup = isCode ? `<pre><code class="language-${language}">${value}</code></pre>` : value;
 
   // to focus scroll to the bottom here
   chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
