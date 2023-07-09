@@ -82,6 +82,7 @@ function typeText(element, text) {
           const tag = text.slice(index - 1, endOfTag + 1);
           index = endOfTag;
 
+          // We add the entire tag (which may contain multiple lines) to the last child
           if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
               element.appendChild(document.createElement('p'));
           }
@@ -89,7 +90,10 @@ function typeText(element, text) {
       } 
       // Handle newline characters
       else if (currentChar === '\n') {
-          element.appendChild(document.createElement('p'));
+          // Only create a new paragraph if the last child is not a preformatted text block
+          if (element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
+              element.appendChild(document.createElement('p'));
+          }
       } 
       // Normal character typing
       else {
@@ -110,33 +114,6 @@ function typeText(element, text) {
 
   requestAnimationFrame(typeCharacter);
 }
-
-// function typeText(element, text) {
-//   let index = 0;
-  
-//   const typeCharacter = () => {
-//       const currentChar = text[index++];
-        
-//       if (currentChar === '\n') {
-//          element.appendChild(document.createElement('p'));
-//       } else {
-//          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-//              element.appendChild(document.createElement('p'));
-//          }
-//          element.lastElementChild.innerHTML += currentChar;
-//       }
-        
-//       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-      
-//       if(index < text.length){
-//         requestAnimationFrame(typeCharacter);
-//       } else {
-//         Prism.highlightAll();
-//       }
-//    };
-
-//    requestAnimationFrame(typeCharacter);
-// }
 
 function escapeHtml(unsafe) {
   return unsafe
@@ -314,14 +291,6 @@ const handleSubmit = async (e) => {
 
     //Clear % value
     progressPercentage.textContent = ``;
-
-    // if (response.ok) {
-    //     const data = await response.json();
-    //     const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
-    //     const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
-
-    //     typeText(messageDiv, parsedData);
-    // } 
     
     if (response.ok) {
       const data = await response.json();
