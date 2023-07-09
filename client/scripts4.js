@@ -387,7 +387,7 @@ const handleSubmit = async (e) => {
       const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
   
       // Call typeText function to display bot's response
-      typeText(messageDiv, parsedData);
+      typeText(messageDiv, parsedData.replace(/\\n/g, '\n').replace(/\\t/g, '\t'));
     }
     else {
         const err = await response.text()
