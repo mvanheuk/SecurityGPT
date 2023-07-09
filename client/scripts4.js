@@ -72,30 +72,71 @@ function loader(element) {
 
 function typeText(element, text) {
   let index = 0;
-  
+
   const typeCharacter = () => {
       const currentChar = text[index++];
-        
-      if (currentChar === '\n') {
-         element.appendChild(document.createElement('p'));
-      } else {
-         if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-             element.appendChild(document.createElement('p'));
-         }
-         element.lastElementChild.innerHTML += currentChar;
-      }
-        
-      chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-      
-      if(index < text.length){
-        requestAnimationFrame(typeCharacter);
-      } else {
-        Prism.highlightAll();
-      }
-   };
 
-   requestAnimationFrame(typeCharacter);
+      // If current character is a '<', then we need to type out the entire HTML tag at once
+      if (currentChar === '<') {
+          const endOfTag = text.indexOf('>', index);
+          const tag = text.slice(index - 1, endOfTag + 1);
+          index = endOfTag;
+
+          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+              element.appendChild(document.createElement('p'));
+          }
+          element.lastElementChild.innerHTML += tag;
+      } 
+      // Handle newline characters
+      else if (currentChar === '\n') {
+          element.appendChild(document.createElement('p'));
+      } 
+      // Normal character typing
+      else {
+          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+              element.appendChild(document.createElement('p'));
+          }
+          element.lastElementChild.innerHTML += currentChar;
+      }
+
+      chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+
+      if(index < text.length){
+          requestAnimationFrame(typeCharacter);
+      } else {
+          Prism.highlightAllUnder(element);
+      }
+  };
+
+  requestAnimationFrame(typeCharacter);
 }
+
+// function typeText(element, text) {
+//   let index = 0;
+  
+//   const typeCharacter = () => {
+//       const currentChar = text[index++];
+        
+//       if (currentChar === '\n') {
+//          element.appendChild(document.createElement('p'));
+//       } else {
+//          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+//              element.appendChild(document.createElement('p'));
+//          }
+//          element.lastElementChild.innerHTML += currentChar;
+//       }
+        
+//       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+      
+//       if(index < text.length){
+//         requestAnimationFrame(typeCharacter);
+//       } else {
+//         Prism.highlightAll();
+//       }
+//    };
+
+//    requestAnimationFrame(typeCharacter);
+// }
 
 function escapeHtml(unsafe) {
   return unsafe
@@ -274,13 +315,44 @@ const handleSubmit = async (e) => {
     //Clear % value
     progressPercentage.textContent = ``;
 
-    if (response.ok) {
-        const data = await response.json();
-        const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
-        const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
+    // if (response.ok) {
+    //     const data = await response.json();
+    //     const parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
+    //     const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
 
-        typeText(messageDiv, parsedData);
-    } else {
+    //     typeText(messageDiv, parsedData);
+    // } 
+    
+    if (response.ok) {
+      const data = await response.json();
+      let parsedData = data.bot.trim(); // trims any trailing spaces/'\n'
+      
+      // Regular expression to match code blocks
+      const codeBlockRegex = /```([^`]+)```/g;
+  
+      // Function to replace code blocks with highlighted code blocks
+      const replaceCodeBlock = (match) => {
+          const firstLineEndIndex = match.indexOf("\n");
+          const language = match.slice(3, firstLineEndIndex).trim(); // Get the language from the first line
+          const code = match.slice(firstLineEndIndex + 1, -3).trim(); // Get the rest of the string after the first line
+  
+          // Create a code block with the appropriate markup for Prism
+          return `<pre><code class="language-${language}">${escapeHtml(code)}</code></pre>`;
+      }
+  
+      // Replace all code blocks with highlighted code blocks
+      parsedData = parsedData.replace(codeBlockRegex, replaceCodeBlock);
+  
+      // Split the rest of the response into paragraphs and wrap them in <p> tags
+      const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
+  
+      // Insert the modified response into the message div
+      messageDiv.innerHTML = paragraphs;
+  
+      // Call typeText function to display bot's response
+      typeText(messageDiv, parsedData);
+    }
+    else {
         const err = await response.text()
 
         messageDiv.innerHTML = "Something went wrong"
