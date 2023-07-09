@@ -75,60 +75,60 @@ function typeText(element, text) {
   let isCodeBlock = false;
 
   const typeCharacter = () => {
-    const currentChar = text[index++];
+      const currentChar = text[index++];
 
-    // Check if we are entering or exiting a code block
-    if (currentChar === '<' && text.slice(index, index + 5) === 'code>') {
-      isCodeBlock = true;
-    } else if (currentChar === '<' && text.slice(index, index + 7) === '/code>') {
-      isCodeBlock = false;
-    }
+      // Check if we are entering or exiting a code block
+      if (currentChar === '<' && text.slice(index, index + 5) === 'code>') {
+          isCodeBlock = true;
+      } else if (currentChar === '<' && text.slice(index, index + 7) === '/code>') {
+          isCodeBlock = false;
+      }
 
-    // If current character is a '<', then we need to type out the entire HTML tag at once
-    if (currentChar === '<') {
-      const endOfTag = text.indexOf('>', index);
-      const tag = text.slice(index - 1, endOfTag + 1);
-      index = endOfTag;
+      // If current character is a '<', then we need to type out the entire HTML tag at once
+      if (currentChar === '<') {
+          const endOfTag = text.indexOf('>', index);
+          const tag = text.slice(index - 1, endOfTag + 1);
+          index = endOfTag;
 
-      // If the tag is a preformatted text block, type out the entire block at once
-      if (tag === '<pre>') {
-        const endOfBlock = text.indexOf('</pre>', index);
-        const block = text.slice(index, endOfBlock + 6);
-        index = endOfBlock + 6;
+          // If the tag is a preformatted text block, type out the entire block at once
+          if (tag === '<pre>') {
+              const endOfBlock = text.indexOf('</pre>', index);
+              const block = text.slice(index, endOfBlock + 6);
+              index = endOfBlock + 6;
 
-        element.lastElementChild.innerHTML += block;
+              element.lastElementChild.innerHTML += block;
+          } else {
+              // For other tags, add the entire tag to the last child
+              if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+                  element.appendChild(document.createElement('p'));
+              }
+              element.lastElementChild.innerHTML += tag;
+          }
+      }
+      // Handle newline characters
+      else if (currentChar === '\n') {
+          // Only create a new paragraph if the last child is not a preformatted text block
+          if (!isCodeBlock && element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
+              element.appendChild(document.createElement('p'));
+          } else if (isCodeBlock) {
+              element.lastElementChild.textContent += '\n';
+          }
+      }
+      // Normal character typing
+      else {
+          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+              element.appendChild(document.createElement('p'));
+          }
+          element.lastElementChild.innerHTML += currentChar;
+      }
+
+      chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+
+      if (index < text.length) {
+          requestAnimationFrame(typeCharacter);
       } else {
-        // For other tags, add the entire tag to the last child
-        if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-          element.appendChild(document.createElement('p'));
-        }
-        element.lastElementChild.innerHTML += tag;
+          Prism.highlightAllUnder(element);
       }
-    }
-    // Handle newline characters
-    else if (currentChar === '\n') {
-      // Only create a new paragraph if the last child is not a preformatted text block
-      if (!isCodeBlock && element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
-        element.appendChild(document.createElement('p'));
-      } else if (isCodeBlock) {
-        element.lastElementChild.innerHTML += '\n';
-      }
-    }
-    // Normal character typing
-    else {
-      if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-        element.appendChild(document.createElement('p'));
-      }
-      element.lastElementChild.innerHTML += currentChar;
-    }
-
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-
-    if (index < text.length) {
-      requestAnimationFrame(typeCharacter);
-    } else {
-      Prism.highlightAllUnder(element);
-    }
   };
 
   requestAnimationFrame(typeCharacter);
