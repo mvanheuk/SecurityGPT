@@ -346,9 +346,6 @@ const handleSubmit = async (e) => {
       // Split the rest of the response into paragraphs and wrap them in <p> tags
       const paragraphs = parsedData.split('\n\n').map((paragraph) => `<p>${paragraph}</p>`).join('');
   
-      // Insert the modified response into the message div
-      messageDiv.innerHTML = paragraphs;
-  
       // Call typeText function to display bot's response
       typeText(messageDiv, parsedData);
     }
