@@ -73,42 +73,57 @@ function loader(element) {
 function typeText(element, text) {
   let index = 0;
   let isCodeBlock = false;
+  let lineStart = 0;
 
   const typeCharacter = () => {
-    let currentChar = text[index++];
-    
-    // Check if we are entering or exiting a code block
-    if (currentChar === '<') {
-      if (text.slice(index, index + 5) === 'code>') {
-        isCodeBlock = true;
-        index += 5;
-        currentChar += 'code>';
-      } else if (text.slice(index, index + 7) === '/code>') {
-        isCodeBlock = false;
-        index += 7;
-        currentChar += '/code>';
-      }
-    }
+      let currentChar = text[index++];
 
-    // Handle newline characters
-    if (currentChar === '\n') {
+      // Check if we are entering or exiting a code block
+      if (currentChar === '<') {
+          if (text.slice(index, index + 5) === 'code>') {
+              isCodeBlock = true;
+              index += 5;
+              currentChar += 'code>';
+          } else if (text.slice(index, index + 7) === '/code>') {
+              isCodeBlock = false;
+              index += 7;
+              currentChar += '/code>';
+          }
+      }
+
+      // Handle newline characters
+      if (currentChar === '\n') {
+          if (!isCodeBlock) {
+              currentChar = '<br>';
+          } else {
+              // Add the line to the element as a text node
+              const line = text.slice(lineStart, index);
+              element.lastElementChild.appendChild(document.createTextNode(line));
+
+              // Start a new line
+              lineStart = index;
+          }
+      }
+
+      if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+          element.appendChild(document.createElement('p'));
+      }
+
       if (!isCodeBlock) {
-        currentChar = '<br>';
+          element.lastElementChild.innerHTML += currentChar;
       }
-    }
 
-    if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-      element.appendChild(document.createElement('p'));
-    }
-    element.lastElementChild.innerHTML += currentChar;
+      chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
 
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+      if(index < text.length){
+          requestAnimationFrame(typeCharacter);
+      } else {
+          // Add the final line to the element as a text node
+          const line = text.slice(lineStart);
+          element.lastElementChild.appendChild(document.createTextNode(line));
 
-    if(index < text.length){
-      requestAnimationFrame(typeCharacter);
-    } else {
-      Prism.highlightAllUnder(element);
-    }
+          Prism.highlightAllUnder(element);
+      }
   };
 
   requestAnimationFrame(typeCharacter);
