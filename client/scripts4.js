@@ -75,64 +75,107 @@ function typeText(element, text) {
   let isCodeBlock = false;
 
   const typeCharacter = () => {
-      const currentChar = text[index++];
+    const currentChar = text[index++];
 
-      // Check if we are entering or exiting a code block
-      if (currentChar === '<' && text.slice(index, index + 5) === 'code>') {
-          isCodeBlock = true;
-      } else if (currentChar === '<' && text.slice(index, index + 7) === '/code>') {
-          isCodeBlock = false;
-      }
+    // Check if we are entering or exiting a code block
+    if (currentChar === '<' && text.slice(index, index + 5) === 'code>') {
+      isCodeBlock = true;
+    } else if (currentChar === '<' && text.slice(index, index + 7) === '/code>') {
+      isCodeBlock = false;
+    }
 
-      // If current character is a '<', then we need to type out the entire HTML tag at once
-      if (currentChar === '<') {
-          const endOfTag = text.indexOf('>', index);
-          const tag = text.slice(index - 1, endOfTag + 1);
-          index = endOfTag;
-
-          // If the tag is a preformatted text block, type out the entire block at once
-          if (tag === '<pre>') {
-              const endOfBlock = text.indexOf('</pre>', index);
-              const block = text.slice(index, endOfBlock + 6);
-              index = endOfBlock + 6;
-
-              element.lastElementChild.innerHTML += block;
-          } else {
-              // For other tags, add the entire tag to the last child
-              if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-                  element.appendChild(document.createElement('p'));
-              }
-              element.lastElementChild.innerHTML += tag;
-          }
-      } 
-      // Handle newline characters
-      else if (currentChar === '\n') {
-          // Only create a new paragraph if the last child is not a preformatted text block
-          if (!isCodeBlock && element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
-              element.appendChild(document.createElement('p'));
-          } else if (isCodeBlock) {
-              element.lastElementChild.innerHTML += '\\n';  // replaced '<br>' with '\\n'
-          }  
-      } 
-      // Normal character typing
-      else {
-          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-              element.appendChild(document.createElement('p'));
-          }
-          element.lastElementChild.innerHTML += currentChar;
-      }
-
-      chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-
-      if(index < text.length){
-          requestAnimationFrame(typeCharacter);
+    // Handle newline tokens
+    if (currentChar === '<' && text.slice(index, index + 8) === 'newline>') {
+      index += 8;
+      if (isCodeBlock) {
+        element.lastElementChild.innerHTML += '\n';
       } else {
-          Prism.highlightAllUnder(element);
+        element.lastElementChild.innerHTML += '<br>';
       }
+    } 
+    // Normal character typing
+    else {
+      if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+        element.appendChild(document.createElement('p'));
+      }
+      element.lastElementChild.innerHTML += currentChar;
+    }
+
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+
+    if(index < text.length){
+      requestAnimationFrame(typeCharacter);
+    } else {
+      Prism.highlightAllUnder(element);
+    }
   };
 
   requestAnimationFrame(typeCharacter);
 }
+
+// function typeText(element, text) {
+//   let index = 0;
+//   let isCodeBlock = false;
+
+//   const typeCharacter = () => {
+//       const currentChar = text[index++];
+
+//       // Check if we are entering or exiting a code block
+//       if (currentChar === '<' && text.slice(index, index + 5) === 'code>') {
+//           isCodeBlock = true;
+//       } else if (currentChar === '<' && text.slice(index, index + 7) === '/code>') {
+//           isCodeBlock = false;
+//       }
+
+//       // If current character is a '<', then we need to type out the entire HTML tag at once
+//       if (currentChar === '<') {
+//           const endOfTag = text.indexOf('>', index);
+//           const tag = text.slice(index - 1, endOfTag + 1);
+//           index = endOfTag;
+
+//           // If the tag is a preformatted text block, type out the entire block at once
+//           if (tag === '<pre>') {
+//               const endOfBlock = text.indexOf('</pre>', index);
+//               const block = text.slice(index, endOfBlock + 6);
+//               index = endOfBlock + 6;
+
+//               element.lastElementChild.innerHTML += block;
+//           } else {
+//               // For other tags, add the entire tag to the last child
+//               if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+//                   element.appendChild(document.createElement('p'));
+//               }
+//               element.lastElementChild.innerHTML += tag;
+//           }
+//       } 
+//       // Handle newline characters
+//       else if (currentChar === '\n') {
+//           // Only create a new paragraph if the last child is not a preformatted text block
+//           if (!isCodeBlock && element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
+//               element.appendChild(document.createElement('p'));
+//           } else if (isCodeBlock) {
+//               element.lastElementChild.innerHTML += '\\n';  // replaced '<br>' with '\\n'
+//           }  
+//       } 
+//       // Normal character typing
+//       else {
+//           if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+//               element.appendChild(document.createElement('p'));
+//           }
+//           element.lastElementChild.innerHTML += currentChar;
+//       }
+
+//       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+
+//       if(index < text.length){
+//           requestAnimationFrame(typeCharacter);
+//       } else {
+//           Prism.highlightAllUnder(element);
+//       }
+//   };
+
+//   requestAnimationFrame(typeCharacter);
+// }
 
 function escapeHtml(unsafe) {
   return unsafe
@@ -150,6 +193,14 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
   let language = null;
 
   // Check if value is a code block 
+  // if (value.trim().startsWith("```") && value.trim().endsWith("```")) {
+  //   value = value.trim().slice(3, -3); // Trim the backticks
+  //   const firstLineEndIndex = value.indexOf("\n");
+  //   language = value.slice(0, firstLineEndIndex).trim(); // Get the language from the first line
+  //   value = value.slice(firstLineEndIndex + 1); // Get the rest of the string after the first line
+  //   isCode = true;
+  // }
+  // Check if value is a code block 
   if (value.trim().startsWith("```") && value.trim().endsWith("```")) {
     value = value.trim().slice(3, -3); // Trim the backticks
     const firstLineEndIndex = value.indexOf("\n");
@@ -158,7 +209,7 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     isCode = true;
   }
 
-  const valueMarkup = isCode ? `<pre><code class="language-${language}">${escapeHtml(value).replace(/\n/g, '<br>')}</code></pre>` : value;
+  const valueMarkup = isCode ? `<pre><code class="language-${language}">${escapeHtml(value).replace(/\n/g, '<newline>')}</code></pre>` : value;
 
   // to focus scroll to the bottom here
   chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
