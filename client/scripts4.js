@@ -1,12 +1,7 @@
 import bot from './assets/bot.svg'
 import user from './assets/user.svg'
 
-import { clearImageUpload } from './processImage.js';
-import { getImageFromMod } from './processImage.js';
-import { getRITfromMod } from './processImage.js';
-import { getRLfromMod } from './processImage.js';
-import { getWDRfromMod } from './processImage.js';
-
+import {clearImageUpload, getImageFromMod, getRITfromMod, getRLfromMod, getWDRfromMod} from './processImage.js';
 import {extractCveId, fetchCveData, detectRssKeyword, generateUniqueId} from './chatFunctions.js';
 
 const form = document.querySelector('form')
