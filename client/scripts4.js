@@ -72,7 +72,7 @@ function loader(element) {
 
 function typeText(element, text) {
   let index = 0;
-  let isCodeBlock = false;  // added this line
+  let isCodeBlock = false;
 
   const typeCharacter = () => {
       const currentChar = text[index++];
@@ -108,11 +108,11 @@ function typeText(element, text) {
       // Handle newline characters
       else if (currentChar === '\n') {
           // Only create a new paragraph if the last child is not a preformatted text block
-          if (!isCodeBlock && element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {  // modified this line
+          if (!isCodeBlock && element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
               element.appendChild(document.createElement('p'));
-          } else if (isCodeBlock) {  // added this line
-              element.lastElementChild.innerHTML += '<br>';  // added this line
-          }  // added this line
+          } else if (isCodeBlock) {
+              element.lastElementChild.innerHTML += '\\n';  // replaced '<br>' with '\\n'
+          }  
       } 
       // Normal character typing
       else {
@@ -133,60 +133,6 @@ function typeText(element, text) {
 
   requestAnimationFrame(typeCharacter);
 }
-
-// function typeText(element, text) {
-//   let index = 0;
-
-//   const typeCharacter = () => {
-//       const currentChar = text[index++];
-
-//       // If current character is a '<', then we need to type out the entire HTML tag at once
-//       if (currentChar === '<') {
-//           const endOfTag = text.indexOf('>', index);
-//           const tag = text.slice(index - 1, endOfTag + 1);
-//           index = endOfTag;
-
-//           // If the tag is a preformatted text block, type out the entire block at once
-//           if (tag === '<pre>') {
-//               const endOfBlock = text.indexOf('</pre>', index);
-//               const block = text.slice(index, endOfBlock + 6);
-//               index = endOfBlock + 6;
-
-//               element.lastElementChild.innerHTML += block;
-//           } else {
-//               // For other tags, add the entire tag to the last child
-//               if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-//                   element.appendChild(document.createElement('p'));
-//               }
-//               element.lastElementChild.innerHTML += tag;
-//           }
-//       } 
-//       // Handle newline characters
-//       else if (currentChar === '\n') {
-//           // Only create a new paragraph if the last child is not a preformatted text block
-//           if (element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
-//               element.appendChild(document.createElement('p'));
-//           }
-//       } 
-//       // Normal character typing
-//       else {
-//           if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-//               element.appendChild(document.createElement('p'));
-//           }
-//           element.lastElementChild.innerHTML += currentChar;
-//       }
-
-//       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-
-//       if(index < text.length){
-//           requestAnimationFrame(typeCharacter);
-//       } else {
-//           Prism.highlightAllUnder(element);
-//       }
-//   };
-
-//   requestAnimationFrame(typeCharacter);
-// }
 
 function escapeHtml(unsafe) {
   return unsafe
