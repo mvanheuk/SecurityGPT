@@ -82,11 +82,20 @@ function typeText(element, text) {
           const tag = text.slice(index - 1, endOfTag + 1);
           index = endOfTag;
 
-          // We add the entire tag (which may contain multiple lines) to the last child
-          if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-              element.appendChild(document.createElement('p'));
+          // If the tag is a preformatted text block, type out the entire block at once
+          if (tag === '<pre>') {
+              const endOfBlock = text.indexOf('</pre>', index);
+              const block = text.slice(index, endOfBlock + 6);
+              index = endOfBlock + 6;
+
+              element.lastElementChild.innerHTML += block;
+          } else {
+              // For other tags, add the entire tag to the last child
+              if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+                  element.appendChild(document.createElement('p'));
+              }
+              element.lastElementChild.innerHTML += tag;
           }
-          element.lastElementChild.innerHTML += tag;
       } 
       // Handle newline characters
       else if (currentChar === '\n') {
@@ -114,6 +123,51 @@ function typeText(element, text) {
 
   requestAnimationFrame(typeCharacter);
 }
+
+// function typeText(element, text) {
+//   let index = 0;
+
+//   const typeCharacter = () => {
+//       const currentChar = text[index++];
+
+//       // If current character is a '<', then we need to type out the entire HTML tag at once
+//       if (currentChar === '<') {
+//           const endOfTag = text.indexOf('>', index);
+//           const tag = text.slice(index - 1, endOfTag + 1);
+//           index = endOfTag;
+
+//           // We add the entire tag (which may contain multiple lines) to the last child
+//           if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+//               element.appendChild(document.createElement('p'));
+//           }
+//           element.lastElementChild.innerHTML += tag;
+//       } 
+//       // Handle newline characters
+//       else if (currentChar === '\n') {
+//           // Only create a new paragraph if the last child is not a preformatted text block
+//           if (element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
+//               element.appendChild(document.createElement('p'));
+//           }
+//       } 
+//       // Normal character typing
+//       else {
+//           if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+//               element.appendChild(document.createElement('p'));
+//           }
+//           element.lastElementChild.innerHTML += currentChar;
+//       }
+
+//       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+
+//       if(index < text.length){
+//           requestAnimationFrame(typeCharacter);
+//       } else {
+//           Prism.highlightAllUnder(element);
+//       }
+//   };
+
+//   requestAnimationFrame(typeCharacter);
+// }
 
 function escapeHtml(unsafe) {
   return unsafe
