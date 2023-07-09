@@ -64,15 +64,12 @@ function loader(element) {
         }
     }, 300);
 }
+
 function typeText(element, text) {
   let index = 0;
 
   const typeCharacter = () => {
     const currentChar = text[index++];
-      
-    if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-      element.appendChild(document.createElement('p'));
-    }
 
     // Add special handling for code blocks
     if (text.substring(index-3, index) === '```') {
@@ -88,7 +85,15 @@ function typeText(element, text) {
       element.appendChild(codeBlock);
       index = endOfCodeBlock + 3;
     } else {
-      element.lastElementChild.innerHTML += currentChar;
+      // Create new paragraph for newline characters
+      if (currentChar === '\n') {
+        element.appendChild(document.createElement('p'));
+      } else {
+        if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+          element.appendChild(document.createElement('p'));
+        }
+        element.lastElementChild.innerHTML += currentChar;
+      }
     }
         
     chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;

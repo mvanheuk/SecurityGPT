@@ -57,7 +57,7 @@ pre[class*="language-"] {
 :not(pre) > code[class*="language-"] {
 	padding: .15em .2em .05em;
 	border-radius: .3em;
-	border: .13em solid hsl(30, 20%, 40%);
+	border: .13em solid hsl(184, 57%, 41%);
 	box-shadow: 1px 1px .3em -.1em black inset;
 	white-space: normal;
 }
@@ -66,7 +66,7 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-	color: hsl(30, 20%, 50%);
+	color: hsl(0, 0%, 61%);
 }
 
 .token.punctuation {
