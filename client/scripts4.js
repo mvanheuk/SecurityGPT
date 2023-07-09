@@ -72,9 +72,17 @@ function loader(element) {
 
 function typeText(element, text) {
   let index = 0;
+  let isCodeBlock = false;  // added this line
 
   const typeCharacter = () => {
       const currentChar = text[index++];
+
+      // Check if we are entering or exiting a code block
+      if (currentChar === '<' && text.slice(index, index + 5) === 'code>') {
+          isCodeBlock = true;
+      } else if (currentChar === '<' && text.slice(index, index + 7) === '/code>') {
+          isCodeBlock = false;
+      }
 
       // If current character is a '<', then we need to type out the entire HTML tag at once
       if (currentChar === '<') {
@@ -100,9 +108,11 @@ function typeText(element, text) {
       // Handle newline characters
       else if (currentChar === '\n') {
           // Only create a new paragraph if the last child is not a preformatted text block
-          if (element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {
+          if (!isCodeBlock && element.lastElementChild && element.lastElementChild.tagName !== 'PRE') {  // modified this line
               element.appendChild(document.createElement('p'));
-          }
+          } else if (isCodeBlock) {  // added this line
+              element.lastElementChild.innerHTML += '<br>';  // added this line
+          }  // added this line
       } 
       // Normal character typing
       else {
@@ -136,11 +146,20 @@ function typeText(element, text) {
 //           const tag = text.slice(index - 1, endOfTag + 1);
 //           index = endOfTag;
 
-//           // We add the entire tag (which may contain multiple lines) to the last child
-//           if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-//               element.appendChild(document.createElement('p'));
+//           // If the tag is a preformatted text block, type out the entire block at once
+//           if (tag === '<pre>') {
+//               const endOfBlock = text.indexOf('</pre>', index);
+//               const block = text.slice(index, endOfBlock + 6);
+//               index = endOfBlock + 6;
+
+//               element.lastElementChild.innerHTML += block;
+//           } else {
+//               // For other tags, add the entire tag to the last child
+//               if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+//                   element.appendChild(document.createElement('p'));
+//               }
+//               element.lastElementChild.innerHTML += tag;
 //           }
-//           element.lastElementChild.innerHTML += tag;
 //       } 
 //       // Handle newline characters
 //       else if (currentChar === '\n') {
