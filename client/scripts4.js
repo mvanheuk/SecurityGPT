@@ -93,7 +93,7 @@ function typeText(element, text) {
     } else {
       // After all text has been typed, convert URLs to links in each paragraph
       for (let paragraph of element.getElementsByTagName('p')) {
-        paragraph.innerHTML = convertUrlsToLinks(paragraph.textContent);
+        paragraph.innerHTML = convertUrlsToLinks(paragraph.textContent.toString());
       }
       Prism.highlightAll();
     }
@@ -101,6 +101,7 @@ function typeText(element, text) {
 
   requestAnimationFrame(typeCharacter);
 }
+
 
 
 
