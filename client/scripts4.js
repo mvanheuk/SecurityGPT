@@ -91,14 +91,17 @@ function typeText(element, text) {
     if(index < text.length){
       requestAnimationFrame(typeCharacter);
     } else {
-      // After all text has been typed, convert URLs to links
-      element.innerHTML = convertUrlsToLinks(element.innerHTML);
+      // After all text has been typed, convert URLs to links in each paragraph
+      for (let paragraph of element.getElementsByTagName('p')) {
+        paragraph.innerHTML = convertUrlsToLinks(paragraph.textContent);
+      }
       Prism.highlightAll();
     }
   };
 
   requestAnimationFrame(typeCharacter);
 }
+
 
 
 // function typeText(element, text) {
