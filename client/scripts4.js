@@ -67,83 +67,46 @@ function loader(element) {
 
 function typeText(element, text) {
   let index = 0;
-  let innerHTML = "";
 
   const typeCharacter = () => {
     const currentChar = text[index++];
 
     // Add special handling for code blocks
     if (text.substring(index-3, index) === '```') {
-      // Existing code block handling code...
+      let endOfCodeBlock = text.indexOf('```', index);
+      if (endOfCodeBlock === -1) endOfCodeBlock = text.length;
+      
+      // Find the language specifier, which is the text between the backticks and the first newline
+      const firstNewlineInBlock = text.indexOf('\n', index);
+      const languageSpecifier = text.substring(index, firstNewlineInBlock).trim();
+
+      const codeBlock = document.createElement('pre');
+      codeBlock.innerHTML = `<code class="language-${languageSpecifier}">${escapeHtml(text.substring(firstNewlineInBlock+1, endOfCodeBlock))}</code>`;
+      element.appendChild(codeBlock);
+      index = endOfCodeBlock + 3;
     } else {
       // Create new paragraph for newline characters
       if (currentChar === '\n') {
-        innerHTML += "<p></p>";
+        element.appendChild(document.createElement('p'));
       } else {
         if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-          innerHTML += "<p></p>";
+          element.appendChild(document.createElement('p'));
         }
-        innerHTML += currentChar;
+        element.lastElementChild.innerHTML += currentChar;
       }
     }
-
-    // Existing scroll adjustment code...
-
+        
+    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+        
     if(index < text.length){
       requestAnimationFrame(typeCharacter);
     } else {
-      // After all text has been typed, convert URLs to links in the whole text
-      element.innerHTML = convertUrlsToLinks(innerHTML);
       Prism.highlightAll();
     }
   };
 
   requestAnimationFrame(typeCharacter);
 }
-
-
-// function typeText(element, text) {
-//   let index = 0;
-
-//   const typeCharacter = () => {
-//     const currentChar = text[index++];
-
-//     // Add special handling for code blocks
-//     if (text.substring(index-3, index) === '```') {
-//       let endOfCodeBlock = text.indexOf('```', index);
-//       if (endOfCodeBlock === -1) endOfCodeBlock = text.length;
-      
-//       // Find the language specifier, which is the text between the backticks and the first newline
-//       const firstNewlineInBlock = text.indexOf('\n', index);
-//       const languageSpecifier = text.substring(index, firstNewlineInBlock).trim();
-
-//       const codeBlock = document.createElement('pre');
-//       codeBlock.innerHTML = `<code class="language-${languageSpecifier}">${escapeHtml(text.substring(firstNewlineInBlock+1, endOfCodeBlock))}</code>`;
-//       element.appendChild(codeBlock);
-//       index = endOfCodeBlock + 3;
-//     } else {
-//       // Create new paragraph for newline characters
-//       if (currentChar === '\n') {
-//         element.appendChild(document.createElement('p'));
-//       } else {
-//         if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-//           element.appendChild(document.createElement('p'));
-//         }
-//         element.lastElementChild.innerHTML += currentChar;
-//       }
-//     }
-        
-//     chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-        
-//     if(index < text.length){
-//       requestAnimationFrame(typeCharacter);
-//     } else {
-//       Prism.highlightAll();
-//     }
-//   };
-
-//   requestAnimationFrame(typeCharacter);
-// }
 
 function escapeHtml(unsafe) {
   return unsafe
@@ -174,7 +137,7 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     valueMarkup = `<pre><code class="language-${language}">${escapeHtml(value)}</code></pre>`;
   } else {
     // If the value is not a code block, convert URLs to clickable links
-    //value = convertUrlsToLinks(value);
+    value = convertUrlsToLinks(value);
     valueMarkup = value.replace(/\n/g, '<br>');
   }
 
