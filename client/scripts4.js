@@ -304,23 +304,6 @@ const handleSubmit = async (e) => {
       }
     }
 
-    // if (hasRssKeyword) {
-    //   const response = await fetch('https://securitygpt.onrender.com/getFeed', {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //   });
-    //   if (response.ok) {
-    //     const rssData = await response.json();
-    //     // Extract title, link, pubDate, author, and summary of each item
-    //     rssInfo = rssData.items.slice(0, 10).map(item => 
-    //       `Title: ${item.title}\nLink: ${item.link}\nPublished Date: ${item.pubDate}\nAuthor: ${item.author}\nSummary: ${item.summary.trim()}`
-    //     ).join('\n\n');
-    //     console.log(rssInfo);
-    //   }
-    // }
-
     const response = await fetch('https://securitygpt.onrender.com', {
         method: 'POST',
         headers: {
