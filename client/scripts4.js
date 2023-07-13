@@ -132,12 +132,14 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     isCode = true;
   }
 
-  // If the value is not a code block, convert URLs to clickable links
-  if (!isCode) {
+  let valueMarkup;
+  if (isCode) {
+    valueMarkup = `<pre><code class="language-${language}">${escapeHtml(value)}</code></pre>`;
+  } else {
+    // If the value is not a code block, convert URLs to clickable links
     value = convertUrlsToLinks(value);
+    valueMarkup = value.replace(/\n/g, '<br>');
   }
-
-  const valueMarkup = isCode ? `<pre><code class="language-${language}">${escapeHtml(value)}</code></pre>` : value.replace(/\n/g, '<br>');
 
   // to focus scroll to the bottom here
   chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
