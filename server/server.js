@@ -180,18 +180,46 @@ app.post('/clear', (req, res) => {
 
 let parser = new Parser();
 
-// Add a new route to fetch RSS data
-app.get('/getFeed', async (req, res) => {
-  try {
-    let feed = await parser.parseURL('https://www.cshub.com/rss/categories/attacks'); // replace with your RSS feed URL
+// define your list of rss feed URLs
+let rssUrls = [
+  'https://www.cshub.com/rss/categories/attacks',
+  'https://rss.example.com/feed',
+  'https://anotherexample.com/rss'
+  // add more URLs as needed
+];
 
-    // Do what you want with feed data here
-    // For instance, send it to the client as JSON
-    res.json(feed);
-  } catch (error) {
-    console.error("Error during RSS feed parsing:", error.message);
+app.get('/getFeeds', async (req, res) => {
+  let feeds = [];
+  for (let url of rssUrls) {
+    try {
+      let feed = await parser.parseURL(url);
+      feeds.push(feed);
+    } catch (error) {
+      console.error(`Error during RSS feed parsing for ${url}:`, error.message);
+    }
+  }
+
+  // If no feeds could be fetched, send an error response
+  if (feeds.length === 0) {
     res.status(500).send('Something went wrong');
+  } else {
+    res.json(feeds);
   }
 });
+
+
+// // Add a new route to fetch RSS data
+// app.get('/getFeed', async (req, res) => {
+//   try {
+//     let feed = await parser.parseURL('https://www.cshub.com/rss/categories/attacks'); // replace with your RSS feed URL
+
+//     // Do what you want with feed data here
+//     // For instance, send it to the client as JSON
+//     res.json(feed);
+//   } catch (error) {
+//     console.error("Error during RSS feed parsing:", error.message);
+//     res.status(500).send('Something went wrong');
+//   }
+// });
 
 app.listen(5000, () => console.log('AI server started on http://localhost:5000'));
