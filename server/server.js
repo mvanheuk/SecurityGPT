@@ -187,7 +187,7 @@ let rssUrls = [
   // add more URLs as needed
 ];
 
-app.get('/getFeeds', async (req, res) => {
+app.get('/getFeed', async (req, res) => {
   let feeds = [];
   for (let url of rssUrls) {
     try {
