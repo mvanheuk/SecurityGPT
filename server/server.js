@@ -180,18 +180,58 @@ app.post('/clear', (req, res) => {
 
 let parser = new Parser();
 
-// Add a new route to fetch RSS data
+// List of RSS feed URLs
+const feedUrls = [
+  'https://www.cshub.com/rss/categories/attacks',
+  'https://www.cisa.gov/cybersecurity-advisories/all.xml',
+  // Add more feed URLs here
+];
+
 app.get('/getFeed', async (req, res) => {
   try {
-    let feed = await parser.parseURL('https://www.cshub.com/rss/categories/attacks'); // replace with your RSS feed URL
+    let feeds = await Promise.all(feedUrls.map(url => parser.parseURL(url)));
 
-    // Do what you want with feed data here
-    // For instance, send it to the client as JSON
-    res.json(feed);
+    // Merge all feeds into a single array
+    let allItems = [];
+    for (let feed of feeds) {
+      allItems.push(...feed.items);
+    }
+
+    // Sort items by publication date (newest first)
+    allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+    // Limit to the first 10 items
+    allItems = allItems.slice(0, 10);
+
+    // Keep only the properties we're interested in
+    allItems = allItems.map(item => ({
+      title: item.title,
+      link: item.link,
+      description: item.description,
+      publicationDate: item.pubDate
+    }));
+
+    // Send the items to the client
+    res.json(allItems);
   } catch (error) {
     console.error("Error during RSS feed parsing:", error.message);
     res.status(500).send('Something went wrong');
   }
 });
+
+
+// // Add a new route to fetch RSS data
+// app.get('/getFeed', async (req, res) => {
+//   try {
+//     let feed = await parser.parseURL('https://www.cshub.com/rss/categories/attacks'); // replace with your RSS feed URL
+
+//     // Do what you want with feed data here
+//     // For instance, send it to the client as JSON
+//     res.json(feed);
+//   } catch (error) {
+//     console.error("Error during RSS feed parsing:", error.message);
+//     res.status(500).send('Something went wrong');
+//   }
+// });
 
 app.listen(5000, () => console.log('AI server started on http://localhost:5000'));
