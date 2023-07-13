@@ -243,13 +243,13 @@ const handleSubmit = async (e) => {
         rssDatas.forEach((rssData, index) => {
           // Extract title, link, pubDate, author, and summary of each item
           let rssInfo = rssData.items.slice(0, 10).map(item => 
-            `Feed ${index+1}\nTitle: ${item.title}\nLink: ${item.link}\nPublished Date: ${item.pubDate}\nAuthor: ${item.author}\nSummary: ${item.summary.trim()}`
+            `Feed ${index+1}\nTitle: ${item.title}\nLink: ${item.link}\nPublished Date: ${item.pubDate}\nAuthor: ${item.author}\nSummary: ${item.summary ? item.summary.trim() : 'No summary available'}`
           ).join('\n\n');
           console.log(rssInfo);
         });
       }
     }
-    
+
     // if (hasRssKeyword) {
     //   const response = await fetch('https://securitygpt.onrender.com/getFeed', {
     //     method: 'GET',
