@@ -70,6 +70,7 @@ function typeText(element, text) {
 
   const typeCharacter = () => {
     const currentChar = text[index++];
+    let innerHTML = "";
 
     // Add special handling for code blocks
     if (text.substring(index-3, index) === '```') {
@@ -77,12 +78,12 @@ function typeText(element, text) {
     } else {
       // Create new paragraph for newline characters
       if (currentChar === '\n') {
-        element.appendChild(document.createElement('p'));
+        innerHTML += "<p></p>";
       } else {
         if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
-          element.appendChild(document.createElement('p'));
+          innerHTML += "<p></p>";
         }
-        element.lastElementChild.textContent += currentChar;
+        innerHTML += currentChar;
       }
     }
 
@@ -91,19 +92,14 @@ function typeText(element, text) {
     if(index < text.length){
       requestAnimationFrame(typeCharacter);
     } else {
-      // After all text has been typed, convert URLs to links in each paragraph
-      for (let paragraph of element.getElementsByTagName('p')) {
-        paragraph.innerHTML = convertUrlsToLinks(paragraph.textContent.toString());
-      }
+      // After all text has been typed, convert URLs to links in the whole text
+      element.innerHTML = convertUrlsToLinks(innerHTML);
       Prism.highlightAll();
     }
   };
 
   requestAnimationFrame(typeCharacter);
 }
-
-
-
 
 // function typeText(element, text) {
 //   let index = 0;
