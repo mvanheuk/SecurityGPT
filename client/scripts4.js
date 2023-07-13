@@ -132,6 +132,11 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     isCode = true;
   }
 
+  // If the value is not a code block, convert URLs to clickable links
+  if (!isCode) {
+    value = convertUrlsToLinks(value);
+  }
+
   const valueMarkup = isCode ? `<pre><code class="language-${language}">${escapeHtml(value)}</code></pre>` : escapeHtml(value).replace(/\n/g, '<br>');
 
   // to focus scroll to the bottom here
@@ -155,6 +160,51 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     `
   );
 }
+
+// New function to convert URLs to clickable links
+function convertUrlsToLinks(text) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, url => `<a href="${url}" target="_blank">${url}</a>`);
+}
+
+// function chatStripe(isAi, value, uniqueId, imageBase64) {
+//   const imageMarkup = imageBase64 ? `<img src="data:image/jpeg;base64,${imageBase64}" class="uploaded-image" />` : '';
+
+//   let isCode = false;
+//   let language = null;
+
+//   // Check if value is a code block 
+//   if (value.trim().startsWith("```") && value.trim().endsWith("```")) {
+//     value = value.trim().slice(3, -3); // Trim the backticks
+//     const firstLineEndIndex = value.indexOf("\n");
+//     language = value.slice(0, firstLineEndIndex).trim(); // Get the language from the first line
+//     value = value.slice(firstLineEndIndex + 1); // Get the rest of the string after the first line
+//     isCode = true;
+//   }
+
+//   const valueMarkup = isCode ? `<pre><code class="language-${language}">${escapeHtml(value)}</code></pre>` : escapeHtml(value).replace(/\n/g, '<br>');
+
+//   // to focus scroll to the bottom here
+//   chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+//   return (
+//     `
+//     <div class="wrapper ${isAi ? 'ai' : ''}">
+//         <div class="chat">
+//             <div class="profile">
+//                 <img 
+//                   src=${isAi ? bot : user} 
+//                   alt="${isAi ? 'bot' : 'user'}" 
+//                 />
+//             </div>
+//             <div class="message" id=${uniqueId}>
+//                 ${imageMarkup}
+//                 ${valueMarkup}
+//             </div>
+//         </div>
+//     </div>
+//     `
+//   );
+// }
 
 async function clearChat() {
     // Clear the chat container
