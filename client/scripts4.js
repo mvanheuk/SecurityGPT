@@ -185,6 +185,8 @@ const handleSubmit = async (e) => {
 
     let userMessage = data.get('prompt');
 
+    let rssInfo = ''; // move rssInfo declaration here
+
     ImageBase64 = getImageFromMod();
     recognizedImageText = getRITfromMod();
     recognizedLabels = getRLfromMod();
@@ -240,15 +242,15 @@ const handleSubmit = async (e) => {
       });
       if (response.ok) {
         const rssDatas = await response.json();
-        let rssInfo = []; // define as an empty array
+        let rssInfos = []; // define as an empty array
         rssDatas.forEach((rssData, index) => {
           // Extract title, link, pubDate, author, and summary of each item
           let info = rssData.items.slice(0, 10).map(item => 
             `Feed ${index+1}\nTitle: ${item.title}\nLink: ${item.link}\nPublished Date: ${item.pubDate}\nAuthor: ${item.author}\nSummary: ${item.summary ? item.summary.trim() : 'No summary available'}`
           ).join('\n\n');
-          rssInfo.push(info); // push the info of each feed into the array
+          rssInfos.push(info); // push the info of each feed into the array
         });
-        rssInfo = rssInfo.join('\n\n'); // join the array into a string with double line breaks in between each feed's info
+        rssInfo = rssInfos.join('\n\n'); // join the array into a string with double line breaks in between each feed's info
         console.log(rssInfo);
       }
     }
