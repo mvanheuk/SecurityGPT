@@ -202,7 +202,6 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
   );
 }
 
-// New function to convert URLs to clickable links
 function convertUrlsToLinks(text) {
   // Match Markdown links: [Link text](URL)
   const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g;
@@ -212,7 +211,7 @@ function convertUrlsToLinks(text) {
   // Match raw URLs: http(s)://...
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   // Convert raw URLs to HTML links
-  text = text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+  text = text.replace(urlRegex, url => `<a href="${url}" target="_blank">${url}</a>`);
 
   return text;
 }
