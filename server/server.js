@@ -183,8 +183,7 @@ let parser = new Parser();
 // define your list of rss feed URLs
 let rssUrls = [
   'https://www.cshub.com/rss/categories/attacks',
-  'https://rss.example.com/feed',
-  'https://anotherexample.com/rss'
+  'https://www.cisa.gov/cybersecurity-advisories/all.xml'
   // add more URLs as needed
 ];
 
