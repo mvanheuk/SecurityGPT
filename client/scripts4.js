@@ -132,6 +132,11 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     isCode = true;
   }
 
+  // If the value is not a code block, convert URLs to clickable links
+  if (!isCode) {
+    value = convertUrlsToLinks(value);
+  }
+
   const valueMarkup = isCode ? `<pre><code class="language-${language}">${escapeHtml(value)}</code></pre>` : convertUrlsToLinks(escapeHtml(value)).replace(/\n/g, '<br>');
 
   // to focus scroll to the bottom here
