@@ -189,27 +189,26 @@ const feedUrls = [
 
 app.get('/getFeed', async (req, res) => {
   try {
-    let feeds = await Promise.all(feedUrls.map(url => parser.parseURL(url)));
+    console.log("Parsing feeds...");
+    let feeds = await Promise.all(feedUrls.map(url => {
+      console.log("Parsing feed: " + url);
+      let feed = parser.parseURL(url);
+      console.log("Parsed feed: " + url);
+      return feed;
+    }));
+    console.log("Finished parsing feeds.");
 
-    // Merge all feeds into a single array
+    console.log("Merging feeds into allItems...");
     let allItems = [];
     for (let feed of feeds) {
       allItems.push(...feed.items);
     }
+    console.log("Finished merging. allItems length: " + allItems.length);
 
-    // Sort items by publication date (newest first)
-    allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-    // Limit to the first 10 items
+    console.log("Slicing allItems...");
+    console.log("allItems before slice: ", allItems);
     allItems = allItems.slice(0, 10);
-
-    // Keep only the properties we're interested in
-    allItems = allItems.map(item => ({
-      title: item.title,
-      link: item.link,
-      description: item.description,
-      publicationDate: item.pubDate
-    }));
+    console.log("allItems after slice: ", allItems);
 
     // Send the items to the client
     res.json(allItems);
@@ -218,6 +217,7 @@ app.get('/getFeed', async (req, res) => {
     res.status(500).send('Something went wrong');
   }
 });
+
 
 
 // // Add a new route to fetch RSS data
