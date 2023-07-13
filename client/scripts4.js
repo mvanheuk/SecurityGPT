@@ -210,8 +210,19 @@ function convertUrlsToLinks(text) {
 
   // Match raw URLs: http(s)://...
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  // Convert raw URLs to HTML links
-  text = text.replace(urlRegex, url => `<a href="${url}" target="_blank">${url}</a>`);
+  // Convert raw URLs to HTML links, but only if they're not already part of an HTML link
+  text = text.replace(urlRegex, (url, offset, string) => {
+    // Look for the start of an <a> tag before this URL, and the end of an </a> tag after it
+    const aTagStart = string.lastIndexOf('<a', offset);
+    const aTagEnd = string.indexOf('</a>', offset);
+    if (aTagStart !== -1 && aTagEnd !== -1 && aTagStart < aTagEnd) {
+      // This URL is already part of an HTML link, so return it as is
+      return url;
+    } else {
+      // This URL is not part of an HTML link, so convert it
+      return `<a href="${url}" target="_blank">${url}</a>`;
+    }
+  });
 
   return text;
 }
