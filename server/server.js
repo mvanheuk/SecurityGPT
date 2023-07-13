@@ -180,59 +180,18 @@ app.post('/clear', (req, res) => {
 
 let parser = new Parser();
 
-// List of RSS feed URLs
-const feedUrls = [
-  'https://www.cshub.com/rss/categories/attacks',
-  'https://www.cisa.gov/cybersecurity-advisories/all.xml',
-  // Add more feed URLs here
-];
-
+// Add a new route to fetch RSS data
 app.get('/getFeed', async (req, res) => {
-  let allItems = [];
   try {
-    for (let url of feedUrls) {
-      let feed = await parser.parseURL(url);
-      console.log(`Feed from ${url}:`, feed);  // Log the parsed feed
-      if (feed && feed.items) {
-        allItems.push(...feed.items);
-      } else {
-        console.log(`No items found in feed from ${url}`);
-      }
-    }
+    let feed = await parser.parseURL('https://www.cshub.com/rss/categories/attacks'); // replace with your RSS feed URL
 
-    if (allItems.length > 0) {
-      // Sort items by publication date (newest first)
-      allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-      // Limit to the first 10 items
-      allItems = allItems.slice(0, 10);
-    } else {
-      console.error("No items found in any RSS feeds");
-      res.status(500).send('Something went wrong');
-      return;
-    }
-
-    // Send the items to the client
-    res.json(allItems);
+    // Do what you want with feed data here
+    // For instance, send it to the client as JSON
+    res.json(feed);
   } catch (error) {
     console.error("Error during RSS feed parsing:", error.message);
     res.status(500).send('Something went wrong');
   }
 });
-
-
-// // Add a new route to fetch RSS data
-// app.get('/getFeed', async (req, res) => {
-//   try {
-//     let feed = await parser.parseURL('https://www.cshub.com/rss/categories/attacks'); // replace with your RSS feed URL
-
-//     // Do what you want with feed data here
-//     // For instance, send it to the client as JSON
-//     res.json(feed);
-//   } catch (error) {
-//     console.error("Error during RSS feed parsing:", error.message);
-//     res.status(500).send('Something went wrong');
-//   }
-// });
 
 app.listen(5000, () => console.log('AI server started on http://localhost:5000'));
