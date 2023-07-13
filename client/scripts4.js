@@ -231,7 +231,6 @@ const handleSubmit = async (e) => {
 
     // Detect "rss" keyword in user input
     const hasRssKeyword = detectRssKeyword(userMessage);
-    let rssInfo = '';
 
     if (hasRssKeyword) {
       const response = await fetch('https://securitygpt.onrender.com/getFeed', {
