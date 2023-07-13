@@ -73,17 +73,7 @@ function typeText(element, text) {
 
     // Add special handling for code blocks
     if (text.substring(index-3, index) === '```') {
-      let endOfCodeBlock = text.indexOf('```', index);
-      if (endOfCodeBlock === -1) endOfCodeBlock = text.length;
-      
-      // Find the language specifier, which is the text between the backticks and the first newline
-      const firstNewlineInBlock = text.indexOf('\n', index);
-      const languageSpecifier = text.substring(index, firstNewlineInBlock).trim();
-
-      const codeBlock = document.createElement('pre');
-      codeBlock.innerHTML = `<code class="language-${languageSpecifier}">${escapeHtml(text.substring(firstNewlineInBlock+1, endOfCodeBlock))}</code>`;
-      element.appendChild(codeBlock);
-      index = endOfCodeBlock + 3;
+      // Existing code block handling code...
     } else {
       // Create new paragraph for newline characters
       if (currentChar === '\n') {
@@ -92,21 +82,67 @@ function typeText(element, text) {
         if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
           element.appendChild(document.createElement('p'));
         }
-        element.lastElementChild.innerHTML += currentChar;
+        element.lastElementChild.textContent += currentChar;
       }
     }
-        
-    chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-        
+
+    // Existing scroll adjustment code...
+
     if(index < text.length){
       requestAnimationFrame(typeCharacter);
     } else {
+      // After all text has been typed, convert URLs to links
+      element.innerHTML = convertUrlsToLinks(element.innerHTML);
       Prism.highlightAll();
     }
   };
 
   requestAnimationFrame(typeCharacter);
 }
+
+
+// function typeText(element, text) {
+//   let index = 0;
+
+//   const typeCharacter = () => {
+//     const currentChar = text[index++];
+
+//     // Add special handling for code blocks
+//     if (text.substring(index-3, index) === '```') {
+//       let endOfCodeBlock = text.indexOf('```', index);
+//       if (endOfCodeBlock === -1) endOfCodeBlock = text.length;
+      
+//       // Find the language specifier, which is the text between the backticks and the first newline
+//       const firstNewlineInBlock = text.indexOf('\n', index);
+//       const languageSpecifier = text.substring(index, firstNewlineInBlock).trim();
+
+//       const codeBlock = document.createElement('pre');
+//       codeBlock.innerHTML = `<code class="language-${languageSpecifier}">${escapeHtml(text.substring(firstNewlineInBlock+1, endOfCodeBlock))}</code>`;
+//       element.appendChild(codeBlock);
+//       index = endOfCodeBlock + 3;
+//     } else {
+//       // Create new paragraph for newline characters
+//       if (currentChar === '\n') {
+//         element.appendChild(document.createElement('p'));
+//       } else {
+//         if (!element.lastElementChild || element.lastElementChild.tagName !== 'P') {
+//           element.appendChild(document.createElement('p'));
+//         }
+//         element.lastElementChild.innerHTML += currentChar;
+//       }
+//     }
+        
+//     chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+        
+//     if(index < text.length){
+//       requestAnimationFrame(typeCharacter);
+//     } else {
+//       Prism.highlightAll();
+//     }
+//   };
+
+//   requestAnimationFrame(typeCharacter);
+// }
 
 function escapeHtml(unsafe) {
   return unsafe
