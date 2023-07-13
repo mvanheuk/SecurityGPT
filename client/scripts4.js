@@ -165,9 +165,19 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
 
 // New function to convert URLs to clickable links
 function convertUrlsToLinks(text) {
+  // Match Markdown links: [Link text](URL)
+  const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g;
+  // Convert Markdown links to HTML links
+  text = text.replace(markdownLinkRegex, '<a href="$2" target="_blank">$1</a>');
+
+  // Match raw URLs: http(s)://...
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return text.replace(urlRegex, url => `<a href="${url}" target="_blank">${url}</a>`);
+  // Convert raw URLs to HTML links
+  text = text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+
+  return text;
 }
+
 
 // function chatStripe(isAi, value, uniqueId, imageBase64) {
 //   const imageMarkup = imageBase64 ? `<img src="data:image/jpeg;base64,${imageBase64}" class="uploaded-image" />` : '';
