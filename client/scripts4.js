@@ -67,10 +67,10 @@ function loader(element) {
 
 function typeText(element, text) {
   let index = 0;
+  let innerHTML = "";
 
   const typeCharacter = () => {
     const currentChar = text[index++];
-    let innerHTML = "";
 
     // Add special handling for code blocks
     if (text.substring(index-3, index) === '```') {
@@ -100,6 +100,7 @@ function typeText(element, text) {
 
   requestAnimationFrame(typeCharacter);
 }
+
 
 // function typeText(element, text) {
 //   let index = 0;
@@ -173,7 +174,7 @@ function chatStripe(isAi, value, uniqueId, imageBase64) {
     valueMarkup = `<pre><code class="language-${language}">${escapeHtml(value)}</code></pre>`;
   } else {
     // If the value is not a code block, convert URLs to clickable links
-    value = convertUrlsToLinks(value);
+    //value = convertUrlsToLinks(value);
     valueMarkup = value.replace(/\n/g, '<br>');
   }
 
