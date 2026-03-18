@@ -7,11 +7,68 @@
     <link rel="stylesheet" href="prism.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="This is SecurityGPT" />
     <title>SecurityGPT</title>
+
+    <style>
+      #construction-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 70vh;
+        text-align: center;
+      }
+
+      .construction-box {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 40px;
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.2);
+        max-width: 500px;
+      }
+
+      .construction-box h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      .construction-box p {
+        color: #ccc;
+        font-size: 1rem;
+      }
+
+      .badge {
+        margin-top: 20px;
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: #38bdf8;
+        color: #000;
+        font-weight: bold;
+      }
+
+      .dots::after {
+        content: "";
+        animation: dots 1.5s steps(4, end) infinite;
+      }
+
+      @keyframes dots {
+        0% { content: ""; }
+        25% { content: "."; }
+        50% { content: ".."; }
+        75% { content: "..."; }
+        100% { content: ""; }
+      }
+
+      /* Hide actual app while under construction */
+      #chat_wrapper {
+        display: none;
+      }
+    </style>
   </head>
 
   <body>
@@ -21,6 +78,20 @@
     </header>
 
     <div id="app">
+
+      <!-- UNDER CONSTRUCTION UI -->
+      <div id="construction-container">
+        <div class="construction-box">
+          <h1>SecurityGPT is Under Construction</h1>
+          <p>
+            We’re building a smarter cybersecurity assistant.<br />
+            Check back soon<span class="dots"></span>
+          </p>
+          <div class="badge">AI Coming Soon</div>
+        </div>
+      </div>
+
+      <!-- EXISTING APP (HIDDEN FOR NOW) -->
       <div id="chat_wrapper">
         <div id="chat_container"></div>
         <form id="chat_form">
@@ -44,6 +115,7 @@
           <span id="progressPercentage"></span>
         </div>
       </div>
+
       <script type="module" src="prism.js"></script>
       <script type="module" src="scripts4.js"></script>
       <script type="module" src="processImage.js"></script>
