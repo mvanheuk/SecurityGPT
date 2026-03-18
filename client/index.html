@@ -4,11 +4,8 @@
   <head>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
-    <link rel="stylesheet" href="prism.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js"></script>
-
     <meta charset="utf-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="description" content="This is SecurityGPT" />
@@ -63,11 +60,6 @@
         75% { content: "..."; }
         100% { content: ""; }
       }
-
-      /* Hide actual app while under construction */
-      #chat_wrapper {
-        display: none;
-      }
     </style>
   </head>
 
@@ -78,8 +70,6 @@
     </header>
 
     <div id="app">
-
-      <!-- UNDER CONSTRUCTION UI -->
       <div id="construction-container">
         <div class="construction-box">
           <h1>SecurityGPT is Under Construction</h1>
@@ -90,35 +80,6 @@
           <div class="badge">AI Coming Soon</div>
         </div>
       </div>
-
-      <!-- EXISTING APP (HIDDEN FOR NOW) -->
-      <div id="chat_wrapper">
-        <div id="chat_container"></div>
-        <form id="chat_form">
-          <textarea name="prompt" rows="1" cols="1" placeholder="Ask SecurityGPT..."></textarea>
-          <div class="buttons-container">
-            <button type="submit" id="send_button"><img src="assets/send.svg" /></button>
-          </div>
-          <div id="image-preview-container" class="hidden">
-            <img id="image-preview" src="" alt="Uploaded image preview" class="hidden" />
-            <span id="remove-image" class="remove-image hidden">x</span>
-          </div>
-        </form>
-        <div id="button-container2">
-          <button id="clear_button">Clear</button>
-          <button id="gpt3-btn">GPT-3.5-Turbo</button>
-          <button id="gpt4-btn">GPT-4</button>
-          <label for="imageInput" class="custom-file-upload">Upload an image</label>
-          <div id="image-upload-container">
-            <input type="file" id="imageInput" accept="image/*" />
-          </div>
-          <span id="progressPercentage"></span>
-        </div>
-      </div>
-
-      <script type="module" src="prism.js"></script>
-      <script type="module" src="scripts4.js"></script>
-      <script type="module" src="processImage.js"></script>
     </div>
 
     <footer></footer>
